@@ -1,4 +1,5 @@
 "use client";
+import { notFound } from 'next/navigation'
 import { getDataService } from "@/redux/service/auth.service";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
@@ -16,8 +17,11 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getDataService());
-  }, []);
 
+  }, []);
+  if (!name) {
+    notFound()
+  }
   return (
     <div className="bg-white p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
       <Formik
