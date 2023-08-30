@@ -12,5 +12,5 @@ export default function LoginPage() {
     dispatch(getDataService());
   }, []);
 
-  return <div>Login page</div>;
+  return <div className="bg-white text-yellow-300">Login page</div>;
 }
