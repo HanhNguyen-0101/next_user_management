@@ -25,3 +25,21 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.bg-auth {
+  background-image: url("./../../public/images/background.png");
+  height: 100vh;
+  margin: 0;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: flex-end;
+  background-position: right;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  padding-top: 6px;
+}
