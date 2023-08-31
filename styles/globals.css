@@ -27,7 +27,7 @@ body {
 }
 
 .bg-auth {
-  background-image: url("./../../public/images/background.png");
+  background-image: url("./../public/images/background.png");
   height: 100vh;
   margin: 0;
   background-color: #fff;

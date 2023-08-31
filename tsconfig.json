@@ -13,18 +13,15 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@/redux/*": ["src/app/_redux/*"],
-      "@/components/*": ["src/app/_components/*"],
+      "@/styles/*": ["styles/*"],
+      "@/redux/*": ["pages/_redux/*"],
+      "@/components/*": ["pages/_components/*"],
       "@/images/*": ["public/images/*"],
     }
+
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

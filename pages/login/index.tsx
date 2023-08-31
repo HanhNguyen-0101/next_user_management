@@ -3,10 +3,11 @@ import { notFound } from 'next/navigation'
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import Link from "next/link";
 import { Input, Checkbox } from "@/components/forms";
 import { AuthAction } from '@/redux/actions';
+import AuthLayout from '@/components/layout/auth.layout';
 export default function LoginPage() {
   // const [user, setUser] = useState([]);
 
@@ -112,3 +113,11 @@ export default function LoginPage() {
     </div>
   );
 }
+
+LoginPage.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AuthLayout>
+      {page}
+    </AuthLayout>
+  );
+};
