@@ -8,6 +8,6 @@ export const AuthService = {
 
     },
     getData() {
-        return axiosConfig.get(`users`);
+        return axiosConfig.get(`posts`);
     }
 }
