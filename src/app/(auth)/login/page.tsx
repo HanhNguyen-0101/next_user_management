@@ -1,14 +1,12 @@
 "use client";
 import { notFound } from 'next/navigation'
-import { getDataService } from "@/redux/service/auth.service";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { Input } from "src/app/components/forms/Input";
-import { Select } from "src/app/components/forms/Select";
-import { Checkbox } from "src/app/components/forms/Checkbox";
+import { Input, Checkbox } from "@/components/forms";
+import { AuthAction } from '@/redux/actions';
 export default function LoginPage() {
   // const [user, setUser] = useState([]);
 
@@ -16,7 +14,7 @@ export default function LoginPage() {
   console.log("8888888888", name);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getDataService());
+    dispatch(AuthAction.getDataService());
 
   }, []);
   if (!name) {
@@ -56,16 +54,16 @@ export default function LoginPage() {
           </p>
           <Input
             label="Email"
-            parentClassName="relative mb-4"
-            lableClassName="leading-7 text-sm text-gray-600"
+            parentclassname="relative mb-4"
+            lableclassname="leading-7 text-sm text-gray-600"
             type="email"
             name="email"
             className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
           />
           <Input
             label="Password"
-            parentClassName="relative mb-4"
-            lableClassName="leading-7 text-sm text-gray-600"
+            parentclassname="relative mb-4"
+            lableclassname="leading-7 text-sm text-gray-600"
             type="text"
             name="fullName"
             className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
@@ -73,8 +71,8 @@ export default function LoginPage() {
 
           <div className="flex justify-between mb-4">
             <Checkbox
-              parentClassName="flex items-center"
-              lableClassName="flex text-xs text-gray-500"
+              parentclassname="flex items-center"
+              lableclassname="flex text-xs text-gray-500"
               name="remember"
               aria-label="Remember me"
               className="mr-1 rounded-sm focus:ri focus:dark:border-violet-400 focus:ri accent-violet-400"

@@ -7,13 +7,13 @@ export const Checkbox = ({ children, ...props }: any) => {
   // in `field` alongside `name`, `value`, `onChange`, and `onBlur`
   const [field, meta] = useField({ ...props, type: "checkbox" });
   return (
-    <div className={props.parentClassName || ""}>
-      <label className={props.lableClassName || ""}>
+    <div className={props.parentclassname || ""}>
+      <label className={props.lableclassname || ""}>
         <input type="checkbox" {...field} {...props} />
         {children}
       </label>
       {meta.touched && meta.error ? (
-        <div className={`error ${props.errorClassName || ''}`}>{meta.error}</div>
+        <div className={`error ${props.errorclassname || ''}`}>{meta.error}</div>
       ) : null}
     </div>
   );

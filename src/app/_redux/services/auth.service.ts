@@ -1,6 +1,6 @@
 import axiosConfig from "./axiosConfig";
 
-export const AuthAPI = {
+export const AuthService = {
     login() {
 
     },
