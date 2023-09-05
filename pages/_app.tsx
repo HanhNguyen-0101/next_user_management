@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { store } from "./_redux/configStore";
 import "@/styles/globals.css";
+import DrawerNav from "./_components/drawer/nav.drawer";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -18,6 +19,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+    <Provider store={store}>
+      <DrawerNav />
+      {getLayout(<Component {...pageProps} />)}
+    </Provider>
   );
 }

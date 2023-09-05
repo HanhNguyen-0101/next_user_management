@@ -1,40 +1,40 @@
-// import React from "react";
-// import { Drawer, Space, Button } from "antd";
-// import { useSelector, useDispatch } from "react-redux";
-// // import { useTranslation } from "react-i18next";
+import React from "react";
+import { Drawer, Space, Button } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { DrawerAction } from "@/redux/actions";
 
-// export default function DrawerNav() {
-//   const { visible, title, FormComponent, submitAction } = useSelector(
-//     (state: any) => state.drawer
-//   );
+export default function DrawerNav() {
+  const { visible, title, FormComponent, submitAction } = useSelector(
+    (state) => state.drawerReducer);
 
-//   const dispatch = useDispatch();
-// //   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-//   const onClose = () => {
-//     // dispatch(hideDrawer());
-//   };
-//   return (
-//     <Drawer
-//       title={<span className="text-amber-700">{title}</span>}
-//       placement="right"
-//       visible={visible}
-//       closable={false}
-//       size="large"
-//       className="drawer"
-//       footer={
-//         <Space>
-//           <Button className="capitalize" onClick={onClose}>{t("cancel")}</Button>
-//           <Button type="primary" className="capitalize" onClick={submitAction}>
-//             {t("confirm")}
-//           </Button>
-//         </Space>
-//       }
-//       footerStyle={{ textAlign: "left", backgroundColor: "#ffc700", borderColor: "transparent" }}
-//       headerStyle={{ backgroundColor: "#ffc700", borderColor: "transparent" }}
-//       bodyStyle={{ backgroundColor: "#fffde6" }}
-//     >
-//       {FormComponent}
-//     </Drawer>
-//   );
-// }
+  const onClose = () => {
+    dispatch(DrawerAction.hideDrawer());
+  };
+  console.log('******111***', visible)
+
+  return (
+    <Drawer
+      title={<span className="text-white">{title}</span>}
+      placement="right"
+      open={visible}
+      closable={false}
+      size="large"
+      className="drawer"
+      footer={
+        <Space>
+          <Button className="capitalize" onClick={onClose}>cancel</Button>
+          <Button type="primary" className="capitalize" onClick={submitAction}>
+          confirm
+          </Button>
+        </Space>
+      }
+      footerStyle={{ textAlign: "left", backgroundColor: "#3F6AAE", borderColor: "transparent" }}
+      headerStyle={{ backgroundColor: "#3F6AAE", borderColor: "transparent" }}
+      bodyStyle={{ backgroundColor: "#ffffff" }}
+    >
+      {FormComponent}
+    </Drawer>
+  );
+}
