@@ -4,8 +4,6 @@ import * as Yup from "yup";
 import { CheckboxField, InputField } from "../form-fields";
 import Link from "next/link";
 import * as en from "@/constants/locales/en/translation";
-import { GoogleOutlined } from "@ant-design/icons";
-import { Space } from "antd";
 
 export default function LoginForm({ onLoginSubmit }) {
   const t = en;
@@ -29,9 +27,11 @@ export default function LoginForm({ onLoginSubmit }) {
     >
       <Form>
         <h2 className="text-gray-900 text-lg font-medium title-font mb-5">
-          {t.login.welcomeBack}
+          Sign Up
         </h2>
-        <p className="text-xs text-gray-500 mb-5">{t.login.signInDesc}</p>
+        <p className="text-xs text-gray-500 mb-5">
+          Literally you probably haven't heard of them jean shorts.
+        </p>
         <InputField
           label="Email"
           parentclassname="relative mb-4"
@@ -57,10 +57,10 @@ export default function LoginForm({ onLoginSubmit }) {
             aria-label="Remember me"
             className="mr-1 rounded-sm focus:ri focus:dark:border-blueDark focus:ri accent-blueDark"
           >
-            {t.login.rememberMe}
+            Remember me
           </CheckboxField>
           <Link href={"/"} className="text-xs text-blueDark">
-            {t.login.forgotPass}
+            Forgot your password?
           </Link>
         </div>
         <button
@@ -74,20 +74,18 @@ export default function LoginForm({ onLoginSubmit }) {
           onClick={() => {
             alert("121222");
           }}
-          className="flex justify-center items-center w-full text-blueDark bg-white my-2 py-2 px-8 focus:outline-none hover:bg-slate-50 rounded border border-blueDark text-lg"
+          className="w-full text-blueDark bg-white my-2 py-2 px-8 focus:outline-none hover:bg-slate-50 rounded border border-blueDark text-lg"
         >
-          <Space>
-            <GoogleOutlined style={{ fontSize: 30 }} />
-            {t.login.signInGG}
-          </Space>
+          Sign in with Google
         </button>
-        <p className="text-xs text-gray-500 mt-3 text-center">
-          <Space>
-            {t.login.dontHaveAccount}
-            <Link href={"/"} className="text-blueDark">
-              {t.register.signUp}
-            </Link>
-          </Space>
+        <p className="text-xs text-gray-500 mt-3">
+          Literally you probably haven't heard of them jean shorts.{" "}
+          <Link
+            href={"/"}
+            className="text-blueDark"
+          >
+            Sign in
+          </Link>
         </p>
       </Form>
     </Formik>

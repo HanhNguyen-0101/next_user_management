@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 import { store } from "./_redux/configStore";
 import "@/styles/globals.css";
 import DrawerNav from "./_components/drawer/nav.drawer";
-import { appWithTranslation } from "next-i18next";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -15,7 +14,7 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
@@ -26,4 +25,3 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     </Provider>
   );
 }
-export default appWithTranslation(MyApp);

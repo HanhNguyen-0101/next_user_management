@@ -1,11 +1,9 @@
 "use client";
 import React, { ReactElement, useEffect } from "react";
 import DashboardLayout from "@/components/layout/dashboard.layout";
-import { Table } from "antd";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { Table} from 'antd'
+
 import type { ColumnsType, TableProps } from "antd/es/table";
-import { GetStaticProps } from "next";
 
 interface DataType {
   key: React.Key;
@@ -81,7 +79,7 @@ export default function DashboardPage() {
       width: "40%",
     },
   ];
-  const { t } = useTranslation();
+
   const data: DataType[] = [
     {
       key: "1",
@@ -119,7 +117,6 @@ export default function DashboardPage() {
   };
   return (
     <div className="bg-white p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
-      {t('homepage.title')}
       <Table columns={columns} dataSource={data} onChange={onChange} />
     </div>
   );
@@ -128,19 +125,3 @@ export default function DashboardPage() {
 DashboardPage.getLayout = function getLayout(page: ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const translationsProps = await serverSideTranslations(locale ?? 'en', [
-    // `i18next` namespace, matches translations file names
-    // & `defaultNS` in `next-i18next.config.js`
-    'default',
-  ])
-
-  return {
-    props: {
-      // These props are used by `appWithTranslation` in `_app.tsx`
-      // to set up a React context which holds translations
-      ...translationsProps,
-    },
-  }
-}
