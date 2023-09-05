@@ -18,6 +18,7 @@
       "@/styles/*": ["styles/*"],
       "@/redux/*": ["pages/_redux/*"],
       "@/components/*": ["pages/_components/*"],
+      "@/constants/*": ["pages/_constants/*"],
       "@/images/*": ["public/images/*"],
     }
 

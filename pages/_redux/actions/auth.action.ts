@@ -10,7 +10,7 @@ export const AuthType = {
 
 export const AuthAction = {
   getDataService: () => {
-    return async (dispatch) => {
+    return async (dispatch: any) => {
       try {
         const data = await AuthService.getData();
         dispatch(AuthType.getData(data));
