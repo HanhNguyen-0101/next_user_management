@@ -30,8 +30,8 @@ export default function DrawerNav() {
           </Button>
         </Space>
       }
-      footerStyle={{ textAlign: "left", backgroundColor: "#3F6AAE", borderColor: "transparent" }}
-      headerStyle={{ backgroundColor: "#3F6AAE", borderColor: "transparent" }}
+      footerStyle={{ textAlign: "left", backgroundColor: "#17759F", borderColor: "transparent" }}
+      headerStyle={{ backgroundColor: "#17759F", borderColor: "transparent" }}
       bodyStyle={{ backgroundColor: "#ffffff" }}
     >
       {FormComponent}

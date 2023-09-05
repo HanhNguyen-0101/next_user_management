@@ -1,35 +1,127 @@
 "use client";
-import { notFound } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
-import { AuthAction } from "@/redux/actions";
 import DashboardLayout from "@/components/layout/dashboard.layout";
-import LoginForm from "@/components/forms/form-components/LoginForm";
+import { Table} from 'antd'
 
-export default function LoginPage() {
-  // const [user, setUser] = useState([]);
+import type { ColumnsType, TableProps } from "antd/es/table";
 
-  const name = useSelector((state) => state.authReducer.name);
-  const dispatch = useDispatch();
+interface DataType {
+  key: React.Key;
+  name: string;
+  age: number;
+  address: string;
+}
 
-  const handleSubmitForm = (values: any) => {
-    alert(JSON.stringify(values));
+export default function DashboardPage() {
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      filters: [
+        {
+          text: "Joe",
+          value: "Joe",
+        },
+        {
+          text: "Category 1",
+          value: "Category 1",
+          children: [
+            {
+              text: "Yellow",
+              value: "Yellow",
+            },
+            {
+              text: "Pink",
+              value: "Pink",
+            },
+          ],
+        },
+        {
+          text: "Category 2",
+          value: "Category 2",
+          children: [
+            {
+              text: "Green",
+              value: "Green",
+            },
+            {
+              text: "Black",
+              value: "Black",
+            },
+          ],
+        },
+      ],
+      filterMode: "tree",
+      filterSearch: true,
+      onFilter: (value: string, record) => record.name.includes(value),
+      width: "30%",
+    },
+    {
+      title: "Age",
+      dataIndex: "age",
+      sorter: (a, b) => a.age - b.age,
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      filters: [
+        {
+          text: "London",
+          value: "London",
+        },
+        {
+          text: "New York",
+          value: "New York",
+        },
+      ],
+      onFilter: (value: string, record) => record.address.startsWith(value),
+      filterSearch: true,
+      width: "40%",
+    },
+  ];
+
+  const data: DataType[] = [
+    {
+      key: "1",
+      name: "John Brown",
+      age: 32,
+      address: "New York No. 1 Lake Park",
+    },
+    {
+      key: "2",
+      name: "Jim Green",
+      age: 42,
+      address: "London No. 1 Lake Park",
+    },
+    {
+      key: "3",
+      name: "Joe Black",
+      age: 32,
+      address: "Sydney No. 1 Lake Park",
+    },
+    {
+      key: "4",
+      name: "Jim Red",
+      age: 32,
+      address: "London No. 2 Lake Park",
+    },
+  ];
+
+  const onChange: TableProps<DataType>["onChange"] = (
+    pagination,
+    filters,
+    sorter,
+    extra
+  ) => {
+    console.log("params", pagination, filters, sorter, extra);
   };
-
-  useEffect(() => {
-    dispatch(AuthAction.getDataService());
-  }, []);
-  if (!name) {
-    notFound();
-  }
-
   return (
     <div className="bg-white p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
-      {/* <LoginForm onLoginSubmit={handleSubmitForm} /> */}
+      <Table columns={columns} dataSource={data} onChange={onChange} />
     </div>
   );
 }
 
-LoginPage.getLayout = function getLayout(page: ReactElement) {
+DashboardPage.getLayout = function getLayout(page: ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };

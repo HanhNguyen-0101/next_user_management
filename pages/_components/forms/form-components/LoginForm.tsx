@@ -38,7 +38,7 @@ export default function LoginForm({ onLoginSubmit }) {
           lableclassname="leading-7 text-sm text-gray-600"
           type="email"
           name="email"
-          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+          className="w-full bg-white rounded border border-gray-300 focus:border-blueDark focus:ring-2 focus:ring-indigo-50 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
         />
         <InputField
           label="Password"
@@ -46,7 +46,7 @@ export default function LoginForm({ onLoginSubmit }) {
           lableclassname="leading-7 text-sm text-gray-600"
           type="text"
           name="fullName"
-          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+          className="w-full bg-white rounded border border-gray-300 focus:border-blueDark focus:ring-2 focus:ring-indigo-50 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
         />
 
         <div className="flex justify-between mb-4">
@@ -55,17 +55,17 @@ export default function LoginForm({ onLoginSubmit }) {
             lableclassname="flex text-xs text-gray-500"
             name="remember"
             aria-label="Remember me"
-            className="mr-1 rounded-sm focus:ri focus:dark:border-violet-400 focus:ri accent-violet-400"
+            className="mr-1 rounded-sm focus:ri focus:dark:border-blueDark focus:ri accent-blueDark"
           >
             Remember me
           </CheckboxField>
-          <Link href={"/"} className="text-xs text-indigo-500">
+          <Link href={"/"} className="text-xs text-blueDark">
             Forgot your password?
           </Link>
         </div>
         <button
           type="submit"
-          className="w-full text-white bg-indigo-500 my-2 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded border border-indigo-600 text-lg"
+          className="w-full text-white bg-blueDark my-2 py-2 px-8 focus:outline-none rounded border border-blueDark text-lg"
         >
           {t.login.signIn}
         </button>
@@ -74,7 +74,7 @@ export default function LoginForm({ onLoginSubmit }) {
           onClick={() => {
             alert("121222");
           }}
-          className="w-full text-black bg-white my-2 py-2 px-8 focus:outline-none hover:bg-slate-50 rounded border border-gray-300 text-lg"
+          className="w-full text-blueDark bg-white my-2 py-2 px-8 focus:outline-none hover:bg-slate-50 rounded border border-blueDark text-lg"
         >
           Sign in with Google
         </button>
@@ -82,7 +82,7 @@ export default function LoginForm({ onLoginSubmit }) {
           Literally you probably haven't heard of them jean shorts.{" "}
           <Link
             href={"/"}
-            className="text-indigo-500 hover:text-indigo-600 focus:text-indigo-600"
+            className="text-blueDark"
           >
             Sign in
           </Link>

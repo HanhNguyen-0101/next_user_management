@@ -38,6 +38,17 @@ body {
   background-position: right top;
 }
 
+.bg-error {
+  background-image: url("./../public/images/background-error.png");
+  height: 100vh;
+  margin: 0;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  background-position: center;
+}
+
 .error {
   color: red;
   font-size: 12px;
