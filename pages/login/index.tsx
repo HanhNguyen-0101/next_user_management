@@ -1,33 +1,35 @@
 "use client";
-import { notFound } from "next/navigation";
+// import { notFound } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
 import { AuthAction } from "@/redux/actions";
 import AuthLayout from "@/components/layout/auth.layout";
 import LoginForm from "@/components/forms/form-components/LoginForm";
-import {
-  NOTIF_TYPE,
-  openNotification,
-} from "@/components/notification/notification";
-import { Button } from "antd";
-import DrawerNav from "@/components/drawer/nav.drawer";
-import { DrawerAction } from "@/redux/actions/drawer.action";
+import { LoginPayload } from "pages/_models/login";
+// import {
+//   NOTIF_TYPE,
+//   openNotification,
+// } from "@/components/notification/notification";
+// import { Button } from "antd";
+// import DrawerNav from "@/components/drawer/nav.drawer";
+// import { DrawerAction } from "@/redux/actions/drawer.action";
 export default function LoginPage() {
   // const [user, setUser] = useState([]);
 
-  const name = useSelector((state) => state.authReducer.name);
+  // const name = useSelector((state) => state.authReducer.name);
   const dispatch = useDispatch();
 
-  const handleSubmitForm = (values: any) => {
+  const handleSubmitForm = (values: LoginPayload) => {
     alert(JSON.stringify(values));
+    dispatch(AuthAction.login(values));
   };
 
-  useEffect(() => {
-    dispatch(AuthAction.getDataService());
-  }, []);
-  if (!name) {
-    notFound();
-  }
+  // useEffect(() => {
+  //   dispatch(AuthAction.getDataService());
+  // }, []);
+  // if (!name) {
+  //   notFound();
+  // }
 
   // const submitAction = () => {
   //   alert("12");

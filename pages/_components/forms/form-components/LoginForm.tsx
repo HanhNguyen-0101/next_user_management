@@ -81,14 +81,14 @@ export default function LoginForm({ onLoginSubmit }) {
             {t.login.signInGG}
           </Space>
         </button>
-        <p className="text-xs text-gray-500 mt-3 text-center">
+        <div className="text-xs text-gray-500 mt-3 text-center">
           <Space>
             {t.login.dontHaveAccount}
             <Link href={"/"} className="text-blueDark">
               {t.register.signUp}
             </Link>
           </Space>
-        </p>
+        </div>
       </Form>
     </Formik>
   );

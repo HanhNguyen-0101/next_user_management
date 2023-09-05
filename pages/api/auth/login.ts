@@ -30,7 +30,17 @@ export default function handler(
 
       proxyRes.on("end", () => {
         try {
-          const {access_token} = JSON.parse(apiResponseBody);
+          const isSuccess =
+            proxyRes.statusCode &&
+            proxyRes.statusCode <= 200 &&
+            proxyRes.statusCode > 300;
+          if (!isSuccess) {
+            (res as NextApiResponse)
+              .status(proxyRes.statusCode || 500)
+              .json({ message: apiResponseBody });
+            return resolve(true);
+          }
+          const { access_token } = JSON.parse(apiResponseBody);
           const cookies = new Cookies(req, res);
           cookies.set("access_token", access_token, {
             httpOnly: true,
