@@ -37,7 +37,7 @@ export default function handler(
           if (!isSuccess) {
             (res as NextApiResponse)
               .status(proxyRes.statusCode || 500)
-              .json({ message: apiResponseBody });
+              .json(JSON.parse(apiResponseBody));
             return resolve(true);
           }
           const { access_token } = JSON.parse(apiResponseBody);

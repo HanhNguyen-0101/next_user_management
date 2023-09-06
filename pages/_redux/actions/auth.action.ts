@@ -1,39 +1,54 @@
-import { LoginPayload } from "pages/_models/login";
+import { LoginPayload } from "@/redux/models/auth";
 import { AuthConstant } from "../constants";
 import { AuthService } from "../services";
+import { STATUS_CODE } from "@/constants/configSetting";
 
-const {GET_DATA, LOGIN_SUCCESS} = AuthConstant;
+const { LOGIN_SUCCESS, LOGIN_FAILUER, LOGIN_GOOGLE_SUCCESS, LOGIN_GOOGLE_FAILUER } = AuthConstant;
 
 export const AuthType = {
-  getData: (payload: any): any => ({
-    type: GET_DATA,
-    payload,
-  }),
   loginSuccess: (payload: any) => ({
     type: LOGIN_SUCCESS,
     payload,
-  }) 
-}
+  }),
+  loginFailue: (payload: any) => ({
+    type: LOGIN_FAILUER,
+    payload,
+  }),
+  loginGoogleSuccess: (payload: any) => ({
+    type: LOGIN_GOOGLE_SUCCESS,
+    payload,
+  }),
+  loginGoogleFailue: (payload: any) => ({
+    type: LOGIN_GOOGLE_FAILUER,
+    payload,
+  }),
+};
 
 export const AuthAction = {
-  getDataService: () => {
-    return async (dispatch: any) => {
-      try {
-        const data = await AuthService.getData();
-        dispatch(AuthType.getData(data));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  },
   login: (payload: LoginPayload) => {
     return async (dispatch: any) => {
       try {
-        const data = await AuthService.login(payload);
-        dispatch(AuthType.loginSuccess(data));
+        const result = await AuthService.login(payload);
+        const { status, data } = result;
+        if (status === STATUS_CODE.SUCCESS) {
+          dispatch(AuthType.loginSuccess(data));
+        }
       } catch (error) {
-        console.log(error);
+        dispatch(AuthType.loginFailue(error));
       }
     };
-  }
-}
+  },
+  loginGoogle: () => {
+    return async (dispatch: any) => {
+      try {
+        const result = await AuthService.loginGoogle();
+        const { status, data } = result;
+        if (status === STATUS_CODE.SUCCESS) {
+          dispatch(AuthType.loginSuccess(data));
+        }
+      } catch (error) {
+        dispatch(AuthType.loginFailue(error));
+      }
+    };
+  },
+};

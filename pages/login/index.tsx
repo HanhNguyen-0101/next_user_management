@@ -4,7 +4,7 @@ import React, { ReactElement } from "react";
 import { AuthAction } from "@/redux/actions";
 import AuthLayout from "@/components/layout/auth.layout";
 import LoginForm from "@/components/forms/form-components/LoginForm";
-import { LoginPayload } from "pages/_models/login";
+import { LoginPayload } from "@/redux/models/auth";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 export default function LoginPage( _props: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -12,12 +12,11 @@ export default function LoginPage( _props: InferGetStaticPropsType<typeof getSta
   const dispatch = useDispatch();
 
   const handleSubmitLoginForm = (values: LoginPayload) => {
-    alert(JSON.stringify(values));
     dispatch(AuthAction.login(values));
   };
 
   const handleSubmitLoginGoogleForm = (values) => {
-    alert(JSON.stringify(values));
+    dispatch(AuthAction.loginGoogle());
   }
   // const name = useSelector((state) => state.authReducer.name);
 

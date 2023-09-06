@@ -1,24 +1,26 @@
 import { AuthConstant } from "../constants";
 
-const { GET_DATA, LOGIN_SUCCESS } = AuthConstant;
+const { LOGIN_SUCCESS, LOGIN_FAILUER, LOGIN_GOOGLE_SUCCESS, LOGIN_GOOGLE_FAILUER } = AuthConstant;
 
 const initState = {
-  name: "guest",
-  token: null,
+  msg: "",
+  error: "",
+  user: null,
 };
 const authReducer = (state = initState, action: any) => {
   switch (action.type) {
-    case GET_DATA:
-      return {
-        ...state,
-        name: action.payload,
-      };
     case LOGIN_SUCCESS: {
-      console.log("********", action.payload);
-      return {
-        ...state,
-        token: action.payload.access_token,
-      };
+      return { ...state, msg: action.payload.message, error: initState.error };
+    }
+    case LOGIN_FAILUER: {
+      return { ...state, error: action.payload.message, msg: initState.msg };
+    }
+    case LOGIN_GOOGLE_SUCCESS: {
+      console.log('8888888888', action.payload)
+      return { ...state, user: action.payload.user, error: initState.error };
+    }
+    case LOGIN_GOOGLE_FAILUER: {
+      return { ...state, error: action.payload.message, msg: initState.msg };
     }
     default:
       return { ...state };
