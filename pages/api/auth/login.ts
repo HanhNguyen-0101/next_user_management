@@ -32,8 +32,8 @@ export default function handler(
         try {
           const isSuccess =
             proxyRes.statusCode &&
-            proxyRes.statusCode <= 200 &&
-            proxyRes.statusCode > 300;
+            proxyRes.statusCode >= 200 &&
+            proxyRes.statusCode < 300;
           if (!isSuccess) {
             (res as NextApiResponse)
               .status(proxyRes.statusCode || 500)
