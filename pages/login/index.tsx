@@ -1,28 +1,25 @@
 "use client";
-// import { notFound } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import React, { ReactElement, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import React, { ReactElement } from "react";
 import { AuthAction } from "@/redux/actions";
 import AuthLayout from "@/components/layout/auth.layout";
 import LoginForm from "@/components/forms/form-components/LoginForm";
 import { LoginPayload } from "pages/_models/login";
-// import {
-//   NOTIF_TYPE,
-//   openNotification,
-// } from "@/components/notification/notification";
-// import { Button } from "antd";
-// import DrawerNav from "@/components/drawer/nav.drawer";
-// import { DrawerAction } from "@/redux/actions/drawer.action";
-export default function LoginPage() {
-  // const [user, setUser] = useState([]);
+import { GetStaticProps, InferGetStaticPropsType } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+export default function LoginPage( _props: InferGetStaticPropsType<typeof getStaticProps>) {
 
-  // const name = useSelector((state) => state.authReducer.name);
   const dispatch = useDispatch();
 
-  const handleSubmitForm = (values: LoginPayload) => {
+  const handleSubmitLoginForm = (values: LoginPayload) => {
     alert(JSON.stringify(values));
     dispatch(AuthAction.login(values));
   };
+
+  const handleSubmitLoginGoogleForm = (values) => {
+    alert(JSON.stringify(values));
+  }
+  // const name = useSelector((state) => state.authReducer.name);
 
   // useEffect(() => {
   //   dispatch(AuthAction.getDataService());
@@ -51,11 +48,22 @@ export default function LoginPage() {
         Success
       </Button> */}
       {/* <Button onClick={openDrawer}>Success</Button> */}
-      <LoginForm onLoginSubmit={handleSubmitForm} />
+      <LoginForm onLoginSubmit={handleSubmitLoginForm} onGoogleLoginSubmit={handleSubmitLoginGoogleForm}/>
     </div>
   );
 }
 
 LoginPage.getLayout = function getLayout(page: ReactElement) {
   return <AuthLayout>{page}</AuthLayout>;
+};
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const translationsProps = await serverSideTranslations(locale ?? "en", [
+    "login",
+  ]);
+
+  return {
+    props: {
+      ...translationsProps,
+    },
+  };
 };
