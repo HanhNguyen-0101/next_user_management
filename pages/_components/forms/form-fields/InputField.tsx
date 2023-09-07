@@ -1,20 +1,17 @@
 import { useField } from "formik";
 
 export const InputField = ({ label, ...props }: any) => {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  // which we can spread on <input>. We can use field meta to show an error
-  // message if the field is invalid and it has been touched (i.e. visited)
   const [field, meta] = useField(props);
 
   return (
-    <div className={props.parentclassname || ""}>
+    <div className={`relative mb-2.5 ${props.parentclassname}`}>
       <label
         htmlFor={props.id || props.name}
-        className={props.lableclassname || ""}
+        className={`leading-7 text-sm text-gray-600 ${props.lableclassname}`}
       >
         {label}
       </label>
-      <input {...field} {...props} />
+      <input {...field} {...props} className={`w-full bg-white rounded border border-gray-300 focus:border-blueDark focus:ring-2 focus:ring-indigo-50 text-base outline-none text-gray-700 py-0.5 px-2 leading-8 transition-colors duration-200 ease-in-out ${props.className}`} />
       {meta.touched && meta.error ? (
         <div className={`error ${props.errorclassname || ''}`}>{meta.error}</div>
       ) : null}

@@ -17,7 +17,6 @@ const drawerReducer = (state = initState, action: any) => {
       };
     }
     case HIDE_DRAWER: {
-      console.log('*********')
       return {
         ...state,
         visible: false,

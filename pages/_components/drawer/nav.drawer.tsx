@@ -12,7 +12,6 @@ export default function DrawerNav() {
   const onClose = () => {
     dispatch(DrawerAction.hideDrawer());
   };
-  console.log('******111***', visible)
 
   return (
     <Drawer
