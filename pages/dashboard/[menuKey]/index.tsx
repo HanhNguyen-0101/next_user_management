@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 
-const index = ({ menuKey }) => {
+const index = ({ menuKey }: {menuKey: string}) => {
   return <div>{menuKey}</div>;
 };
 

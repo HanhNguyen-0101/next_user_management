@@ -18,7 +18,7 @@ export const openNotification = (
   description = "",
   placement = NOTIF_POSITION.TOP_RIGHT
 ) => {
-  notification[type]({
+  notification[type as keyof typeof notification]({
     message,
     description,
     placement,

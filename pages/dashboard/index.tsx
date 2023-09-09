@@ -36,15 +36,15 @@ export default function DashboardPage(
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const handleEditRecord = (id) => {
+  const handleEditRecord = (id: any) => {
     alert(id);
   };
 
-  const handleDeleteRecord = (id) => {
+  const handleDeleteRecord = (id: any) => {
     alert(id);
   };
 
-  const data_1: DataType[] = [
+  const data_1 = [
     {
       id: "1c9ce179-cc6e-4a3f-b722-c437b479c7a9",
       email: "123@yopmail.com",
@@ -462,7 +462,8 @@ export default function DashboardPage(
       <h3>{t("homepage.title")}</h3>
       <Table
         columns={columns_1}
-        dataSource={data_1}
+        // dataSource={data_1}
+        dataSource={[]}
         onChange={onChange}
         scroll={{ x: true }}
         sticky={true}

@@ -74,7 +74,7 @@ export default function DashboardLayout({ children }: any) {
     dispatch(AuthAction.logout());
     router.push("/login");
   };
-  const handleOnSelectMenu = (data) => {
+  const handleOnSelectMenu = (data: any) => {
     router.push(`/dashboard/${data.key}`)
   }
 
