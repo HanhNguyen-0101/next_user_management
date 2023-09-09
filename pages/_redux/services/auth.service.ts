@@ -16,4 +16,10 @@ export const AuthService = {
       },
     });
   },
+  logout() {
+    return axiosConfig.post("/auth/logout");
+  },
+  getUser() {
+    return axiosConfig.get('/users')
+  }
 };

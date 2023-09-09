@@ -5,75 +5,47 @@ import { AuthAction } from "@/redux/actions";
 import AuthLayout from "@/components/layout/auth.layout";
 import LoginForm from "@/components/forms/form-components/LoginForm";
 import { LoginPayload } from "@/redux/models/auth";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { LightButton } from "@/components/button/lightButton";
 import { Space } from "antd";
 import Link from "next/link";
 import { GoogleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
+import { Dispatch } from "redux";
 
-export default function LoginPage(
-  _props: InferGetStaticPropsType<typeof getStaticProps>
-) {
-  const dispatch = useDispatch();
+export default function LoginPage() {
+  const dispatch = useDispatch<Dispatch<any>>();
   const router = useRouter();
-  const { t } = useTranslation("login");
-
+  const { t } = useTranslation(["common", "auth"]);
   const handleSubmitLoginForm = (values: LoginPayload) => {
     dispatch(AuthAction.login(values));
-    router.push('/dashboard')
+    router.push("/dashboard");
   };
 
-  const handleSubmitLoginGoogleForm = (values) => {
+  const handleSubmitLoginGoogleForm = () => {
     dispatch(AuthAction.loginGoogle());
   };
-  // const name = useSelector((state) => state.authReducer.name);
-
-  // useEffect(() => {
-  //   dispatch(AuthAction.getDataService());
-  // }, []);
-  // if (!name) {
-  //   notFound();
-  // }
-
-  // const submitAction = () => {
-  //   alert("12");
-  // };
-  // const openDrawer = () => {
-  //   dispatch(
-  //     DrawerAction.openDrawer({
-  //       visible: true,
-  //       title: "title",
-  //       FormComponent: <LoginForm />,
-  //       submitAction,
-  //     })
-  //   );
-  // };
 
   return (
     <div className="bg-white px-8 py-4 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
-      {/* <Button onClick={() => openNotification(NOTIF_TYPE.INFO, "11111111111", 'aaaaaaa asasasas')}>
-        Success
-      </Button> */}
-      {/* <Button onClick={openDrawer}>Success</Button> */}
       <h2 className="text-gray-900 text-lg font-medium title-font mb-3">
-        {t("login.welcomeBack")}
+        {t("auth:login.welcomeBack")}
       </h2>
-      <p className="text-xs text-gray-500 mb-4">{t("login.signInDesc")}</p>
+      <p className="text-xs text-gray-500 mb-4">{t("auth:login.signInDesc")}</p>
       <LoginForm onLoginSubmit={handleSubmitLoginForm} />
       <LightButton type="button" onClick={handleSubmitLoginGoogleForm}>
         <Space>
           <GoogleOutlined style={{ fontSize: 25 }} />
-          {t("login.signInGG")}
+          {t("auth:login.signInGG")}
         </Space>
       </LightButton>
       <div className="text-xs text-gray-500 mt-3 text-center">
         <Space>
-          {t("login.dontHaveAccount")}
-          <Link href={"/"} className="text-blueDark">
-            {t("login.signUp")}
+          {t("auth:login.dontHaveAccount")}
+          <Link href={"/register"} className="text-blueDark hover:text-blueDark focus:text-blueDark">
+            {t("auth:register.signUp")}
           </Link>
         </Space>
       </div>
@@ -84,9 +56,11 @@ export default function LoginPage(
 LoginPage.getLayout = function getLayout(page: ReactElement) {
   return <AuthLayout>{page}</AuthLayout>;
 };
+
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const translationsProps = await serverSideTranslations(locale ?? "en", [
-    "login",
+    "common",
+    "auth",
   ]);
 
   return {

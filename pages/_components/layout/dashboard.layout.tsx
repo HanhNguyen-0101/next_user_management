@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import {
   LeftOutlined,
   RightOutlined,
@@ -6,55 +6,77 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Button, theme, Dropdown, Avatar } from "antd";
+import {
+  Layout,
+  Menu,
+  Button,
+  theme,
+  Dropdown,
+  Avatar,
+  Space,
+  Divider,
+} from "antd";
 import type { MenuProps } from "antd";
 import LoadingComponent from "../loading";
+import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { Dispatch } from "redux";
+import { AuthAction } from "@/redux/actions";
 
 const { Header, Sider, Content } = Layout;
 
-const items: MenuProps["items"] = [
-  {
-    key: "1",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.antgroup.com"
-      >
-        1st menu item
-      </a>
-    ),
-  },
-  {
-    key: "2",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.aliyun.com"
-      >
-        2nd menu item
-      </a>
-    ),
-  },
-  {
-    key: "3",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.luohanacademy.com"
-      >
-        3rd menu item
-      </a>
-    ),
-  },
-];
 export default function DashboardLayout({ children }: any) {
   const [collapsed, setCollapsed] = useState(false);
+  const dispatch = useDispatch<Dispatch<any>>();
+  const router = useRouter();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  useEffect(() => {
+
+  }, [])
+  
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <div><Link href={'/'} className="font-bold">hanh@gmail.com</Link><br /><i className="opacity-50">Administrator</i></div>,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "3",
+      label: (
+        <button type="button" onClick={() => handleLogout()}>
+          Log out
+        </button>
+      ),
+    },
+  ];
+  const itemsMenu = [
+    {
+      key: "1",
+      label: "nav 1",
+    },
+    {
+      key: "2",
+      label: "nav 2",
+    },
+    {
+      key: "3",
+      label: "nav 3",
+    },
+  ]
+
+  const handleLogout = () => {
+    dispatch(AuthAction.logout());
+    router.push("/login");
+  };
+  const handleOnSelectMenu = (data) => {
+    router.push(`/dashboard/${data.key}`)
+  }
 
   return (
     <Layout>
@@ -107,23 +129,8 @@ export default function DashboardLayout({ children }: any) {
                 }}
                 className={collapsed ? "hidden" : "inline"}
                 defaultSelectedKeys={["1"]}
-                items={[
-                  {
-                    key: "1",
-                    icon: <UserOutlined />,
-                    label: "nav 1",
-                  },
-                  {
-                    key: "2",
-                    icon: <VideoCameraOutlined />,
-                    label: "nav 2",
-                  },
-                  {
-                    key: "3",
-                    icon: <UploadOutlined />,
-                    label: "nav 3",
-                  },
-                ]}
+                items={itemsMenu}
+                onSelect={handleOnSelectMenu}
               />
             </Suspense>
           </Sider>

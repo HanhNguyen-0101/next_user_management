@@ -1,2 +1,2 @@
-export {AuthAction, AuthType} from './auth.action'
-export {DrawerAction, DrawerType} from './drawer.action'
+export { AuthAction } from "./auth.action";
+export { DrawerAction } from "./drawer.action";

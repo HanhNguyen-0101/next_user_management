@@ -1,24 +1,23 @@
+import { Dispatch } from "redux";
 import { DrawerConstant } from "../constants";
+import { DrawerPayload } from "../models/common";
 
-export const DrawerType = {
-  openDrawer: (payload: any): any => ({
-    type: DrawerConstant.OPEN_DRAWER,
-    payload,
-  }),
-  hideDrawer: () => ({
-    type: DrawerConstant.HIDE_DRAWER,
-  })
-};
+const { OPEN_DRAWER, HIDE_DRAWER } = DrawerConstant;
 
 export const DrawerAction = {
-  openDrawer: (data: any) => {
-    return (dispatch: any) => {
-      dispatch(DrawerType.openDrawer(data));
+  openDrawer: (data: DrawerPayload) => {
+    return (dispatch: Dispatch) => {
+      dispatch({
+        type: OPEN_DRAWER,
+        payload: data,
+      });
     };
   },
   hideDrawer: () => {
-    return (dispatch: any) => {
-      dispatch(DrawerType.hideDrawer());
+    return (dispatch: Dispatch) => {
+      dispatch({
+        type: HIDE_DRAWER,
+      });
     };
-  }
+  },
 };

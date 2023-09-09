@@ -2,74 +2,88 @@ import { LoginPayload, RegisterPayload } from "@/redux/models/auth";
 import { AuthConstant } from "../constants";
 import { AuthService } from "../services";
 import { STATUS_CODE } from "@/constants/configSetting";
-import { NOTIF_TYPE, openNotification } from "@/components/notification/notification";
+import { Dispatch } from "redux";
 
-const { LOGIN_SUCCESS, LOGIN_FAILUER, LOGIN_GOOGLE_SUCCESS, LOGIN_GOOGLE_FAILUER, REGISTER_FAILUER, REGISTER_SUCCESS } = AuthConstant;
-
-export const AuthType = {
-  loginSuccess: (payload: any) => ({
-    type: LOGIN_SUCCESS,
-    payload,
-  }),
-  loginFailue: (payload: any) => ({
-    type: LOGIN_FAILUER,
-    payload,
-  }),
-  loginGoogleSuccess: (payload: any) => ({
-    type: LOGIN_GOOGLE_SUCCESS,
-    payload,
-  }),
-  loginGoogleFailue: (payload: any) => ({
-    type: LOGIN_GOOGLE_FAILUER,
-    payload,
-  }),
-  registerSuccess: (payload: any) => ({
-    type: REGISTER_SUCCESS,
-    payload,
-  }),
-  registerFailue: (payload: any) => ({
-    type: REGISTER_FAILUER,
-    payload,
-  }),
-};
+const {
+  LOGIN_SUCCESS,
+  LOGIN_FAILUER,
+  LOGIN_GOOGLE_SUCCESS,
+  LOGIN_GOOGLE_FAILUER,
+  REGISTER_FAILUER,
+  REGISTER_SUCCESS,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+} = AuthConstant;
 
 export const AuthAction = {
   login: (payload: LoginPayload) => {
-    return async (dispatch: any) => {
+    return async (dispatch: Dispatch): Promise<void> => {
       try {
-        const result = await AuthService.login(payload);
-        const { status, data } = result;
+        const { status, data } = await AuthService.login(payload);
         if (status === STATUS_CODE.SUCCESS) {
-          dispatch(AuthType.loginSuccess(data));
+          dispatch({
+            type: LOGIN_SUCCESS,
+            payload: data,
+          });
         }
       } catch (error) {
-        dispatch(AuthType.loginFailue(error));
+        dispatch({
+          type: LOGIN_FAILUER,
+          payload: error,
+        });
       }
     };
   },
   loginGoogle: () => {
-    return async (dispatch: any) => {
+    return async (dispatch: Dispatch): Promise<void> => {
       try {
-        const result = await AuthService.loginGoogle();
-        const { status, data } = result;
+        const { status, data } = await AuthService.loginGoogle();
         if (status === STATUS_CODE.SUCCESS) {
-          dispatch(AuthType.loginSuccess(data));
+          dispatch({
+            type: LOGIN_GOOGLE_SUCCESS,
+            payload: data,
+          });
         }
       } catch (error) {
-        dispatch(AuthType.loginFailue(error));
+        dispatch({
+          type: LOGIN_GOOGLE_FAILUER,
+          payload: error,
+        });
       }
     };
   },
   register: (payload: RegisterPayload) => {
-    return async (dispatch: any) => {
+    return async (dispatch: Dispatch): Promise<void> => {
       try {
-        const result = await AuthService.register(payload);
-        const { status, data } = result;
+        const { status, data } = await AuthService.register(payload);
         if (status === STATUS_CODE.SUCCESS) {
-          await dispatch(AuthType.registerSuccess(data));
+          dispatch({
+            type: REGISTER_SUCCESS,
+            payload: data,
+          });
         }
       } catch (error) {
-        dispatch(AuthType.registerFailue(error));
+        dispatch({
+          type: REGISTER_FAILUER,
+          payload: error,
+        });
+      }
+    };
+  },
+  logout: () => {
+    return async (dispatch: Dispatch): Promise<void> => {
+      try {
+        const { status } = await AuthService.logout();
+        if (status === STATUS_CODE.SUCCESS) {
+          dispatch({
+            type: LOGOUT_SUCCESS,
+          });
+        }
+      } catch (error) {
+        dispatch({
+          type: LOGOUT_FAILURE,
+          payload: error,
+        });
       }
     };
   },

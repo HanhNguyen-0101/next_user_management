@@ -5,9 +5,14 @@ import { CheckboxField, InputField } from "../form-fields";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { DarkButton } from "@/components/button/darkButton";
+import { LoginPayload } from "@/redux/models/auth";
 
-export default function LoginForm({ onLoginSubmit }) {
-  const { t } = useTranslation("login");
+export default function LoginForm({
+  onLoginSubmit,
+}: {
+  onLoginSubmit: (payload: LoginPayload) => void;
+}) {
+  const { t } = useTranslation(["common", "auth"]);
   return (
     <Formik
       initialValues={{
@@ -38,13 +43,13 @@ export default function LoginForm({ onLoginSubmit }) {
             name="remember"
             aria-label="Remember me"
           >
-            {t("login.rememberMe")}
+            {t("auth:login.rememberMe")}
           </CheckboxField>
           <Link href={"/"} className="text-xs text-blueDark">
-            {t("login.forgotPass")}
+            {t("auth:login.forgotPass")}
           </Link>
         </div>
-        <DarkButton type="submit">{t("login.signIn")}</DarkButton>
+        <DarkButton type="submit">{t("auth:login.signIn")}</DarkButton>
       </Form>
     </Formik>
   );
