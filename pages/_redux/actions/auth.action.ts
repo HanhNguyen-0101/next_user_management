@@ -16,7 +16,7 @@ const {
 } = AuthConstant;
 
 export const AuthAction = {
-  login: (payload: LoginPayload) => {
+  login: (payload: LoginPayload, setSubmitting: Function) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
         const { status, data } = await AuthService.login(payload);
@@ -26,11 +26,16 @@ export const AuthAction = {
             payload: data,
           });
         }
-      } catch (error) {
+      } catch (error: any) {
+        let message = error.response.data.message;
+        if (error.response.status === STATUS_CODE.BAD_REQUEST) {
+          message = "Email or Password is wrong!";
+        }
         dispatch({
           type: LOGIN_FAILUER,
-          payload: error,
+          payload: { message },
         });
+        setSubmitting(false);
       }
     };
   },
