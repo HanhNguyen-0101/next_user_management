@@ -462,8 +462,8 @@ export default function DashboardPage(
       <h3>{t("homepage.title")}</h3>
       <Table
         columns={columns_1}
-        // dataSource={data_1}
-        dataSource={[]}
+        dataSource={data_1}
+        // dataSource={[]}
         onChange={onChange}
         scroll={{ x: true }}
         sticky={true}

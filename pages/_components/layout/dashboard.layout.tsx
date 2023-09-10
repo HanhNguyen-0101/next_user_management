@@ -1,28 +1,14 @@
-import React, { Suspense, useState, useEffect } from "react";
-import {
-  LeftOutlined,
-  RightOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import {
-  Layout,
-  Menu,
-  Button,
-  theme,
-  Dropdown,
-  Avatar,
-  Space,
-  Divider,
-} from "antd";
+import React, { useState, useEffect } from "react";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { Layout, Menu, Button, theme, Dropdown, Avatar } from "antd";
 import type { MenuProps } from "antd";
-import LoadingComponent from "../loading";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Dispatch } from "redux";
-import { AuthAction } from "@/redux/actions";
+import { AuthAction, MenuAction } from "@/redux/actions";
+import { MenuType } from "@/redux/models/menu";
+import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
 
 const { Header, Sider, Content } = Layout;
 
@@ -30,18 +16,60 @@ export default function DashboardLayout({ children }: any) {
   const [collapsed, setCollapsed] = useState(false);
   const dispatch = useDispatch<Dispatch<any>>();
   const router = useRouter();
+  const { menuData } = useSelector((state: any) => state.menuReducer);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   useEffect(() => {
+    dispatch(MenuAction.getAll());
+  }, []);
 
-  }, [])
-  
+  const itemsMenu: ItemType<MenuItemType>[] | { key: string; label: string }[] =
+    [];
+  if (menuData && menuData.data) {
+    const mainMenu = menuData.data.filter((i:any) => !i.parentId);
+
+    mainMenu.map((item: any) => {
+      const index = menuData.data.findIndex(i => i.parentId === item.id);
+      if (index !== -1) {
+        if (!item.children) {
+          item.children = [];
+        }
+        item.children.push(item);
+      }
+      return item;
+    })
+    // menuData.data.map((item: any) => {
+    //   const index = mainMenu.findIndex(i => i.id === item.parentId);
+    //   if (index !== -1) {
+    //     if (!mainMenu[index].children) {
+    //       mainMenu[index].children = [];
+    //     }
+    //     mainMenu[index].children.push(item);
+    //   }
+    //  });
+    console.log('*88888888888', mainMenu)
+    menuData.data.map((menu: MenuType) => {
+      itemsMenu.push({
+        key: menu.key,
+        label: menu.name,
+      });
+    });
+  }
+
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: <div><Link href={'/'} className="font-bold">hanh@gmail.com</Link><br /><i className="opacity-50">Administrator</i></div>,
+      label: (
+        <div>
+          <Link href={"/"} className="font-bold">
+            hanh@gmail.com
+          </Link>
+          <br />
+          <i className="opacity-50">Administrator</i>
+        </div>
+      ),
     },
     {
       type: "divider",
@@ -55,28 +83,13 @@ export default function DashboardLayout({ children }: any) {
       ),
     },
   ];
-  const itemsMenu = [
-    {
-      key: "1",
-      label: "nav 1",
-    },
-    {
-      key: "2",
-      label: "nav 2",
-    },
-    {
-      key: "3",
-      label: "nav 3",
-    },
-  ]
 
   const handleLogout = () => {
     dispatch(AuthAction.logout());
-    router.push("/login");
   };
   const handleOnSelectMenu = (data: any) => {
-    router.push(`/dashboard/${data.key}`)
-  }
+    router.push(`/dashboard/${data.key}`);
+  };
 
   return (
     <Layout>
@@ -119,34 +132,30 @@ export default function DashboardLayout({ children }: any) {
                 zIndex: 10,
               }}
             />
-            <Suspense fallback={<LoadingComponent />}>
-              <Menu
-                mode="inline"
-                style={{
-                  backgroundColor: "#f6f6f6",
-                  border: 0,
-                  paddingRight: 30,
-                }}
-                className={collapsed ? "hidden" : "inline"}
-                defaultSelectedKeys={["1"]}
-                items={itemsMenu}
-                onSelect={handleOnSelectMenu}
-              />
-            </Suspense>
+            <Menu
+              mode="inline"
+              style={{
+                backgroundColor: "#f6f6f6",
+                border: 0,
+                paddingRight: 30,
+              }}
+              className={collapsed ? "hidden" : "inline"}
+              defaultSelectedKeys={["1"]}
+              items={itemsMenu}
+              onSelect={handleOnSelectMenu}
+            />
           </Sider>
           <Layout className="relative">
-            <Suspense fallback={<LoadingComponent />}>
-              <Content
-                className="shadow-lg"
-                style={{
-                  padding: 24,
-                  minHeight: 280,
-                  background: colorBgContainer,
-                }}
-              >
-                {children}
-              </Content>
-            </Suspense>
+            <Content
+              className="shadow-lg"
+              style={{
+                padding: 24,
+                minHeight: 280,
+                background: colorBgContainer,
+              }}
+            >
+              {children}
+            </Content>
           </Layout>
         </Layout>
       </Content>

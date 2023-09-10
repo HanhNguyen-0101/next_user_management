@@ -12,16 +12,13 @@ import { LightButton } from "@/components/button/lightButton";
 import { Space } from "antd";
 import Link from "next/link";
 import { GoogleOutlined } from "@ant-design/icons";
-import { useRouter } from "next/router";
 import { Dispatch } from "redux";
 
 export default function LoginPage() {
   const dispatch = useDispatch<Dispatch<any>>();
-  const router = useRouter();
   const { t } = useTranslation(["common", "auth"]);
   const handleSubmitLoginForm = (values: LoginPayload) => {
     dispatch(AuthAction.login(values));
-    router.push("/dashboard");
   };
 
   const handleSubmitLoginGoogleForm = () => {

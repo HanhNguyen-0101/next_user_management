@@ -21,7 +21,6 @@ export default function LoginPage() {
   const { t } = useTranslation(["common", "auth"]);
   const handleSubmitLoginForm = (values: LoginPayload) => {
     dispatch(AuthAction.login(values));
-    router.push("/dashboard");
   };
 
   const handleSubmitLoginGoogleForm = () => {
