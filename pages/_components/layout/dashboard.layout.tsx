@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Layout, Menu, Button, theme, Dropdown, Avatar } from "antd";
@@ -20,6 +19,8 @@ export default function DashboardLayout({ children }: any) {
   const router = useRouter();
   const { menuData } = useSelector((state: any) => state.menuReducer);
   const { profile } = useSelector((state: any) => state.authReducer);
+  const [isClient, setIsClient] = useState(false)
+ 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -28,34 +29,13 @@ export default function DashboardLayout({ children }: any) {
     if (!profile) {
       router.push("/login");
     }
+    setIsClient(true)
     dispatch(MenuAction.getAll());
   }, []);
 
   const itemsMenu: ItemType<MenuItemType>[] | { key: string; label: string }[] =
     [];
   if (menuData && menuData.data) {
-    const mainMenu = menuData.data.filter((i: any) => !i.parentId);
-
-    // mainMenu.map((item: any) => {
-    //   const index = menuData.data.findIndex(i => i.parentId === item.id);
-    //   if (index !== -1) {
-    //     if (!item.children) {
-    //       item.children = [];
-    //     }
-    //     item.children.push(item);
-    //   }
-    //   return item;
-    // })
-    // menuData.data.map((item: any) => {
-    //   const index = mainMenu.findIndex(i => i.id === item.parentId);
-    //   if (index !== -1) {
-    //     if (!mainMenu[index].children) {
-    //       mainMenu[index].children = [];
-    //     }
-    //     mainMenu[index].children.push(item);
-    //   }
-    //  });
-    console.log("*88888888888", mainMenu);
     menuData.data.map((menu: MenuType) => {
       itemsMenu.push({
         key: menu.key,
@@ -97,7 +77,7 @@ export default function DashboardLayout({ children }: any) {
     router.push(`/dashboard/${data.key}`);
   };
 
-  return profile && (
+  return profile && isClient ? (
     <Layout>
       <Header
         style={{
@@ -166,5 +146,5 @@ export default function DashboardLayout({ children }: any) {
         </Layout>
       </Content>
     </Layout>
-  );
+  ) : <LoadingComponent />;
 }
