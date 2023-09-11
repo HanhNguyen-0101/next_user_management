@@ -12,7 +12,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 export default function LoginForm({
   onLoginSubmit,
 }: {
-  onLoginSubmit: (payload: LoginPayload, setSubmitting: Function) => void;
+  onLoginSubmit: (payload: LoginPayload) => void;
 }) {
   const { t } = useTranslation(["common", "auth"]);
   return (
@@ -31,8 +31,8 @@ export default function LoginForm({
           .required(t("error.required")),
         remember: Yup.boolean(),
       })}
-      onSubmit={(values, { setSubmitting }) => {
-        onLoginSubmit(values, setSubmitting);
+      onSubmit={(values) => {
+        onLoginSubmit(values);
       }}
     >
       {({ isSubmitting }) => (
@@ -52,7 +52,7 @@ export default function LoginForm({
               {t("auth:login.forgotPass")}
             </Link>
           </div>
-          <DarkButton type="submit" disabled={isSubmitting}>
+          <DarkButton type="submit" disabled={isSubmitting} className='w-full'>
             <Space>
               {isSubmitting && <LoadingOutlined />}
               {t("auth:login.signIn")}

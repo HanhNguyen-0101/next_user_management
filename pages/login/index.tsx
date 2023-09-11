@@ -19,17 +19,13 @@ export default function LoginPage() {
   const dispatch = useDispatch<Dispatch<any>>();
   const router = useRouter();
   const { t } = useTranslation(["common", "auth"]);
-  const { error, msg } = useSelector((state: any) => state.authReducer);
+  const { error } = useSelector((state: any) => state.authReducer);
 
-  const handleSubmitLoginForm = (
-    values: LoginPayload,
-    setSubmitting: Function
-  ) => {
-    dispatch(AuthAction.login(values, setSubmitting));
+  const handleSubmitLoginForm = async (values: LoginPayload) => {
+    await dispatch(AuthAction.login(values));
+    await router.push("/dashboard");
+
   };
-  if (msg) {
-    router.push("/dashboard");
-  }
   const handleSubmitLoginGoogleForm = () => {
     dispatch(AuthAction.loginGoogle());
   };

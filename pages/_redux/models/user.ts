@@ -1,19 +1,19 @@
 export interface IUserModel {
-  createdAt: string;
   email: string;
   firstName: string;
-  globalId: string;
-  id: string;
-  isDisable: boolean;
-  isPending: boolean;
-  isRegisteredWithGoogle: boolean;
+  globalId?: string;
+  id?: string;
+  isDisable?: boolean;
+  isPending?: boolean;
+  isRegisteredWithGoogle?: boolean;
   lastName: string;
-  officeCode: string;
+  officeCode?: string;
   password: string;
-  updatedAt: string;
-  updatedBy: string;
-  updatedByUser: IUserModel | null;
-  userRoles: {} | null;
+  createdAt?: string;
+  updatedAt?: string;
+  updatedBy?: string;
+  updatedByUser?: IUserModel | null;
+  userRoles?: {} | null;
 }
 export interface IUserArrayModel {
   data: Array<IUserModel>;

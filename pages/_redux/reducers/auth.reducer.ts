@@ -21,8 +21,7 @@ if (typeof window !== "undefined") {
 }
 
 const initState = {
-  msg: "",
-  error: "",
+  error: null,
   profile: user,
   user: null,
 };
@@ -36,18 +35,19 @@ const authReducer = (
       localStorage.setItem(USER_LOGIN, JSON.stringify(payload.profile));
       return {
         ...state,
-        msg: payload.message,
         profile: payload.profile,
+        error: initState.error
       };
     }
     case LOGIN_FAILUER: {
-      return { ...state, error: payload.message };
+      localStorage.removeItem(USER_LOGIN);
+      return { ...state, profile: null, error: payload.message, user: initState.user };
     }
     case LOGIN_GOOGLE_SUCCESS: {
       return { ...state, user: payload.user, error: initState.error };
     }
     case LOGIN_GOOGLE_FAILUER: {
-      return { ...state, error: payload.message, msg: initState.msg };
+      return { ...state, error: payload.message };
     }
     case REGISTER_SUCCESS: {
       return { ...state, user: payload, error: initState.error };
@@ -56,7 +56,6 @@ const authReducer = (
       return {
         ...state,
         error: payload?.response?.data.message,
-        msg: initState.msg,
       };
     }
     case LOGOUT_SUCCESS:

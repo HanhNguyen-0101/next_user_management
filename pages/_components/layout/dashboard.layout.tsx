@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Layout, Menu, Button, theme, Dropdown, Avatar } from "antd";
+import { Layout, Menu, Button, theme, Dropdown, Avatar, Space } from "antd";
 import type { MenuProps } from "antd";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { Dispatch } from "redux";
 import { AuthAction, MenuAction } from "@/redux/actions";
 import { MenuType } from "@/redux/models/menu";
 import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
 import LoadingComponent from "../loading";
+import { DownOutlined } from "@ant-design/icons";
 
 const { Header, Sider, Content } = Layout;
 
@@ -19,8 +20,8 @@ export default function DashboardLayout({ children }: any) {
   const router = useRouter();
   const { menuData } = useSelector((state: any) => state.menuReducer);
   const { profile } = useSelector((state: any) => state.authReducer);
-  const [isClient, setIsClient] = useState(false)
- 
+  const [isClient, setIsClient] = useState(false);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -29,21 +30,44 @@ export default function DashboardLayout({ children }: any) {
     if (!profile) {
       router.push("/login");
     }
-    setIsClient(true)
+    setIsClient(true);
     dispatch(MenuAction.getAll());
   }, []);
 
-  const itemsMenu: ItemType<MenuItemType>[] | { key: string; label: string }[] =
-    [];
+  const handleLogout = async () => {
+    await dispatch(AuthAction.logout());
+    await router.push("/login");
+  };
+  const handleOnSelectMenu = (data: any) => {
+    router.push(`/dashboard/${data.key}`);
+  };
+
+  const itemsMenu: any = [];
   if (menuData && menuData.data) {
-    menuData.data.map((menu: MenuType) => {
-      itemsMenu.push({
-        key: menu.key,
-        label: menu.name,
+    menuData.data.filter((menu: MenuType) => {
+      if (!menu.parentId) {
+        itemsMenu.push({
+          key: menu.key,
+          label: menu.name,
+          type: "group",
+        });
+      }
+    });
+    itemsMenu.map((item: any) => {
+      menuData.data.map((i: any) => {
+        if (i?.parentMenu?.key === item.key) {
+          const menuSub = {
+            key: i.key,
+            label: <Link href={`/dashboard/${i.key}`}>{i.name}</Link>,
+          };
+          if (!item.children) {
+            item.children = [];
+          }
+          item.children.push(menuSub);
+        }
       });
     });
   }
-
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -70,13 +94,6 @@ export default function DashboardLayout({ children }: any) {
     },
   ];
 
-  const handleLogout = () => {
-    dispatch(AuthAction.logout());
-  };
-  const handleOnSelectMenu = (data: any) => {
-    router.push(`/dashboard/${data.key}`);
-  };
-
   return profile && isClient ? (
     <Layout>
       <Header
@@ -90,61 +107,31 @@ export default function DashboardLayout({ children }: any) {
         <Dropdown menu={{ items }} placement="bottomRight">
           <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
         </Dropdown>
+        <Dropdown menu={{ items: itemsMenu }}>
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              Management Services
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
       </Header>
       <Content>
-        <Layout>
-          <Sider
-            trigger={null}
-            collapsible
-            collapsed={collapsed}
-            collapsedWidth={30}
+        <Layout className="relative">
+          <Content
+            className="shadow-lg"
             style={{
-              overflowY: "auto",
-              maxHeight: "100vh",
-              backgroundColor: "#f6f6f6",
+              padding: 24,
+              minHeight: 280,
+              background: colorBgContainer,
             }}
           >
-            <Button
-              type="text"
-              icon={collapsed ? <RightOutlined /> : <LeftOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              className="shadow-lg"
-              style={{
-                borderRadius: 0,
-                backgroundColor: "white",
-                position: "absolute",
-                top: 50,
-                right: 0,
-                zIndex: 10,
-              }}
-            />
-            <Menu
-              mode="inline"
-              style={{
-                backgroundColor: "#f6f6f6",
-                border: 0,
-                paddingRight: 30,
-              }}
-              className={collapsed ? "hidden" : "inline"}
-              defaultSelectedKeys={["1"]}
-              items={itemsMenu}
-              onSelect={handleOnSelectMenu}
-            />
-          </Sider>
-          <Layout className="relative">
-            <Content
-              className="shadow-lg"
-              style={{
-                padding: 24,
-                minHeight: 280,
-                background: colorBgContainer,
-              }}
-            >
-              {children}
-            </Content>
-          </Layout>
+            {children}
+          </Content>
         </Layout>
       </Content>
     </Layout>
-  ) : <LoadingComponent />;
+  ) : (
+    <LoadingComponent />
+  );
 }

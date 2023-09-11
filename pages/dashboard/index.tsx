@@ -26,6 +26,8 @@ import {
 } from "@/redux/models/user";
 import { DrawerAction } from "@/redux/actions";
 import LoginForm from "@/components/forms/form-components/LoginForm";
+import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
+import { DarkButton } from "@/components/button/darkButton";
 
 interface DataType {
   key: React.Key;
@@ -54,23 +56,39 @@ export default function DashboardPage(
     dispatch(UserAction.getAll());
   }, []);
 
+  const handleAddUser = () => {
+    dispatch(
+      DrawerAction.openDrawer({
+        visible: true,
+        title: 'Edit User',
+        FormComponent: <CreateUserForm onCreateUserSubmit={() => {}} />,
+        submitAction: handleSubmitAddUserForm,
+      })
+    ); 
+  }
   const handleEditRecord = async (values: GetUserByIdPayload) => {
     await dispatch(UserAction.getItemById(values));
     await dispatch(
       DrawerAction.openDrawer({
         visible: true,
         title: 'Edit User',
-        FormComponent: <LoginForm onLoginSubmit={() => {}} />,
-        submitAction: () => {},
+        FormComponent: <CreateUserForm onCreateUserSubmit={() => {}} />,
+        submitAction: handleSubmitEditUserForm,
       })
     );
   };
 
+  const handleSubmitAddUserForm = (values: any) => {
+    console.log('-----add--------', values);
+  }
+  const handleSubmitEditUserForm = (values: any) => {
+    console.log('------edit-------', values);
+  }
   const handleDeleteRecord = (values: DeleteUserByIdPayload) => {
     dispatch(UserAction.removeItem(values));
   };
 
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType = [
     {
       title: "UserID",
       dataIndex: "id",
@@ -178,6 +196,7 @@ export default function DashboardPage(
     {
       title: "Updated By",
       dataIndex: "updatedByUser",
+      width: 150,
       render: (value) => {
         if (value) {
           return (
@@ -241,7 +260,7 @@ export default function DashboardPage(
   };
 
   return (
-    <div className="bg-white p-4 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
+    <div className="bg-white p-4 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
       <h3>{t("homepage.title")}</h3>
       <Table
         columns={columns}
@@ -249,7 +268,9 @@ export default function DashboardPage(
         onChange={onChange}
         scroll={{ x: true }}
         sticky={true}
+        className="mb-8"
       />
+      <DarkButton className='fixed z-20 bottom-5 right-5 w-auto shadow-md' onClick={handleAddUser}>Add new User</DarkButton>
     </div>
   );
 }
