@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Layout, Menu, Button, theme, Dropdown, Avatar } from "antd";
@@ -9,6 +10,7 @@ import { Dispatch } from "redux";
 import { AuthAction, MenuAction } from "@/redux/actions";
 import { MenuType } from "@/redux/models/menu";
 import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
+import LoadingComponent from "../loading";
 
 const { Header, Sider, Content } = Layout;
 
@@ -17,29 +19,33 @@ export default function DashboardLayout({ children }: any) {
   const dispatch = useDispatch<Dispatch<any>>();
   const router = useRouter();
   const { menuData } = useSelector((state: any) => state.menuReducer);
+  const { profile } = useSelector((state: any) => state.authReducer);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   useEffect(() => {
+    if (!profile) {
+      router.push("/login");
+    }
     dispatch(MenuAction.getAll());
   }, []);
 
   const itemsMenu: ItemType<MenuItemType>[] | { key: string; label: string }[] =
     [];
   if (menuData && menuData.data) {
-    const mainMenu = menuData.data.filter((i:any) => !i.parentId);
+    const mainMenu = menuData.data.filter((i: any) => !i.parentId);
 
-    mainMenu.map((item: any) => {
-      const index = menuData.data.findIndex(i => i.parentId === item.id);
-      if (index !== -1) {
-        if (!item.children) {
-          item.children = [];
-        }
-        item.children.push(item);
-      }
-      return item;
-    })
+    // mainMenu.map((item: any) => {
+    //   const index = menuData.data.findIndex(i => i.parentId === item.id);
+    //   if (index !== -1) {
+    //     if (!item.children) {
+    //       item.children = [];
+    //     }
+    //     item.children.push(item);
+    //   }
+    //   return item;
+    // })
     // menuData.data.map((item: any) => {
     //   const index = mainMenu.findIndex(i => i.id === item.parentId);
     //   if (index !== -1) {
@@ -49,7 +55,7 @@ export default function DashboardLayout({ children }: any) {
     //     mainMenu[index].children.push(item);
     //   }
     //  });
-    console.log('*88888888888', mainMenu)
+    console.log("*88888888888", mainMenu);
     menuData.data.map((menu: MenuType) => {
       itemsMenu.push({
         key: menu.key,
@@ -91,7 +97,7 @@ export default function DashboardLayout({ children }: any) {
     router.push(`/dashboard/${data.key}`);
   };
 
-  return (
+  return profile && (
     <Layout>
       <Header
         style={{

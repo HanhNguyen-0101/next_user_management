@@ -1,5 +1,6 @@
 export const DOMAIN = 'http://localhost:3001/';
 export const TOKEN = 'token';
+export const USER_LOGIN = 'user_login';
 
 export const STATUS_CODE = {
     SUCCESS: 200,

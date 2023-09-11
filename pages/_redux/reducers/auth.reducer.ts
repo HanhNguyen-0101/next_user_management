@@ -1,3 +1,4 @@
+import { USER_LOGIN } from "@/constants/configSetting";
 import { AuthConstant } from "../constants";
 
 const {
@@ -11,9 +12,18 @@ const {
   LOGOUT_SUCCESS,
 } = AuthConstant;
 
+let user = null;
+if (typeof window !== "undefined") {
+  const userLocal = localStorage.getItem(USER_LOGIN);
+  if (userLocal) {
+    user = JSON.parse(userLocal);
+  }
+}
+
 const initState = {
   msg: "",
   error: "",
+  profile: user,
   user: null,
 };
 
@@ -23,10 +33,15 @@ const authReducer = (
 ) => {
   switch (type) {
     case LOGIN_SUCCESS: {
-      return { ...state, msg: payload.message, error: initState.error };
+      localStorage.setItem(USER_LOGIN, JSON.stringify(payload.profile));
+      return {
+        ...state,
+        msg: payload.message,
+        profile: payload.profile,
+      };
     }
     case LOGIN_FAILUER: {
-      return { ...state, error: payload.message, msg: initState.msg };
+      return { ...state, error: payload.message };
     }
     case LOGIN_GOOGLE_SUCCESS: {
       return { ...state, user: payload.user, error: initState.error };
@@ -45,7 +60,8 @@ const authReducer = (
       };
     }
     case LOGOUT_SUCCESS:
-      return { ...state };
+      localStorage.removeItem(USER_LOGIN);
+      return { ...state, profile: null };
     case LOGOUT_FAILURE:
       return { ...state };
     default:

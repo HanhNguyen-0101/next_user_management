@@ -40,7 +40,7 @@ export default function handler(
               .json(JSON.parse(apiResponseBody));
             return resolve(true);
           }
-          const { access_token } = JSON.parse(apiResponseBody);
+          const { access_token, profile } = JSON.parse(apiResponseBody);
           const cookies = new Cookies(req, res);
           cookies.set("access_token", access_token, {
             httpOnly: true,
@@ -48,7 +48,7 @@ export default function handler(
           });
           (res as NextApiResponse)
             .status(200)
-            .json({ message: "login successful" });
+            .json({ message: "login successful", profile });
         } catch (err) {
           (res as NextApiResponse)
             .status(500)
