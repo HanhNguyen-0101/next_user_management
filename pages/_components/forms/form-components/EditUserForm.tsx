@@ -5,25 +5,27 @@ import { InputField, SwitchField } from "../form-fields";
 import { useTranslation } from "next-i18next";
 import { IUserModel } from "@/redux/models/user";
 import { Space } from "antd";
-import { DarkButton } from "@/components/button/darkButton";
+import { useSelector } from "react-redux";
 
-export default function CreateUserForm({
-  onCreateUserSubmit,
+export default function EditUserForm({
+  onEditUserSubmit,
 }: {
-  onCreateUserSubmit: (payload: Partial<IUserModel>) => void;
+  onEditUserSubmit: (payload: Partial<IUserModel>) => void;
 }) {
   const { t } = useTranslation(["common", "auth"]);
+  const { user } = useSelector((state: any) => state.userReducer);
+  console.log('--------------------------', user)
   return (
     <Formik
       initialValues={{
-        email: "",
-        firstName: "",
-        globalId: "",
-        isDisable: false,
-        isPending: false,
-        lastName: "",
-        officeCode: "",
-        password: "",
+        email: user.email || '',
+        firstName: user.firstName || "",
+        globalId: user.globalId || "",
+        isDisable: user.isDisable,
+        isPending: user.isPending,
+        lastName: user.lastName,
+        officeCode: user.officeCode,
+        password: user.password,
       }}
       validationSchema={Yup.object({
         password: Yup.string()
@@ -50,7 +52,7 @@ export default function CreateUserForm({
         isPending: Yup.boolean(),
       })}
       onSubmit={(values) => {
-        onCreateUserSubmit(values);
+        onEditUserSubmit(values);
       }}
     >
       <Form>
@@ -65,10 +67,9 @@ export default function CreateUserForm({
           <InputField label="Global ID" type="text" name="globalId" />
         </Space>
         <Space className="grid grid-cols-2">
-          <SwitchField label='Is disabled?' name='isDisable' />
-          <SwitchField label='Is pending?' name='isPending' />
+          <SwitchField label="Is disabled?" name="isDisable" />
+          <SwitchField label="Is pending?" name="isPending" />
         </Space>
-        <DarkButton type='submit'>111</DarkButton>
       </Form>
     </Formik>
   );

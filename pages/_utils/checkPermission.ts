@@ -1,7 +1,7 @@
-const tables = {
+export const tables = {
   USER: "user",
 };
-const permissionGroup = {
+export const permissionGroup = {
   VIEW: "view",
   EDIT: "update",
   DELETE: "delete",

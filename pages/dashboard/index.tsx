@@ -29,6 +29,7 @@ import LoginForm from "@/components/forms/form-components/LoginForm";
 import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
 import { DarkButton } from "@/components/button/darkButton";
 import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
+import EditUserForm from "@/components/forms/form-components/EditUserForm";
 
 interface DataType {
   key: React.Key;
@@ -62,8 +63,8 @@ export default function DashboardPage(
       DrawerAction.openDrawer({
         visible: true,
         title: "Edit User",
-        FormComponent: <CreateUserForm onCreateUserSubmit={() => {}} />,
-        submitAction: handleSubmitAddUserForm,
+        FormComponent: <CreateUserForm onCreateUserSubmit={handleSubmitAddUserForm} />,
+        // submitAction: handleSubmitAddUserForm,
       })
     );
   };
@@ -73,7 +74,7 @@ export default function DashboardPage(
       DrawerAction.openDrawer({
         visible: true,
         title: "Edit User",
-        FormComponent: <CreateUserForm onCreateUserSubmit={() => {}} />,
+        FormComponent: <EditUserForm onEditUserSubmit={handleSubmitEditUserForm} />,
         submitAction: handleSubmitEditUserForm,
       })
     );
