@@ -1,6 +1,6 @@
 import { LoginPayload, RegisterPayload } from "@/redux/models/auth";
 import { AuthConstant } from "../constants";
-import { AuthService } from "../services";
+import { AuthService, UserService } from "../services";
 import { STATUS_CODE } from "@/constants/configSetting";
 import { Dispatch } from "redux";
 
@@ -21,9 +21,10 @@ export const AuthAction = {
       try {
         const { status, data } = await AuthService.login(payload);
         if (status === STATUS_CODE.SUCCESS) {
+          const user = await UserService.getItemById(data.profile.id);
           dispatch({
             type: LOGIN_SUCCESS,
-            payload: data,
+            payload: user.data,
           });
         }
       } catch (error: any) {

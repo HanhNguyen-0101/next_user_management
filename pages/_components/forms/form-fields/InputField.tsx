@@ -1,4 +1,4 @@
-import { useField } from "formik";
+import { Field, useField } from "formik";
 
 export const InputField = ({ label, ...props }: any) => {
   const [field, meta] = useField(props);
@@ -11,7 +11,7 @@ export const InputField = ({ label, ...props }: any) => {
       >
         {label}
       </label>
-      <input {...field} {...props} className={`w-full bg-white rounded border border-gray-300 focus:border-blueDark focus:ring-2 focus:ring-indigo-50 text-base outline-none text-gray-700 py-0.5 px-2 leading-8 transition-colors duration-200 ease-in-out ${props.className}`} />
+      <Field {...field} {...props} className={`w-full bg-white rounded border border-gray-300 focus:border-blueDark focus:ring-2 focus:ring-indigo-50 text-base outline-none text-gray-700 py-0.5 px-2 leading-8 transition-colors duration-200 ease-in-out ${props.className}`} />
       {meta.touched && meta.error ? (
         <div className={`error ${props.errorclassname || ''}`}>{meta.error}</div>
       ) : null}

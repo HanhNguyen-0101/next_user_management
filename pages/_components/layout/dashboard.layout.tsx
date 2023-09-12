@@ -8,14 +8,13 @@ import { Router, useRouter } from "next/router";
 import { Dispatch } from "redux";
 import { AuthAction, MenuAction } from "@/redux/actions";
 import { MenuType } from "@/redux/models/menu";
-import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
 import LoadingComponent from "../loading";
 import { DownOutlined } from "@ant-design/icons";
+import { permissionTypes } from "pages/_utils/checkPermission";
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 export default function DashboardLayout({ children }: any) {
-  const [collapsed, setCollapsed] = useState(false);
   const dispatch = useDispatch<Dispatch<any>>();
   const router = useRouter();
   const { menuData } = useSelector((state: any) => state.menuReducer);
@@ -37,9 +36,6 @@ export default function DashboardLayout({ children }: any) {
   const handleLogout = async () => {
     await dispatch(AuthAction.logout());
     await router.push("/login");
-  };
-  const handleOnSelectMenu = (data: any) => {
-    router.push(`/dashboard/${data.key}`);
   };
 
   const itemsMenu: any = [];

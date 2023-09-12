@@ -32,16 +32,37 @@ const authReducer = (
 ) => {
   switch (type) {
     case LOGIN_SUCCESS: {
-      localStorage.setItem(USER_LOGIN, JSON.stringify(payload.profile));
+      const { id, email, firstName, lastName, updatedBy, userRoles } = payload;
+      const permissionListOfProfile: any[] = [];
+      userRoles?.map((userRoleItem: any) => {
+        userRoleItem?.role?.rolePermissions?.map((rolePermission: any) => {
+          permissionListOfProfile.push(rolePermission.permission.name);
+        });
+      });
+    
+      const dataUserStore = {
+        id,
+        email,
+        firstName,
+        lastName,
+        updatedBy,
+        permissionList: permissionListOfProfile,
+      };
+      localStorage.setItem(USER_LOGIN, JSON.stringify(dataUserStore));
       return {
         ...state,
-        profile: payload.profile,
-        error: initState.error
+        profile: dataUserStore,
+        error: initState.error,
       };
     }
     case LOGIN_FAILUER: {
       localStorage.removeItem(USER_LOGIN);
-      return { ...state, profile: null, error: payload.message, user: initState.user };
+      return {
+        ...state,
+        profile: null,
+        error: payload.message,
+        user: initState.user,
+      };
     }
     case LOGIN_GOOGLE_SUCCESS: {
       return { ...state, user: payload.user, error: initState.error };

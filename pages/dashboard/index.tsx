@@ -1,7 +1,7 @@
 "use client";
 import React, { ReactElement, useEffect } from "react";
 import DashboardLayout from "@/components/layout/dashboard.layout";
-import { Badge, Popconfirm, Popover, Space, Table } from "antd";
+import { Badge, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import type { ColumnsType, TableProps } from "antd/es/table";
@@ -9,7 +9,7 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthService } from "@/redux/services";
 import { FormatDate } from "pages/_utils/formatData";
-import { MinusOutlined, CheckOutlined } from "@ant-design/icons";
+import { MinusOutlined, CheckOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -28,6 +28,7 @@ import { DrawerAction } from "@/redux/actions";
 import LoginForm from "@/components/forms/form-components/LoginForm";
 import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
 import { DarkButton } from "@/components/button/darkButton";
+import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
 
 interface DataType {
   key: React.Key;
@@ -51,7 +52,7 @@ export default function DashboardPage(
   const { userData }: UserState = useSelector(
     (state: any) => state.userReducer
   );
-
+  const { profile } = useSelector((state: any) => state.authReducer);
   useEffect(() => {
     dispatch(UserAction.getAll());
   }, []);
@@ -60,18 +61,18 @@ export default function DashboardPage(
     dispatch(
       DrawerAction.openDrawer({
         visible: true,
-        title: 'Edit User',
+        title: "Edit User",
         FormComponent: <CreateUserForm onCreateUserSubmit={() => {}} />,
         submitAction: handleSubmitAddUserForm,
       })
-    ); 
-  }
+    );
+  };
   const handleEditRecord = async (values: GetUserByIdPayload) => {
     await dispatch(UserAction.getItemById(values));
     await dispatch(
       DrawerAction.openDrawer({
         visible: true,
-        title: 'Edit User',
+        title: "Edit User",
         FormComponent: <CreateUserForm onCreateUserSubmit={() => {}} />,
         submitAction: handleSubmitEditUserForm,
       })
@@ -79,11 +80,11 @@ export default function DashboardPage(
   };
 
   const handleSubmitAddUserForm = (values: any) => {
-    console.log('-----add--------', values);
-  }
+    console.log("-----add--------", values);
+  };
   const handleSubmitEditUserForm = (values: any) => {
-    console.log('------edit-------', values);
-  }
+    console.log("------edit-------", values);
+  };
   const handleDeleteRecord = (values: DeleteUserByIdPayload) => {
     dispatch(UserAction.removeItem(values));
   };
@@ -197,6 +198,7 @@ export default function DashboardPage(
       title: "Updated By",
       dataIndex: "updatedByUser",
       width: 150,
+      align: "center",
       render: (value) => {
         if (value) {
           return (
@@ -208,7 +210,7 @@ export default function DashboardPage(
             </Popover>
           );
         }
-        return <></>;
+        return <MinusOutlined className="text-gray-400" />;
       },
     },
     {
@@ -221,35 +223,51 @@ export default function DashboardPage(
         return moment(a.updatedAt).diff(moment(b.updatedAt));
       },
     },
-    {
+  ];
+  const hasEditPermission = hasPermission(
+      permissionTypes.USER_EDIT,
+      profile?.permissionList
+    ),
+    hasDeletePermission = hasPermission(
+      permissionTypes.USER_DELETE,
+      profile?.permissionList
+    );
+
+  if (hasDeletePermission || hasEditPermission) {
+    columns.push({
       title: "Action",
       key: "operation",
       fixed: "right",
       width: 100,
-      render: (value, record) => (
-        <Space>
-          <button
-            className="text-xl text-blueDark pr-4"
-            onClick={() => handleEditRecord(record)}
-          >
-            <EditOutlined />
-          </button>
-          <Popconfirm
-            title="Are you sure to delete item?"
-            okText="Delete"
-            cancelText="Cancel"
-            onConfirm={() => handleDeleteRecord(record)}
-            icon={<QuestionCircleOutlined className="text-red-600" />}
-          >
-            <button className="text-xl text-red-600">
-              <DeleteOutlined />
-            </button>
-          </Popconfirm>
-        </Space>
-      ),
-    },
-  ];
-
+      render: (value, record) => {
+        return (
+          <Space>
+            {hasEditPermission && (
+              <button
+                className="text-xl text-blueDark pr-4"
+                onClick={() => handleEditRecord(record)}
+              >
+                <EditOutlined />
+              </button>
+            )}
+            {hasDeletePermission && (
+              <Popconfirm
+                title="Are you sure to delete item?"
+                okText="Delete"
+                cancelText="Cancel"
+                onConfirm={() => handleDeleteRecord(record)}
+                icon={<QuestionCircleOutlined className="text-red-600" />}
+              >
+                <button className="text-xl text-red-600">
+                  <DeleteOutlined />
+                </button>
+              </Popconfirm>
+            )}
+          </Space>
+        );
+      },
+    });
+  }
   const onChange: TableProps<DataType>["onChange"] = (
     pagination,
     filters,
@@ -270,7 +288,16 @@ export default function DashboardPage(
         sticky={true}
         className="mb-8"
       />
-      <DarkButton className='fixed z-20 bottom-5 right-5 w-auto shadow-md' onClick={handleAddUser}>Add new User</DarkButton>
+      {hasPermission(permissionTypes.USER_CREATE, profile?.permissionList) && (
+        <Tooltip title="Add new User">
+          <button
+            className="fixed z-20 bottom-5 right-5 shadow-md w-14 h-14 bg-blueDark rounded-full text-lg text-white"
+            onClick={handleAddUser}
+          >
+            <PlusOutlined />
+          </button>
+        </Tooltip>
+      )}
     </div>
   );
 }

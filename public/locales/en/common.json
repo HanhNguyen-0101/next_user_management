@@ -2,6 +2,7 @@
   "error": {
     "emailInvalid": "Invalid email address",
     "charactersInvalid": "Must be {{number}} characters or less",
-    "required": "Required"
+    "required": "Required",
+    "passwordNotMatch": "Passwords must match"
   }
 }

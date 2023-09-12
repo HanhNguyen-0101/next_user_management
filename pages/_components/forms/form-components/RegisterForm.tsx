@@ -27,7 +27,8 @@ export default function RegisterForm({
           .required(t("error.required")),
         passwordConfirm: Yup.string()
           .max(30, t("error.charactersInvalid", { number: 30 }))
-          .required(t("error.required")),
+          .required(t("error.required"))
+          .oneOf([Yup.ref('password')], t("error.passwordNotMatch")),
         firstName: Yup.string()
           .max(30, t("error.charactersInvalid", { number: 30 }))
           .required(t("error.required")),
@@ -48,7 +49,7 @@ export default function RegisterForm({
         <InputField label="Lastname" type="text" name="lastName" />
         <InputField label="Password" type="password" name="password" />
         <InputField label="Password" type="password" name="passwordConfirm" />
-        <DarkButton type="submit">{t("auth:login.signIn")}</DarkButton>
+        <DarkButton type="submit" className='w-full'>{t("auth:login.signIn")}</DarkButton>
       </Form>
     </Formik>
   );
