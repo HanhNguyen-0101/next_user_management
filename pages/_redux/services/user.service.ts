@@ -1,8 +1,8 @@
 import axiosConfig from "./axiosConfig";
 
 export const UserService = {
-  getAll() {
-    return axiosConfig.get("/users");
+  getAll(query: any) {
+    return axiosConfig.get(`/users?${query}`);
   },
   getItemById(id: string) {
     return axiosConfig.get(`/users/${id}`);

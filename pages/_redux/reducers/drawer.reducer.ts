@@ -1,6 +1,6 @@
 import { DrawerConstant } from "../constants";
 
-const { OPEN_DRAWER, HIDE_DRAWER } = DrawerConstant;
+const { OPEN_DRAWER, HIDE_DRAWER, SET_CALLBACK_DRAWER } = DrawerConstant;
 
 const initState = {
   visible: false,
@@ -21,6 +21,9 @@ const drawerReducer = (state = initState, action: any) => {
         ...state,
         ...initState,
       };
+    }
+    case SET_CALLBACK_DRAWER: {
+      return { ...state, submitAction: action.payload };
     }
     default:
       return { ...state };

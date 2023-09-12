@@ -9,7 +9,6 @@ export default function DrawerNav() {
     (state: any) => state.drawerReducer);
 
   const dispatch = useDispatch<Dispatch<any>>();
-
   const onClose = () => {
     dispatch(DrawerAction.hideDrawer());
   };

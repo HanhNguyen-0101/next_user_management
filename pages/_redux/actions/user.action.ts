@@ -19,10 +19,10 @@ const {
 } = UserConstant;
 
 export const UserAction = {
-  getAll: () => {
+  getAll: (query: any) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
-        const { status, data } = await UserService.getAll();
+        const { status, data } = await UserService.getAll(query);
         if (status === STATUS_CODE.SUCCESS) {
           dispatch({
             type: GET_USER_LIST_SUCCESS,

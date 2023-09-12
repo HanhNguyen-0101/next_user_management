@@ -1,23 +1,20 @@
-import { Dispatch } from "redux";
 import { DrawerConstant } from "../constants";
 import { DrawerPayload } from "../models/common";
 
-const { OPEN_DRAWER, HIDE_DRAWER } = DrawerConstant;
+const { OPEN_DRAWER, HIDE_DRAWER, SET_CALLBACK_DRAWER } = DrawerConstant;
 
 export const DrawerAction = {
-  openDrawer: (data: DrawerPayload) => {
-    return (dispatch: Dispatch) => {
-      dispatch({
-        type: OPEN_DRAWER,
-        payload: data,
-      });
-    };
-  },
-  hideDrawer: () => {
-    return (dispatch: Dispatch) => {
-      dispatch({
-        type: HIDE_DRAWER,
-      });
-    };
+  openDrawer: (data: DrawerPayload) => ({
+    type: OPEN_DRAWER,
+    payload: data,
+  }),
+  hideDrawer: () => ({
+    type: HIDE_DRAWER,
+  }),
+  setCallbackDrawer: (submitAction: any) => {
+    return ({
+      type: SET_CALLBACK_DRAWER,
+      payload: submitAction,
+    })
   },
 };

@@ -1,7 +1,7 @@
 "use client";
 import React, { ReactElement, useEffect } from "react";
 import DashboardLayout from "@/components/layout/dashboard.layout";
-import { Badge, Pagination, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
+import { Badge, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import type { ColumnsType, TableProps } from "antd/es/table";
@@ -24,13 +24,12 @@ import {
   IUserModel,
   UserState,
 } from "@/redux/models/user";
-import { DrawerAction } from "@/redux/actions";
+import { DrawerAction, MenuAction } from "@/redux/actions";
 import LoginForm from "@/components/forms/form-components/LoginForm";
 import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
 import { DarkButton } from "@/components/button/darkButton";
 import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
 import EditUserForm from "@/components/forms/form-components/EditUserForm";
-import { ITEM_PER_PAGE } from "pages/_utils/constant";
 
 interface DataType {
   key: React.Key;
@@ -45,6 +44,7 @@ interface DataType {
   password: string;
   isRegisteredWithGoogle: boolean;
 }
+
 export default function DashboardPage(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
@@ -55,14 +55,16 @@ export default function DashboardPage(
   );
   const { profile } = useSelector((state: any) => state.authReducer);
   useEffect(() => {
-    dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
+    dispatch(MenuAction.getAll());
   }, []);
+
   const handleAddUser = () => {
     dispatch(
       DrawerAction.openDrawer({
         visible: true,
-        title: "Add User",
-        FormComponent: <CreateUserForm />,
+        title: "Edit User",
+        FormComponent: <CreateUserForm onCreateUserSubmit={handleSubmitAddUserForm} />,
+        // submitAction: handleSubmitAddUserForm,
       })
     );
   };
@@ -276,10 +278,6 @@ export default function DashboardPage(
     console.log("params", pagination, filters, sorter, extra);
   };
 
-  const onChangePagination = (page: number) => {
-    dispatch(UserAction.getAll(`page=${page}&item_per_page=${ITEM_PER_PAGE}`));
-  }
-
   return (
     <div className="bg-white p-4 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
       <h3>{t("homepage.title")}</h3>
@@ -290,9 +288,7 @@ export default function DashboardPage(
         scroll={{ x: true }}
         sticky={true}
         className="mb-8"
-        pagination={false}
       />
-      <Pagination onChange={onChangePagination} total={userData?.total} pageSize={ITEM_PER_PAGE} current={userData?.currentPage} />
       {hasPermission(permissionTypes.USER_CREATE, profile?.permissionList) && (
         <Tooltip title="Add new User">
           <button
