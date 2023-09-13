@@ -1,16 +1,23 @@
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import * as Yup from "yup";
-import { InputField, SwitchField } from "../form-fields";
 import { useTranslation } from "next-i18next";
-import { Form, Input, Space } from "antd";
+import { Form, Input, Space, Switch } from "antd";
 import { useDispatch } from "react-redux";
 import { DrawerAction } from "@/redux/actions";
 import { UserAction } from "@/redux/actions/user.action";
+import { InputFormField } from "../form-fields/InputFormField";
+import { SwitchFormField } from "../form-fields/SwitchFormField";
 
 export default function CreateUserForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
+
+  const handleChangeSwitch = (name) => {
+    return (value) => {
+      formik.setFieldValue(name, value);
+    };
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -19,7 +26,7 @@ export default function CreateUserForm() {
       firstName: "",
       globalId: "",
       isDisable: false,
-      isPending: false,
+      isPending: true,
       lastName: "",
       officeCode: "",
       password: "",
@@ -48,12 +55,12 @@ export default function CreateUserForm() {
       isDisable: Yup.boolean(),
       isPending: Yup.boolean(),
     }),
-    onSubmit: async (values) => {
-      await dispatch(UserAction.addItem(values));
-      await dispatch(DrawerAction.hideDrawer());
+    onSubmit: (values) => {
+      dispatch(UserAction.addItem(values));
     },
   });
   useEffect(() => {
+    dispatch(DrawerAction.setCallbackDrawer(formik.resetForm));
     dispatch(DrawerAction.setCallbackDrawer(formik.handleSubmit));
   }, []);
 
@@ -64,92 +71,51 @@ export default function CreateUserForm() {
       className="px-4"
       onSubmitCapture={formik.handleSubmit}
     >
-      <Space className="grid grid-cols-2">
-        <Form.Item
-          className="mb-1"
-          label={
-            <span className="font-bold">
-              First Name <span className="text-red-500">*</span>
-            </span>
-          }
-        >
-          <Input
-            name="firstName"
-            onChange={formik.handleChange}
-            value={formik.values.firstName}
-          />
-          {formik.errors.firstName ? (
-            <div className="text-red-500 text-xs mb-2">
-              {formik.errors.firstName}
-            </div>
-          ) : null}
-        </Form.Item>
-        <Form.Item
-          className="mb-1"
-          label={
-            <span className="font-bold">
-              Last Name <span className="text-red-500">*</span>
-            </span>
-          }
-        >
-          <Input
-            name="lastName"
-            onChange={formik.handleChange}
-            value={formik.values.lastName}
-          />
-          {formik.errors.lastName ? (
-            <div className="text-red-500 text-xs mb-2">
-              {formik.errors.lastName}
-            </div>
-          ) : null}
-        </Form.Item>
-      </Space>
-      <Form.Item
-        className="mb-1"
-        label={
-          <span className="font-bold">
-            Email <span className="text-red-500">*</span>
-          </span>
-        }
-      >
-        <Input
-          name="email"
-          type="email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
+      <Space className="grid grid-cols-2 items-start">
+        <InputFormField
+          formik={formik}
+          label="First Name"
+          name="firstName"
+          isRequired={true}
         />
-        {formik.errors.email ? (
-          <div className="text-red-500 text-xs mb-2">{formik.errors.email}</div>
-        ) : null}
-      </Form.Item>
-      <Form.Item
-        className="mb-1"
-        label={
-          <span className="font-bold">
-            Password <span className="text-red-500">*</span>
-          </span>
-        }
-      >
-        <Input
-          name="password"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
+        <InputFormField
+          formik={formik}
+          label="Last Name"
+          name="lastName"
+          isRequired={true}
         />
-        {formik.errors.password ? (
-          <div className="text-red-500 text-xs mb-2">
-            {formik.errors.password}
-          </div>
-        ) : null}
-      </Form.Item>
-      {/* <Space className="grid grid-cols-2">
-        <InputField label="Office Code" type="text" name="officeCode" />
-        <InputField label="Global ID" type="text" name="globalId" />
       </Space>
-      <Space className="grid grid-cols-2">
-        <SwitchField label="Is disabled?" name="isDisable" />
-        <SwitchField label="Is pending?" name="isPending" />
-      </Space> */}
+      <InputFormField
+        formik={formik}
+        label="Email"
+        name="email"
+        isRequired={true}
+      />
+      <InputFormField
+        formik={formik}
+        type={'password'}
+        label="Password"
+        name="password"
+        isRequired={true}
+      />
+      <Space className="grid grid-cols-2 items-start">
+        <InputFormField formik={formik} label="Office Code" name="officeCode" />
+        <InputFormField formik={formik} label="Global ID" name="globalId" />
+      </Space>
+      <Space className="grid grid-cols-2 items-start">
+        <SwitchFormField
+          formik={formik}
+          label="Is disabled?"
+          name="isDisable"
+          onChange={handleChangeSwitch("isDisable")}
+        />
+        <SwitchFormField
+          formik={formik}
+          label="Is pending?"
+          name="isPending"
+          onChange={handleChangeSwitch("isPending")}
+        />
+      </Space>
     </Form>
   );
 }

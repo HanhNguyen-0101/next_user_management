@@ -2,8 +2,18 @@ import { STATUS_CODE } from "@/constants/configSetting";
 import { Dispatch } from "redux";
 import { UserService } from "../services";
 import { UserConstant } from "../constants";
-import { DeleteUserByIdPayload, DeleteUserResponse, GetUserByIdPayload, GetUserResponse } from "../models/user";
-import { NOTIF_TYPE, openNotification } from "@/components/notification/notification";
+import {
+  DeleteUserByIdPayload,
+  DeleteUserResponse,
+  GetUserByIdPayload,
+  GetUserResponse,
+} from "../models/user";
+import {
+  NOTIF_TYPE,
+  openNotification,
+} from "@/components/notification/notification";
+import { DrawerAction } from ".";
+import { ITEM_PER_PAGE } from "pages/_utils/constant";
 
 const {
   GET_USER_LIST_SUCCESS,
@@ -40,11 +50,9 @@ export const UserAction = {
   getItemById: (values: GetUserByIdPayload) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
-        const {
-          status,
-          data,
-        }: GetUserResponse =
-          await UserService.getItemById(values.id);
+        const { status, data }: GetUserResponse = await UserService.getItemById(
+          values.id
+        );
         if (status === STATUS_CODE.SUCCESS) {
           dispatch({
             type: GET_USER_ITEM_SUCCESS,
@@ -69,11 +77,18 @@ export const UserAction = {
             payload: data,
           });
         }
+        openNotification(
+          NOTIF_TYPE.SUCCESS,
+          "A new user is added successfully!"
+        );
+        dispatch(DrawerAction.hideDrawer());
+        dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
       } catch (error: any) {
         dispatch({
           type: ADD_USER_ITEM_FAILUER,
           payload: error.response,
         });
+        openNotification(NOTIF_TYPE.ERROR, error.response.data.message);
       }
     };
   },
@@ -98,7 +113,8 @@ export const UserAction = {
   removeItem: (values: DeleteUserByIdPayload) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
-        const { status, data }: DeleteUserResponse = await UserService.deleteItem(values.id);
+        const { status, data }: DeleteUserResponse =
+          await UserService.deleteItem(values.id);
         if (status === STATUS_CODE.SUCCESS) {
           dispatch({
             type: REMOVE_USER_ITEM_SUCCESS,
@@ -106,6 +122,7 @@ export const UserAction = {
           });
           openNotification(NOTIF_TYPE.SUCCESS, data);
         }
+        dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
       } catch (error: any) {
         dispatch({
           type: REMOVE_USER_ITEM_FAILURE,

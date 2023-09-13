@@ -21,6 +21,7 @@ export default function DrawerNav() {
       closable={false}
       size="large"
       className="drawer"
+      destroyOnClose={true}
       footer={
         <Space>
           <Button className="capitalize" onClick={onClose}>cancel</Button>
