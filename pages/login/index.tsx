@@ -10,22 +10,19 @@ import { GetStaticProps } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 
 export default function LoginPage() {
   const dispatch = useDispatch<Dispatch<any>>();
-  const router = useRouter();
   const { t } = useTranslation(["common", "auth"]);
   const { error } = useSelector((state: any) => state.authReducer);
 
-  const handleSubmitLoginForm = async (values: LoginPayload) => {
-    await dispatch(AuthAction.login(values));
-    await router.push("/dashboard");
-
+  const handleSubmitLoginForm = (values: LoginPayload) => {
+    dispatch(AuthAction.login(values));
   };
+
   const handleSubmitLoginGoogleForm = () => {
     dispatch(AuthAction.loginGoogle());
   };

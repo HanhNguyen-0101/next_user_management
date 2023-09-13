@@ -1,13 +1,14 @@
-import { Form, Formik } from "formik";
+import { useFormik } from "formik";
 import React from "react";
 import * as Yup from "yup";
-import { CheckboxField, InputField } from "../form-fields";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { DarkButton } from "@/components/button/darkButton";
 import { LoginPayload } from "@/redux/models/auth";
-import { Space } from "antd";
+import { Space, Form } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { InputFormField } from "../form-fields/InputFormField";
+import { CheckboxFormField } from "../form-fields/CheckboxFormField";
 
 export default function LoginForm({
   onLoginSubmit,
@@ -15,51 +16,58 @@ export default function LoginForm({
   onLoginSubmit: (payload: LoginPayload) => void;
 }) {
   const { t } = useTranslation(["common", "auth"]);
+
+  const handleCheckboxChange = (e) => {
+    formik.setFieldValue(e.target.name, e.target.checked);
+  };
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      password: "",
+      email: "",
+      remember: false,
+    },
+    validationSchema: Yup.object({
+      password: Yup.string()
+        .max(15, t("error.charactersInvalid", { number: 15 }))
+        .required(t("error.required")),
+      email: Yup.string()
+        .email(t("error.emailInvalid"))
+        .required(t("error.required")),
+      remember: Yup.boolean(),
+    }),
+    onSubmit: async (values) => {
+      await onLoginSubmit(values);
+      await formik.setSubmitting(false);
+    },
+  });
   return (
-    <Formik
-      initialValues={{
-        password: "",
-        email: "",
-        remember: false,
-      }}
-      validationSchema={Yup.object({
-        password: Yup.string()
-          .max(15, t("error.charactersInvalid", { number: 15 }))
-          .required(t("error.required")),
-        email: Yup.string()
-          .email(t("error.emailInvalid"))
-          .required(t("error.required")),
-        remember: Yup.boolean(),
-      })}
-      onSubmit={(values) => {
-        onLoginSubmit(values);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <InputField label="Email" type="email" name="email" />
-          <InputField label="Password" type="password" name="password" />
-          <div className="flex justify-between mb-4 mt-2">
-            <CheckboxField
-              parentclassname="flex items-center"
-              lableclassname="flex text-xs"
-              name="remember"
-              aria-label="Remember me"
-            >
-              {t("auth:login.rememberMe")}
-            </CheckboxField>
-            <Link href={"/"} className="text-xs text-blueDark">
-              {t("auth:login.forgotPass")}
-            </Link>
-          </div>
-          <DarkButton type="submit" disabled={isSubmitting} className='w-full'>
-            <Space>
-              {isSubmitting && <LoadingOutlined />}
-              {t("auth:login.signIn")}
-            </Space>
-          </DarkButton>
-        </Form>
-      )}
-    </Formik>
+    <Form layout="vertical" colon={false} onSubmitCapture={formik.handleSubmit}>
+      <InputFormField formik={formik} label="Email" name="email" />
+      <InputFormField
+        formik={formik}
+        type={"password"}
+        label="Password"
+        name="password"
+      />
+      <div className="flex justify-between mb-4 items-baseline">
+        <CheckboxFormField
+          formik={formik}
+          name="remember"
+          onChange={handleCheckboxChange}
+        >
+          {t("auth:login.rememberMe")}
+        </CheckboxFormField>
+        <Link href={"/"} className="text-xs text-blueDark">
+          {t("auth:login.forgotPass")}
+        </Link>
+      </div>
+      <DarkButton type="submit" className="w-full" disabled={formik.isSubmitting}>
+        <Space>
+          {formik.isSubmitting && <LoadingOutlined />}
+          {t("auth:login.signIn")}
+        </Space>
+      </DarkButton>
+    </Form>
   );
 }

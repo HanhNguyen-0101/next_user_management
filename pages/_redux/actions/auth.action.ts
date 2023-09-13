@@ -3,6 +3,7 @@ import { AuthConstant } from "../constants";
 import { AuthService, UserService } from "../services";
 import { STATUS_CODE } from "@/constants/configSetting";
 import { Dispatch } from "redux";
+import Router from "next/router";
 
 const {
   LOGIN_SUCCESS,
@@ -27,11 +28,9 @@ export const AuthAction = {
             payload: user.data,
           });
         }
+        Router.push('/dashboard');
       } catch (error: any) {
-        let message = error?.response?.data.message;
-        if (error.response.status === STATUS_CODE.BAD_REQUEST) {
-          message = "Email or Password is wrong!";
-        }
+        const message = error?.response?.data.message;
         dispatch({
           type: LOGIN_FAILUER,
           payload: { message },
@@ -67,10 +66,12 @@ export const AuthAction = {
             payload: data,
           });
         }
-      } catch (error) {
+        Router.push('/login');
+      } catch (error: any) {
+        const message = error?.response?.data.message;
         dispatch({
           type: REGISTER_FAILUER,
-          payload: error,
+          payload: { message },
         });
       }
     };
@@ -84,6 +85,7 @@ export const AuthAction = {
             type: LOGOUT_SUCCESS,
           });
         }
+        Router.push('/login')
       } catch (error) {
         dispatch({
           type: LOGOUT_FAILURE,

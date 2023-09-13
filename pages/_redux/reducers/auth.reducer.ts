@@ -76,7 +76,7 @@ const authReducer = (
     case REGISTER_FAILUER: {
       return {
         ...state,
-        error: payload?.response?.data.message,
+        error: payload.message,
       };
     }
     case LOGOUT_SUCCESS:

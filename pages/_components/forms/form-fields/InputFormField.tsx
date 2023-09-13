@@ -3,7 +3,9 @@ import { Input, Form } from "antd";
 export const InputFormField = ({ formik, label, name, isRequired, ...props }: any) => {
   return (
     <Form.Item
-      className="mb-3"
+      style={{
+        marginBottom: 12
+      }}
       label={
         <span>
           {label} {isRequired && <span className="text-red-500">*</span>}
@@ -14,14 +16,16 @@ export const InputFormField = ({ formik, label, name, isRequired, ...props }: an
         name={name}
         onChange={formik.handleChange}
         value={formik.values[name]}
-        className="p-1.5 rounded-sm"
+        className="rounded-sm"
+        style={{padding: 7}}
         {...props}
       />}
       {!props.type && <Input
         name={name}
         onChange={formik.handleChange}
         value={formik.values[name]}
-        className="p-1.5 rounded-sm"
+        className="rounded-sm"
+        style={{padding: 7}}
         {...props}
       />}
       {formik.errors[name] ? (

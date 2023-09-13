@@ -4,13 +4,12 @@ import { Layout, Menu, Button, theme, Dropdown, Avatar, Space } from "antd";
 import type { MenuProps } from "antd";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { Dispatch } from "redux";
 import { AuthAction, MenuAction } from "@/redux/actions";
 import { MenuType } from "@/redux/models/menu";
 import LoadingComponent from "../loading";
 import { DownOutlined } from "@ant-design/icons";
-import { permissionTypes } from "pages/_utils/checkPermission";
 
 const { Header, Content } = Layout;
 
@@ -35,7 +34,6 @@ export default function DashboardLayout({ children }: any) {
 
   const handleLogout = async () => {
     await dispatch(AuthAction.logout());
-    await router.push("/login");
   };
 
   const itemsMenu: any = [];

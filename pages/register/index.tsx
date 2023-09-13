@@ -1,5 +1,5 @@
 "use client";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import React, { ReactElement } from "react";
 import { AuthAction } from "@/redux/actions";
 import AuthLayout from "@/components/layout/auth.layout";
@@ -7,19 +7,17 @@ import { RegisterPayload } from "@/redux/models/auth";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import RegisterForm from "@/components/forms/form-components/RegisterForm";
-import { useRouter } from "next/router";
 import { Dispatch } from "redux";
 import { Space } from "antd";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 export default function RegisterPage() {
   const dispatch = useDispatch<Dispatch<any>>();
-  const router = useRouter();
   const { t } = useTranslation(["common", "auth"]);
+  const { error } = useSelector((state: any) => state.authReducer);
 
   const handleSubmitRegisterForm = (values: RegisterPayload) => {
     dispatch(AuthAction.register(values));
-    router.push("/login");
   };
 
   return (
@@ -28,6 +26,7 @@ export default function RegisterPage() {
         {t("auth:register.createAccount")}
       </h2>
       <p className="text-xs text-gray-500 mb-5">{t("auth:register.signUpDesc")}</p>
+      {error && <div className="error">{error}</div>}
       <RegisterForm onRegisterSubmit={handleSubmitRegisterForm} />
       <div className="text-xs text-gray-500 mt-3 text-center">
         <Space>
