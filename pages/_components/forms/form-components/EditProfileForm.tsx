@@ -4,29 +4,28 @@ import * as Yup from "yup";
 import { useTranslation } from "next-i18next";
 import { Space, Form } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { DrawerAction } from "@/redux/actions";
+import { AuthAction, ModalAction } from "@/redux/actions";
 import { InputFormField } from "../form-fields/InputFormField";
 import { UserAction } from "@/redux/actions/user.action";
 import { CheckboxFormField } from "../form-fields/CheckboxFormField";
 
-export default function EditUserForm() {
+export default function EditProfileForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
-  const { user } = useSelector((state: any) => state.userReducer);
+  const { profile } = useSelector((state: any) => state.authReducer);
   const handleCheckboxChange = (e) => {
     formik.setFieldValue(e.target.name, e.target.checked);
   };
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      email: user.email || "",
-      firstName: user.firstName || "",
-      globalId: user.globalId || "",
-      isDisable: user.isDisable,
-      isPending: user.isPending,
-      lastName: user.lastName || "",
-      officeCode: user.officeCode || "",
+      email: profile?.email || "",
+      firstName: profile?.firstName || "",
+      globalId: profile?.globalId || "",
+      lastName: profile?.lastName || "",
+      officeCode: profile?.officeCode || "",
       password: "",
+      passwordConfirm: "",
       isChangePassword: false,
     },
     validationSchema: Yup.object({
@@ -37,7 +36,17 @@ export default function EditUserForm() {
           then: (schema) =>
             schema
               .max(30, t("error.charactersInvalid", { number: 30 }))
+              .required(t("error.required")),
+        }),
+      passwordConfirm: Yup.string()
+        .ensure()
+        .when("isChangePassword", {
+          is: true,
+          then: (schema) =>
+            schema
+              .max(30, t("error.charactersInvalid", { number: 30 }))
               .required(t("error.required"))
+              .oneOf([Yup.ref("password")], t("error.passwordNotMatch")),
         }),
       email: Yup.string()
         .email(t("error.emailInvalid"))
@@ -56,35 +65,37 @@ export default function EditUserForm() {
         10,
         t("error.charactersInvalid", { number: 10 })
       ),
-      isDisable: Yup.boolean(),
-      isPending: Yup.boolean(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      const isChangePassword = values.isChangePassword;
       if (!values.isChangePassword) {
-        values.password = user.password;
+        values.password = profile?.password;
       }
       delete values["isChangePassword"];
-      dispatch(UserAction.editItem(user.id, values));
+      delete values["passwordConfirm"];
+      await dispatch(AuthAction.editProfile(profile?.id, values));
     },
   });
   useEffect(() => {
-    dispatch(DrawerAction.setCallbackDrawer(formik.resetForm));
-    dispatch(DrawerAction.setCallbackDrawer(formik.handleSubmit));
+    dispatch(ModalAction.setCallbackModal(formik.resetForm));
+    dispatch(ModalAction.setCallbackModal(formik.handleSubmit));
   }, []);
   return (
     <Form
       layout="vertical"
       colon={false}
-      className="px-4"
+      className="p-4"
       onSubmitCapture={formik.handleSubmit}
     >
-      <InputFormField
-        formik={formik}
-        label="Email"
-        name="email"
-        isRequired={true}
-        disabled={true}
-      />
+      <div className="text-center mb-8">
+        <h3 className="font-bold text-lg text-blueDark">
+          <Space>
+            {profile?.firstName}
+            {profile?.lastName}
+          </Space>
+        </h3>
+        <div className="text-gray-500 text-sm">{profile?.email}</div>
+      </div>
       <Space className="grid grid-cols-2 items-start">
         <InputFormField
           formik={formik}
@@ -105,33 +116,28 @@ export default function EditUserForm() {
       </Space>
       <CheckboxFormField
         formik={formik}
-        name="isDisable"
-        onChange={handleCheckboxChange}
-      >
-        Disabled?
-      </CheckboxFormField>
-      <CheckboxFormField
-        formik={formik}
-        name="isPending"
-        onChange={handleCheckboxChange}
-      >
-        Pending?
-      </CheckboxFormField>
-      <CheckboxFormField
-        formik={formik}
         name="isChangePassword"
         onChange={handleCheckboxChange}
       >
         Change password?
       </CheckboxFormField>
       {formik.values.isChangePassword && (
-        <InputFormField
-          formik={formik}
-          type="password"
-          label="Password"
-          name="password"
-          isRequired={true}
-        />
+        <>
+          <InputFormField
+            formik={formik}
+            type="password"
+            label="New Password"
+            name="password"
+            isRequired={true}
+          />
+          <InputFormField
+            formik={formik}
+            type={"password"}
+            label="New Password Confirm"
+            name="passwordConfirm"
+            isRequired={true}
+          />
+        </>
       )}
     </Form>
   );

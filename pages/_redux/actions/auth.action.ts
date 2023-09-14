@@ -4,6 +4,11 @@ import { AuthService, UserService } from "../services";
 import { STATUS_CODE } from "@/constants/configSetting";
 import { Dispatch } from "redux";
 import Router from "next/router";
+import {
+  NOTIF_TYPE,
+  openNotification,
+} from "@/components/notification/notification";
+import { ModalAction } from ".";
 
 const {
   LOGIN_SUCCESS,
@@ -14,6 +19,8 @@ const {
   REGISTER_SUCCESS,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
+  EDIT_PROFILE_FAILURE,
+  EDIT_PROFILE_SUCCESS,
 } = AuthConstant;
 
 export const AuthAction = {
@@ -28,7 +35,7 @@ export const AuthAction = {
             payload: user.data,
           });
         }
-        Router.push('/dashboard');
+        Router.push("/dashboard");
       } catch (error: any) {
         const message = error?.response?.data.message;
         dispatch({
@@ -66,7 +73,7 @@ export const AuthAction = {
             payload: data,
           });
         }
-        Router.push('/login');
+        Router.push("/login");
       } catch (error: any) {
         const message = error?.response?.data.message;
         dispatch({
@@ -85,12 +92,38 @@ export const AuthAction = {
             type: LOGOUT_SUCCESS,
           });
         }
-        Router.push('/login')
+        Router.push("/login");
       } catch (error) {
         dispatch({
           type: LOGOUT_FAILURE,
           payload: error,
         });
+      }
+    };
+  },
+  editProfile: (id: string, payload: any) => {
+    return async (dispatch: Dispatch): Promise<void> => {
+      try {
+        const { status, data } = await UserService.updateItem(id, payload);
+        if (status === STATUS_CODE.SUCCESS) {
+          const user = await UserService.getItemById(data.id);
+          dispatch({
+            type: EDIT_PROFILE_SUCCESS,
+            payload: user.data,
+          });
+          openNotification(
+            NOTIF_TYPE.SUCCESS,
+            "Profile is updated successfully!"
+          );
+          dispatch(ModalAction.hideModal());
+        }
+      } catch (error: any) {
+        const message = error?.response?.data.message;
+        dispatch({
+          type: EDIT_PROFILE_FAILURE,
+          payload: { message },
+        });
+        openNotification(NOTIF_TYPE.ERROR, error.response.data.message);
       }
     };
   },

@@ -32,7 +32,7 @@ export default function CreateUserForm() {
     },
     validationSchema: Yup.object({
       password: Yup.string()
-        .max(15, t("error.charactersInvalid", { number: 15 }))
+        .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
       email: Yup.string()
         .email(t("error.emailInvalid"))

@@ -53,6 +53,7 @@ export const UserAction = {
         const { status, data }: GetUserResponse = await UserService.getItemById(
           values.id
         );
+        console.log('action', data)
         if (status === STATUS_CODE.SUCCESS) {
           dispatch({
             type: GET_USER_ITEM_SUCCESS,

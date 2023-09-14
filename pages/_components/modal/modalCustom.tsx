@@ -20,6 +20,9 @@ export default function ModalCustom() {
       open={visible}
       onOk={submitAction}
       onCancel={onClose}
+      cancelButtonProps={{className: 'hidden'}}
+      okText='Save'
+      okButtonProps={{className: 'bg-blueDark'}}
     >
       {FormComponent}
     </Modal>

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import LoadingComponent from "../loading";
+import EditProfileForm from "../forms/form-components/EditProfileForm";
 
 const { Header, Content } = Layout;
 
@@ -35,7 +36,7 @@ export default function DashboardLayout({ children }: any) {
     dispatch(
       ModalAction.openModal({
         visible: true,
-        FormComponent: <>122212122</>,
+        FormComponent: <EditProfileForm />,
       })
     );
   };

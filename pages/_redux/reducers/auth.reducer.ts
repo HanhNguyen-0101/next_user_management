@@ -10,6 +10,8 @@ const {
   REGISTER_SUCCESS,
   LOGOUT_FAILURE,
   LOGOUT_SUCCESS,
+  EDIT_PROFILE_FAILURE,
+  EDIT_PROFILE_SUCCESS,
 } = AuthConstant;
 
 let user = null;
@@ -23,7 +25,6 @@ if (typeof window !== "undefined") {
 const initState = {
   error: null,
   profile: user,
-  user: null,
 };
 
 const authReducer = (
@@ -32,10 +33,9 @@ const authReducer = (
 ) => {
   switch (type) {
     case LOGIN_SUCCESS: {
-      const { id, email, firstName, lastName, updatedBy, userRoles } = payload;
       const permissionListOfProfile: any[] = [];
       const roleListOfProfile: any[] = [];
-      userRoles?.map((userRoleItem: any) => {
+      payload?.userRoles?.map((userRoleItem: any) => {
         roleListOfProfile.push(userRoleItem.role.name);
         userRoleItem?.role?.rolePermissions?.map((rolePermission: any) => {
           permissionListOfProfile.push(rolePermission.permission.name);
@@ -43,11 +43,7 @@ const authReducer = (
       });
 
       const dataUserStore = {
-        id,
-        email,
-        firstName,
-        lastName,
-        updatedBy,
+        ...payload,
         permissionList: permissionListOfProfile,
         roleList: roleListOfProfile,
       };
@@ -64,17 +60,16 @@ const authReducer = (
         ...state,
         profile: null,
         error: payload.message,
-        user: initState.user,
       };
     }
     case LOGIN_GOOGLE_SUCCESS: {
-      return { ...state, user: payload.user, error: initState.error };
+      return { ...state, error: initState.error };
     }
     case LOGIN_GOOGLE_FAILUER: {
       return { ...state, error: payload.message };
     }
     case REGISTER_SUCCESS: {
-      return { ...state, user: payload, error: initState.error };
+      return { ...state, error: initState.error };
     }
     case REGISTER_FAILUER: {
       return {
@@ -82,11 +77,42 @@ const authReducer = (
         error: payload.message,
       };
     }
-    case LOGOUT_SUCCESS:
+    case LOGOUT_SUCCESS: {
       localStorage.removeItem(USER_LOGIN);
       return { ...state, profile: null };
+    }
     case LOGOUT_FAILURE:
       return { ...state };
+    case EDIT_PROFILE_SUCCESS: {
+      const permissionListOfProfile: any[] = [];
+      const roleListOfProfile: any[] = [];
+      payload?.userRoles?.map((userRoleItem: any) => {
+        roleListOfProfile.push(userRoleItem.role.name);
+        userRoleItem?.role?.rolePermissions?.map((rolePermission: any) => {
+          permissionListOfProfile.push(rolePermission.permission.name);
+        });
+      });
+
+      const dataUserStore = {
+        ...payload,
+        permissionList: permissionListOfProfile,
+        roleList: roleListOfProfile,
+      };
+      localStorage.setItem(USER_LOGIN, JSON.stringify(dataUserStore));
+      return {
+        ...state,
+        profile: dataUserStore,
+        error: initState.error,
+      };
+    }
+    case EDIT_PROFILE_FAILURE: {
+      localStorage.removeItem(USER_LOGIN);
+      return {
+        ...state,
+        profile: null,
+        error: payload.message,
+      };
+    }
     default:
       return { ...state };
   }
