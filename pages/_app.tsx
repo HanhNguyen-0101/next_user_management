@@ -7,6 +7,7 @@ import "@/styles/globals.css";
 import DrawerNav from "./_components/drawer/nav.drawer";
 import { appWithTranslation } from "next-i18next";
 import { ConfigProvider } from "antd";
+import ModalCustom from "./_components/modal/modalCustom";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         }}
       >
         <DrawerNav />
+        <ModalCustom />
         {getLayout(<Component {...pageProps} />)}
       </ConfigProvider>
     </Provider>

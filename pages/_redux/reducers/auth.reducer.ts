@@ -34,12 +34,14 @@ const authReducer = (
     case LOGIN_SUCCESS: {
       const { id, email, firstName, lastName, updatedBy, userRoles } = payload;
       const permissionListOfProfile: any[] = [];
+      const roleListOfProfile: any[] = [];
       userRoles?.map((userRoleItem: any) => {
+        roleListOfProfile.push(userRoleItem.role.name);
         userRoleItem?.role?.rolePermissions?.map((rolePermission: any) => {
           permissionListOfProfile.push(rolePermission.permission.name);
         });
       });
-    
+
       const dataUserStore = {
         id,
         email,
@@ -47,6 +49,7 @@ const authReducer = (
         lastName,
         updatedBy,
         permissionList: permissionListOfProfile,
+        roleList: roleListOfProfile,
       };
       localStorage.setItem(USER_LOGIN, JSON.stringify(dataUserStore));
       return {

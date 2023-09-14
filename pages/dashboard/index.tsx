@@ -277,7 +277,6 @@ export default function DashboardPage(
 
   return (
     <div className="bg-white p-4 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
-      <h3>{t("homepage.title")}</h3>
       <Table
         columns={columns}
         dataSource={userData?.data.map(i => {return {...i, key: i.id}})}
