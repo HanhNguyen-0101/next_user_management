@@ -101,12 +101,19 @@ export const UserAction = {
             type: EDIT_USER_ITEM_SUCCESS,
             payload: data,
           });
+          openNotification(
+            NOTIF_TYPE.SUCCESS,
+            "User is updated successfully!"
+          );
+          dispatch(DrawerAction.hideDrawer());
+          dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
         }
       } catch (error: any) {
         dispatch({
           type: EDIT_USER_ITEM_FAILURE,
           payload: error.response,
         });
+        openNotification(NOTIF_TYPE.ERROR, error.response.data.message);
       }
     };
   },
@@ -120,7 +127,7 @@ export const UserAction = {
             type: REMOVE_USER_ITEM_SUCCESS,
             payload: data,
           });
-          openNotification(NOTIF_TYPE.SUCCESS, data);
+          openNotification(NOTIF_TYPE.SUCCESS, 'User is deleted succesfully');
         }
         dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
       } catch (error: any) {

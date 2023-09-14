@@ -58,7 +58,7 @@ export default function LoginForm({
         >
           {t("auth:login.rememberMe")}
         </CheckboxFormField>
-        <Link href={"/"} className="text-xs text-blueDark">
+        <Link href={"/"} className="text-xs text-blueDark focus:text-blueDark hover:text-blueDark">
           {t("auth:login.forgotPass")}
         </Link>
       </div>

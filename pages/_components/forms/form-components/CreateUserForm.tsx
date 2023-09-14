@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { useTranslation } from "next-i18next";
-import { Form, Input, Space, Switch } from "antd";
+import { Form, Space } from "antd";
 import { useDispatch } from "react-redux";
 import { DrawerAction } from "@/redux/actions";
 import { UserAction } from "@/redux/actions/user.action";

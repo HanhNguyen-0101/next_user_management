@@ -31,7 +31,7 @@ export default function RegisterPage() {
       <div className="text-xs text-gray-500 mt-3 text-center">
         <Space>
           {t("auth:register.haveAnAccount")}
-          <Link href={"/"} className="text-blueDark">
+          <Link href={"/login"} className="text-blueDark focus:text-blueDark hover:text-blueDark">
             {t("auth:login.signIn")}
           </Link>
         </Space>

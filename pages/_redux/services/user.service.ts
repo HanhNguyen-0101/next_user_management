@@ -14,7 +14,7 @@ export const UserService = {
     return axiosConfig.post("/users", payload);
   },
   updateItem(id: string, payload: any) {
-    return axiosConfig.post(`/users/${id}`, payload);
+    return axiosConfig.put(`/users/${id}`, payload);
   },
   deleteItem(id: string) {
     return axiosConfig.delete(`/users/${id}`);

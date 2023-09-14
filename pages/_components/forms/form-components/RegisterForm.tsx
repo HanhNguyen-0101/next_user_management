@@ -46,6 +46,7 @@ export default function RegisterForm({
       await formik.setSubmitting(false);
     },
   });
+
   return (
     <Form layout="vertical" colon={false} onSubmitCapture={formik.handleSubmit}>
       <InputFormField formik={formik} label="Email" name="email" />

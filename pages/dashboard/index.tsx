@@ -1,36 +1,27 @@
 "use client";
-import React, { ReactElement, useEffect } from "react";
+import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
+import EditUserForm from "@/components/forms/form-components/EditUserForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
-import { Badge, Pagination, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import type { ColumnsType, TableProps } from "antd/es/table";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { useDispatch, useSelector } from "react-redux";
-import { AuthService } from "@/redux/services";
-import { FormatDate } from "pages/_utils/formatData";
-import { MinusOutlined, CheckOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
-import moment from "moment";
+import { DrawerAction } from "@/redux/actions";
 import { UserAction } from "@/redux/actions/user.action";
-import { Dispatch } from "redux";
 import {
   DeleteUserByIdPayload,
   GetUserByIdPayload,
-  IUserModel,
   UserState,
 } from "@/redux/models/user";
-import { DrawerAction } from "@/redux/actions";
-import LoginForm from "@/components/forms/form-components/LoginForm";
-import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
-import { DarkButton } from "@/components/button/darkButton";
+import { CheckOutlined, DeleteOutlined, EditOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Badge, Pagination, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
+import type { ColumnsType, TableProps } from "antd/es/table";
+import moment from "moment";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
-import EditUserForm from "@/components/forms/form-components/EditUserForm";
 import { ITEM_PER_PAGE } from "pages/_utils/constant";
+import { FormatDate } from "pages/_utils/formatData";
+import React, { ReactElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
 
 interface DataType {
   key: React.Key;
@@ -72,17 +63,9 @@ export default function DashboardPage(
       DrawerAction.openDrawer({
         visible: true,
         title: "Edit User",
-        FormComponent: <EditUserForm onEditUserSubmit={handleSubmitEditUserForm} />,
-        submitAction: handleSubmitEditUserForm,
+        FormComponent: <EditUserForm />,
       })
     );
-  };
-
-  const handleSubmitAddUserForm = (values: any) => {
-    console.log("-----add--------", values);
-  };
-  const handleSubmitEditUserForm = (values: any) => {
-    console.log("------edit-------", values);
   };
   const handleDeleteRecord = (values: DeleteUserByIdPayload) => {
     dispatch(UserAction.removeItem(values));
