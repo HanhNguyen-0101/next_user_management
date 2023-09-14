@@ -85,6 +85,13 @@ export default function EditUserForm() {
       className="px-4"
       onSubmitCapture={formik.handleSubmit}
     >
+      <InputFormField
+        formik={formik}
+        label="Email"
+        name="email"
+        isRequired={true}
+        disabled={true}
+      />
       <Space className="grid grid-cols-2 items-start">
         <InputFormField
           formik={formik}
@@ -99,12 +106,6 @@ export default function EditUserForm() {
           isRequired={true}
         />
       </Space>
-      <InputFormField
-        formik={formik}
-        label="Email"
-        name="email"
-        isRequired={true}
-      />
       <Space className="grid grid-cols-2 items-start">
         <InputFormField formik={formik} label="Office Code" name="officeCode" />
         <InputFormField formik={formik} label="Global ID" name="globalId" />

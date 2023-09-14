@@ -8,15 +8,14 @@ import { DrawerAction } from "@/redux/actions";
 import { UserAction } from "@/redux/actions/user.action";
 import { InputFormField } from "../form-fields/InputFormField";
 import { SwitchFormField } from "../form-fields/SwitchFormField";
+import { CheckboxFormField } from "../form-fields/CheckboxFormField";
 
 export default function CreateUserForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
 
-  const handleChangeSwitch = (name) => {
-    return (value) => {
-      formik.setFieldValue(name, value);
-    };
+  const handleChangeCheckbox = (e) => {
+    formik.setFieldValue(e.target.name, e.target.value);
   };
 
   const formik = useFormik({
@@ -71,6 +70,19 @@ export default function CreateUserForm() {
       className="px-4"
       onSubmitCapture={formik.handleSubmit}
     >
+      <InputFormField
+        formik={formik}
+        label="Email"
+        name="email"
+        isRequired={true}
+      />
+      <InputFormField
+        formik={formik}
+        type={"password"}
+        label="Password"
+        name="password"
+        isRequired={true}
+      />
       <Space className="grid grid-cols-2 items-start">
         <InputFormField
           formik={formik}
@@ -85,37 +97,24 @@ export default function CreateUserForm() {
           isRequired={true}
         />
       </Space>
-      <InputFormField
-        formik={formik}
-        label="Email"
-        name="email"
-        isRequired={true}
-      />
-      <InputFormField
-        formik={formik}
-        type={'password'}
-        label="Password"
-        name="password"
-        isRequired={true}
-      />
       <Space className="grid grid-cols-2 items-start">
         <InputFormField formik={formik} label="Office Code" name="officeCode" />
         <InputFormField formik={formik} label="Global ID" name="globalId" />
       </Space>
-      <Space className="grid grid-cols-2 items-start">
-        <SwitchFormField
-          formik={formik}
-          label="Is disabled?"
-          name="isDisable"
-          onChange={handleChangeSwitch("isDisable")}
-        />
-        <SwitchFormField
-          formik={formik}
-          label="Is pending?"
-          name="isPending"
-          onChange={handleChangeSwitch("isPending")}
-        />
-      </Space>
+      <CheckboxFormField
+        formik={formik}
+        name="isDisable"
+        onChange={handleChangeCheckbox}
+      >
+        Disabled?
+      </CheckboxFormField>
+      <CheckboxFormField
+        formik={formik}
+        name="isPending"
+        onChange={handleChangeCheckbox}
+      >
+        Pending?
+      </CheckboxFormField>
     </Form>
   );
 }
