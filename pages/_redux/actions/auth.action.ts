@@ -21,6 +21,8 @@ const {
   LOGOUT_FAILURE,
   EDIT_PROFILE_FAILURE,
   EDIT_PROFILE_SUCCESS,
+  DELETE_PROFILE_SUCCESS,
+  DELETE_PROFILE_FAILURE,
 } = AuthConstant;
 
 export const AuthAction = {
@@ -104,7 +106,7 @@ export const AuthAction = {
   editProfile: (id: string, payload: any) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
-        const { status, data } = await UserService.updateItem(id, payload);
+        const { status, data } = await AuthService.updateProfile(id, payload);
         if (status === STATUS_CODE.SUCCESS) {
           const user = await UserService.getItemById(data.id);
           dispatch({
@@ -121,6 +123,31 @@ export const AuthAction = {
         const message = error?.response?.data.message;
         dispatch({
           type: EDIT_PROFILE_FAILURE,
+          payload: { message },
+        });
+        openNotification(NOTIF_TYPE.ERROR, error.response.data.message);
+      }
+    };
+  },
+  deleteProfile: (id: string) => {
+    return async (dispatch: Dispatch): Promise<void> => {
+      try {
+        const { status } = await AuthService.deleteProfile(id);
+        if (status === STATUS_CODE.SUCCESS) {
+          dispatch({
+            type: DELETE_PROFILE_SUCCESS,
+          });
+          openNotification(
+            NOTIF_TYPE.SUCCESS,
+            "Profile is deleted successfully!"
+          );
+          dispatch(ModalAction.hideModal());
+          Router.push('/login');
+        }
+      } catch (error: any) {
+        const message = error?.response?.data.message;
+        dispatch({
+          type: DELETE_PROFILE_FAILURE,
           payload: { message },
         });
         openNotification(NOTIF_TYPE.ERROR, error.response.data.message);

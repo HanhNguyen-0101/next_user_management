@@ -12,6 +12,8 @@ const {
   LOGOUT_SUCCESS,
   EDIT_PROFILE_FAILURE,
   EDIT_PROFILE_SUCCESS,
+  DELETE_PROFILE_SUCCESS,
+  DELETE_PROFILE_FAILURE,
 } = AuthConstant;
 
 let user = null;
@@ -110,6 +112,19 @@ const authReducer = (
       return {
         ...state,
         profile: null,
+        error: payload.message,
+      };
+    }
+    case DELETE_PROFILE_SUCCESS: {
+      localStorage.removeItem(USER_LOGIN);
+      return {
+        ...state,
+        profile: null,
+      }
+    }
+    case DELETE_PROFILE_FAILURE: {
+      return {
+        ...state,
         error: payload.message,
       };
     }

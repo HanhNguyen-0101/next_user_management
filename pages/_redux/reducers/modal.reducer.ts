@@ -1,6 +1,12 @@
 import { ModalConstant } from "../constants";
 
-const { OPEN_MODAL, HIDE_MODAL, SET_CALLBACK_MODAL, SET_RESET_CALLBACK_MODAL } = ModalConstant;
+const {
+  OPEN_MODAL,
+  HIDE_MODAL,
+  SET_CALLBACK_MODAL,
+  SET_RESET_CALLBACK_MODAL,
+  SET_DELETE_CALLBACK_MODAL,
+} = ModalConstant;
 
 const initState = {
   visible: false,
@@ -8,6 +14,7 @@ const initState = {
   FormComponent: null,
   submitAction: () => {},
   resetAction: () => {},
+  deleteAction: () => {},
 };
 const modalReducer = (state = initState, action: any) => {
   switch (action.type) {
@@ -28,6 +35,9 @@ const modalReducer = (state = initState, action: any) => {
     }
     case SET_RESET_CALLBACK_MODAL: {
       return { ...state, resetAction: action.payload };
+    }
+    case SET_DELETE_CALLBACK_MODAL: {
+      return { ...state, deleteAction: action.payload };
     }
     default:
       return { ...state };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Dispatch } from "redux";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import { ModalAction } from "@/redux/actions";
 
 export default function ModalCustom() {
@@ -20,9 +20,17 @@ export default function ModalCustom() {
       open={visible}
       onOk={submitAction}
       onCancel={onClose}
-      cancelButtonProps={{className: 'hidden'}}
-      okText='Save'
-      okButtonProps={{className: 'bg-blueDark'}}
+      cancelButtonProps={{ className: "hidden" }}
+      footer={[
+        <Button
+          key="submit"
+          type="primary"
+          className="bg-blueDark mr-4"
+          onClick={submitAction}
+        >
+          Save
+        </Button>
+      ]}
     >
       {FormComponent}
     </Modal>

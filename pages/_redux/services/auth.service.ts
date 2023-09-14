@@ -19,7 +19,10 @@ export const AuthService = {
   logout() {
     return axiosConfig.post("/auth/logout");
   },
-  getUser() {
-    return axiosConfig.get('/users')
-  }
+  updateProfile(id: string, payload: any) {
+    return axiosConfig.put(`/users/personal/${id}`, payload);
+  },
+  deleteProfile(id: string) {
+    return axiosConfig.delete(`/users/personal/${id}`);
+  },
 };

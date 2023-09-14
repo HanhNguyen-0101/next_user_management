@@ -2,12 +2,12 @@ import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { useTranslation } from "next-i18next";
-import { Space, Form } from "antd";
+import { Space, Form, Popconfirm, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthAction, ModalAction } from "@/redux/actions";
 import { InputFormField } from "../form-fields/InputFormField";
-import { UserAction } from "@/redux/actions/user.action";
 import { CheckboxFormField } from "../form-fields/CheckboxFormField";
+import { DeleteOutlined } from "@ant-design/icons";
 
 export default function EditProfileForm() {
   const { t } = useTranslation(["common", "auth"]);
@@ -15,6 +15,9 @@ export default function EditProfileForm() {
   const { profile } = useSelector((state: any) => state.authReducer);
   const handleCheckboxChange = (e) => {
     formik.setFieldValue(e.target.name, e.target.checked);
+  };
+  const handleDeleteProfile = (id: string) => {
+    dispatch(AuthAction.deleteProfile(id));
   };
   const formik = useFormik({
     enableReinitialize: true,
@@ -67,7 +70,6 @@ export default function EditProfileForm() {
       ),
     }),
     onSubmit: async (values) => {
-      const isChangePassword = values.isChangePassword;
       if (!values.isChangePassword) {
         values.password = profile?.password;
       }
@@ -87,6 +89,19 @@ export default function EditProfileForm() {
       className="p-4"
       onSubmitCapture={formik.handleSubmit}
     >
+      <Popconfirm
+        title="Are you sure to delete this account?"
+        onConfirm={() => handleDeleteProfile(profile?.id)}
+        okText="Yes, I'm sure"
+        cancelText="No, I'm not"
+        okButtonProps={{ className: "bg-blueDark" }}
+        className="text-red-600 text-lg absolute bottom-[15px] cursor-pointer"
+      >
+        <Space>
+          <DeleteOutlined />
+          <span className="text-sm underline">Delete account</span>
+        </Space>
+      </Popconfirm>
       <div className="text-center mb-8">
         <h3 className="font-bold text-lg text-blueDark">
           <Space>
