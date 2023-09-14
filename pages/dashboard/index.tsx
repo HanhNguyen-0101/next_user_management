@@ -12,6 +12,7 @@ import {
 import { CheckOutlined, DeleteOutlined, EditOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import { Badge, Pagination, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
+import { TableRowSelection } from "antd/es/table/interface";
 import moment from "moment";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useTranslation } from "next-i18next";
@@ -262,18 +263,30 @@ export default function DashboardPage(
   const onChangePagination = (page: number) => {
     dispatch(UserAction.getAll(`page=${page}&item_per_page=${ITEM_PER_PAGE}`));
   }
+  const rowSelection: TableRowSelection<DataType> = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    },
+    onSelect: (record, selected, selectedRows) => {
+      console.log('one', record, selected, selectedRows);
+    },
+    onSelectAll: (selected, selectedRows, changeRows) => {
+      console.log('all', selected, selectedRows, changeRows);
+    },
+  };
 
   return (
     <div className="bg-white p-4 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
       <h3>{t("homepage.title")}</h3>
       <Table
         columns={columns}
-        dataSource={userData?.data}
+        dataSource={userData?.data.map(i => {return {...i, key: i.id}})}
         onChange={onChange}
         scroll={{ x: true }}
         sticky={true}
         className="mb-8"
         pagination={false}
+        rowSelection={{ ...rowSelection }}
       />
       <Pagination onChange={onChangePagination} total={userData?.total} pageSize={ITEM_PER_PAGE} current={userData?.currentPage} />
       {hasPermission(permissionTypes.USER_CREATE, profile?.permissionList) && (
