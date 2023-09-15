@@ -1,8 +1,13 @@
 import { AuthAction, MenuAction, ModalAction } from "@/redux/actions";
 import { MenuType } from "@/redux/models/menu";
-import { DownOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  SettingFilled,
+  SearchOutlined,
+  FilterFilled,
+} from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Dropdown, Layout, Space } from "antd";
+import { Avatar, Button, Dropdown, Input, Layout, Space } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -10,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import LoadingComponent from "../loading";
 import EditProfileForm from "../forms/form-components/EditProfileForm";
+import Image from "next/image";
 
 const { Header, Content } = Layout;
 
@@ -28,6 +34,17 @@ export default function DashboardLayout({ children }: any) {
     dispatch(MenuAction.getAll());
   }, []);
 
+  const handleSearch = () => {
+    alert("111111111111");
+  };
+  const handleFilter = () => {
+    dispatch(
+      ModalAction.openModal({
+        visible: true,
+        FormComponent: <>hello filter</>,
+      })
+    );
+  };
   const handleLogout = async () => {
     await dispatch(AuthAction.logout());
   };
@@ -69,19 +86,15 @@ export default function DashboardLayout({ children }: any) {
   }
   let roleName = "";
   profile?.roleList?.map((name: string) => {
-    roleName += `/ ${name}`;
+    roleName += `${name}/ `;
   });
   const items: MenuProps["items"] = [
     {
       key: "1",
       label: (
-        <div>
-          <button className="font-bold" onClick={handleProfileModal}>
-            {profile?.email}
-          </button>
-          <br />
-          <i className="opacity-50">{roleName}</i>
-        </div>
+        <button className="font-bold" onClick={handleProfileModal}>
+          My account
+        </button>
       ),
     },
     {
@@ -90,7 +103,7 @@ export default function DashboardLayout({ children }: any) {
     {
       key: "3",
       label: (
-        <button type="button" onClick={() => handleLogout()}>
+        <button className="font-bold" onClick={() => handleLogout()}>
           Log out
         </button>
       ),
@@ -99,40 +112,59 @@ export default function DashboardLayout({ children }: any) {
 
   return profile && isClient ? (
     <Layout>
-      <Header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#17759F",
-        }}
-        className="shadow-lg"
-      >
-        <Dropdown menu={{ items }} placement="bottomRight">
-          <Space>
-            {profile?.firstName}
-            {profile?.lastName}
-          </Space>
-        </Dropdown>
-        <Dropdown menu={{ items: itemsMenu }}>
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>
-              Management Services
-              <DownOutlined />
-            </Space>
-          </a>
-        </Dropdown>
+      <Header className="flex items-center z-20 shadow-md bg-white">
+        <div className="w-full m-auto md:px-8 px-5">
+          <div className="inline-flex justify-center items-center align-middle">
+            <Link href={"/dashboard"} className="mr-4">
+              <Image
+                src={"/images/logo.png"}
+                alt={"logo"}
+                width={150}
+                height={30}
+              />
+            </Link>
+            <Dropdown menu={{ items: itemsMenu }}>
+              <a onClick={(e) => e.preventDefault()}>
+                <Space className="text-blueDark font-medium text-base">
+                  Management Services
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
+          <div className="float-right items-center">
+            <div className="inline-block mx-2">
+              <Input
+                size="large"
+                placeholder="Search..."
+                onPressEnter={handleSearch}
+                suffix={
+                  <button className="text-blueDark" onClick={handleSearch}>
+                    <SearchOutlined className="font-bold text-xl" />
+                  </button>
+                }
+                className="rounded-lg border-blueDark"
+              />
+            </div>
+            <button
+              onClick={handleFilter}
+              className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
+            >
+              <FilterFilled />
+            </button>
+            <Dropdown menu={{ items }} placement="bottomRight" className="ml-2">
+              <Avatar
+                size={40}
+                className="bg-blueDark"
+                icon={<SettingFilled />}
+              />
+            </Dropdown>
+          </div>
+        </div>
       </Header>
       <Content>
-        <Layout className="relative">
-          <Content
-            className="shadow-lg"
-            style={{
-              padding: 24,
-              minHeight: 280,
-            }}
-          >
-            {children}
-          </Content>
+        <Layout className="relative z-10 min-h-[280px] w-full max-w-[1260px] m-auto p-5">
+          <Content className="shadow-lg">{children}</Content>
         </Layout>
       </Content>
     </Layout>

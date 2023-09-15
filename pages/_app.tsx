@@ -25,8 +25,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: "#17759F",
-            borderRadius: 2,
+            colorPrimary: "#274a74",
+            borderRadius: 2,            
           },
         }}
       >

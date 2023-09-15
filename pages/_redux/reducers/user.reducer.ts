@@ -24,7 +24,6 @@ const initState: UserState = {
   },
   user: null,
   error: null,
-  deleteMsg: null,
 };
 
 const userReducer = (
@@ -57,7 +56,7 @@ const userReducer = (
       return { ...state, error: payload.data };
     }
     case REMOVE_USER_ITEM_SUCCESS: {
-      return { ...state, deleteMsg: payload };
+      return { ...state };
     }
     case REMOVE_USER_ITEM_FAILURE: {
       return { ...state, error: payload.data };

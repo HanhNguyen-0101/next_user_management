@@ -2,15 +2,27 @@
 import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
 import EditUserForm from "@/components/forms/form-components/EditUserForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
-import { DrawerAction } from "@/redux/actions";
-import { UserAction } from "@/redux/actions/user.action";
 import {
-  DeleteUserByIdPayload,
-  GetUserByIdPayload,
-  UserState,
-} from "@/redux/models/user";
-import { CheckOutlined, DeleteOutlined, EditOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
-import { Badge, Pagination, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
+  NOTIF_TYPE,
+  openNotification,
+} from "@/components/notification/notification";
+import { DrawerAction, ModalAction } from "@/redux/actions";
+import { UserAction } from "@/redux/actions/user.action";
+import { UserState } from "@/redux/models/user";
+import {
+  CheckOutlined,
+  MinusOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
+import {
+  Badge,
+  Button,
+  Pagination,
+  Popconfirm,
+  Popover,
+  Space,
+  Table,
+} from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
 import moment from "moment";
@@ -20,7 +32,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
 import { ITEM_PER_PAGE } from "pages/_utils/constant";
 import { FormatDate } from "pages/_utils/formatData";
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 
@@ -46,9 +58,37 @@ export default function DashboardPage(
     (state: any) => state.userReducer
   );
   const { profile } = useSelector((state: any) => state.authReducer);
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+  const hasEditPermission = hasPermission(
+      permissionTypes.USER_EDIT,
+      profile?.permissionList
+    ),
+    hasDeletePermission = hasPermission(
+      permissionTypes.USER_DELETE,
+      profile?.permissionList
+    ),
+    hasAddPermission = hasPermission(
+      permissionTypes.USER_CREATE,
+      profile?.permissionList
+    );
+
   useEffect(() => {
     dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
   }, []);
+
+  const onChangePagination = (page: number) => {
+    dispatch(UserAction.getAll(`page=${page}&item_per_page=${ITEM_PER_PAGE}`));
+  };
+  const handleShowDetail = () => {
+    dispatch(
+      ModalAction.openModal({
+        visible: true,
+        FormComponent: <>hello detail</>,
+      })
+    );
+  };
   const handleAddUser = () => {
     dispatch(
       DrawerAction.openDrawer({
@@ -58,246 +98,250 @@ export default function DashboardPage(
       })
     );
   };
-  const handleEditRecord = async (values: GetUserByIdPayload) => {
-    await dispatch(UserAction.getItemById(values));
-    await dispatch(
-      DrawerAction.openDrawer({
-        visible: true,
-        title: "Edit User",
-        FormComponent: <EditUserForm />,
-      })
-    );
+  const handleEditUserBtn = async () => {
+    if (selectedRowKeys && selectedRowKeys.length === 1) {
+      await dispatch(
+        UserAction.getItemById({ id: selectedRowKeys[0].toString() })
+      );
+      await dispatch(
+        DrawerAction.openDrawer({
+          visible: true,
+          title: "Edit User",
+          FormComponent: <EditUserForm />,
+        })
+      );
+    } else {
+      openNotification(
+        NOTIF_TYPE.WARNING,
+        "Please select only a row in the table!"
+      );
+    }
   };
-  const handleDeleteRecord = (values: DeleteUserByIdPayload) => {
-    dispatch(UserAction.removeItem(values));
+  const handleDeleteUserBtn = () => {
+    openNotification(NOTIF_TYPE.WARNING, "Please select a row in the table!");
+  };
+  const handleDeleteUser = async () => {
+    await dispatch(
+      UserAction.removeItem({ id: selectedRowKeys[0].toString() })
+    );
   };
 
   const columns: ColumnsType = [
     {
-      title: "UserID",
-      dataIndex: "id",
-      fixed: "left",
-      width: 80,
-      render: (value): ReactElement => {
-        return (
-          <Popover
-            content={value}
-            className="w-10 block overflow-hidden text-ellipsis whitespace-nowrap"
-          >
-            <span className="cursor-pointer">{value}</span>
-          </Popover>
-        );
-      },
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      fixed: "left",
-      sorter: {
-        compare: (a, b) => {
-          return a.email.localeCompare(b.email);
-        },
-        multiple: 1,
-      },
-    },
-    {
-      title: "Firstname",
-      dataIndex: "firstName",
-      sorter: {
-        compare: (a, b) => {
-          return a.firstName.localeCompare(b.firstName);
-        },
-        multiple: 2,
-      },
-    },
-    {
-      title: "Lastname",
-      dataIndex: "lastName",
-      sorter: {
-        compare: (a, b) => {
-          return a.lastName.localeCompare(b.lastName);
-        },
-        multiple: 3,
-      },
-    },
-    {
-      title: "Disable",
-      dataIndex: "isDisable",
-      width: 100,
-      align: "center",
-      render: (value) => {
-        const statusText = value ? "Disable" : "Active";
-        const status = value ? "error" : "success";
-        return <Badge status={status} text={statusText} />;
-      },
-      filters: [
+      title: (
+        <Space>
+          {hasAddPermission && (
+            <Button
+              className="text-blueDark border-blueDark font-medium"
+              onClick={handleAddUser}
+            >
+              Add
+            </Button>
+          )}
+          {hasEditPermission && (
+            <Button
+              className="text-blueDark border-blueDark font-medium"
+              onClick={handleEditUserBtn}
+            >
+              Edit
+            </Button>
+          )}
+          {hasDeletePermission && (
+            <Popconfirm
+              title="Are you sure to delete item/items?"
+              okText="Delete"
+              cancelText="Cancel"
+              disabled={!(selectedRowKeys && selectedRowKeys.length === 1)}
+              onConfirm={handleDeleteUser}
+              icon={<QuestionCircleOutlined className="text-red-600" />}
+            >
+              <Button
+                className="text-blueDark border-blueDark font-medium"
+                onClick={
+                  !(selectedRowKeys && selectedRowKeys.length === 1)
+                    ? handleDeleteUserBtn
+                    : () => {}
+                }
+              >
+                Delete
+              </Button>
+            </Popconfirm>
+          )}
+          {hasDeletePermission && (
+            <Button
+              className="text-blueDark border-blueDark font-medium"
+              onClick={handleAddUser}
+            >
+              Change Role
+            </Button>
+          )}
+        </Space>
+      ),
+      align: "left",
+      children: [
         {
-          text: "Disable",
-          value: true,
+          title: "Email",
+          dataIndex: "email",
+          fixed: "left",
+          sorter: {
+            compare: (a, b) => {
+              return a.email.localeCompare(b.email);
+            },
+            multiple: 1,
+          },
         },
         {
-          text: "Enable",
-          value: false,
+          title: "Firstname",
+          dataIndex: "firstName",
+          sorter: {
+            compare: (a, b) => {
+              return a.firstName.localeCompare(b.firstName);
+            },
+            multiple: 2,
+          },
+        },
+        {
+          title: "Lastname",
+          dataIndex: "lastName",
+          sorter: {
+            compare: (a, b) => {
+              return a.lastName.localeCompare(b.lastName);
+            },
+            multiple: 3,
+          },
+        },
+        {
+          title: "Disable",
+          dataIndex: "isDisable",
+          width: 100,
+          align: "center",
+          render: (value) => {
+            const statusText = value ? "Disable" : "Active";
+            const status = value ? "error" : "success";
+            return <Badge status={status} text={statusText} />;
+          },
+          filters: [
+            {
+              text: "Disable",
+              value: true,
+            },
+            {
+              text: "Enable",
+              value: false,
+            },
+          ],
+          onFilter: (value, record) => record.isDisable === value,
+        },
+        {
+          title: "Registered With Google",
+          dataIndex: "isRegisteredWithGoogle",
+          width: 200,
+          align: "center",
+          render: (value) =>
+            value ? (
+              <span className="text-green-600 font-bold text-lg">
+                <CheckOutlined />
+              </span>
+            ) : (
+              <MinusOutlined className="text-gray-400" />
+            ),
+          filters: [
+            {
+              text: "Registered via Google",
+              value: true,
+            },
+            {
+              text: "Registered Without Google",
+              value: false,
+            },
+          ],
+          onFilter: (value, record) => record.isRegisteredWithGoogle === value,
+        },
+        {
+          title: "Created At",
+          dataIndex: "createdAt",
+          sorter: (a, b) => {
+            return moment(a.createdAt).diff(moment(b.createdAt));
+          },
+          render: (value) => {
+            return <span>{new FormatDate(value).toFullDate()}</span>;
+          },
+        },
+        {
+          title: "Updated By",
+          dataIndex: "updatedByUser",
+          width: 150,
+          align: "center",
+          render: (value) => {
+            if (value) {
+              return (
+                <Popover content={value.email}>
+                  <Space className="cursor-pointer">
+                    <span>{value.firstName}</span>
+                    <span>{value.lastName}</span>
+                  </Space>
+                </Popover>
+              );
+            }
+            return <MinusOutlined className="text-gray-400" />;
+          },
+        },
+        {
+          title: "Updated At",
+          dataIndex: "updatedAt",
+          render: (value) => {
+            return <span>{new FormatDate(value).toFullDate()}</span>;
+          },
+          sorter: (a, b) => {
+            return moment(a.updatedAt).diff(moment(b.updatedAt));
+          },
         },
       ],
-      onFilter: (value, record) => record.isDisable === value,
-    },
-    {
-      title: "Registered With Google",
-      dataIndex: "isRegisteredWithGoogle",
-      width: 200,
-      align: "center",
-      render: (value) =>
-        value ? (
-          <span className="text-green-600 font-bold text-lg">
-            <CheckOutlined />
-          </span>
-        ) : (
-          <MinusOutlined className="text-gray-400" />
-        ),
-      filters: [
-        {
-          text: "Registered via Google",
-          value: true,
-        },
-        {
-          text: "Registered Without Google",
-          value: false,
-        },
-      ],
-      onFilter: (value, record) => record.isRegisteredWithGoogle === value,
-    },
-    {
-      title: "Created At",
-      dataIndex: "createdAt",
-      sorter: (a, b) => {
-        return moment(a.createdAt).diff(moment(b.createdAt));
-      },
-      render: (value) => {
-        return <span>{new FormatDate(value).toFullDate()}</span>;
-      },
-    },
-    {
-      title: "Updated By",
-      dataIndex: "updatedByUser",
-      width: 150,
-      align: "center",
-      render: (value) => {
-        if (value) {
-          return (
-            <Popover content={value.email}>
-              <Space className="cursor-pointer">
-                <span>{value.firstName}</span>
-                <span>{value.lastName}</span>
-              </Space>
-            </Popover>
-          );
-        }
-        return <MinusOutlined className="text-gray-400" />;
-      },
-    },
-    {
-      title: "Updated At",
-      dataIndex: "updatedAt",
-      render: (value) => {
-        return <span>{new FormatDate(value).toFullDate()}</span>;
-      },
-      sorter: (a, b) => {
-        return moment(a.updatedAt).diff(moment(b.updatedAt));
-      },
     },
   ];
-  const hasEditPermission = hasPermission(
-      permissionTypes.USER_EDIT,
-      profile?.permissionList
-    ),
-    hasDeletePermission = hasPermission(
-      permissionTypes.USER_DELETE,
-      profile?.permissionList
-    );
 
-  if (hasDeletePermission || hasEditPermission) {
-    columns.push({
-      title: "Action",
-      key: "operation",
-      fixed: "right",
-      width: 100,
-      render: (value, record) => {
-        return (
-          <Space>
-            {hasEditPermission && (
-              <button
-                className="text-xl text-blueDark pr-4"
-                onClick={() => handleEditRecord(record)}
-              >
-                <EditOutlined />
-              </button>
-            )}
-            {hasDeletePermission && (
-              <Popconfirm
-                title="Are you sure to delete item?"
-                okText="Delete"
-                cancelText="Cancel"
-                onConfirm={() => handleDeleteRecord(record)}
-                icon={<QuestionCircleOutlined className="text-red-600" />}
-              >
-                <button className="text-xl text-red-600">
-                  <DeleteOutlined />
-                </button>
-              </Popconfirm>
-            )}
-          </Space>
-        );
-      },
-    });
-  }
   const onChange: TableProps<DataType>["onChange"] = (
-    pagination,
     filters,
     sorter,
     extra
   ) => {
-    console.log("params", pagination, filters, sorter, extra);
+    console.log("params", filters, sorter, extra);
   };
-
-  const onChangePagination = (page: number) => {
-    dispatch(UserAction.getAll(`page=${page}&item_per_page=${ITEM_PER_PAGE}`));
-  }
   const rowSelection: TableRowSelection<DataType> = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    onSelect: (record, selected, selectedRows) => {
-      console.log('one', record, selected, selectedRows);
-    },
-    onSelectAll: (selected, selectedRows, changeRows) => {
-      console.log('all', selected, selectedRows, changeRows);
+    onChange: (selectedRowKeys) => {
+      setSelectedRowKeys(selectedRowKeys);
     },
   };
 
   return (
-    <div className="bg-white p-4 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
+    <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
       <Table
         columns={columns}
-        dataSource={userData?.data.map(i => {return {...i, key: i.id}})}
+        dataSource={userData?.data.map((i) => {
+          return { ...i, key: i.id };
+        })}
         onChange={onChange}
         scroll={{ x: true }}
         sticky={true}
-        className="mb-8"
         pagination={false}
         rowSelection={{ ...rowSelection }}
+        bordered
+        rowClassName="cursor-pointer"
+        footer={() => (
+          <Pagination
+            onChange={onChangePagination}
+            total={userData?.total}
+            pageSize={ITEM_PER_PAGE}
+            current={userData?.currentPage}
+            className="text-right"
+          />
+        )}
+        onRow={(record, rowIndex) => {
+          return {
+            onDoubleClick: handleShowDetail,
+          };
+        }}
       />
-      <Pagination onChange={onChangePagination} total={userData?.total} pageSize={ITEM_PER_PAGE} current={userData?.currentPage} />
-      {hasPermission(permissionTypes.USER_CREATE, profile?.permissionList) && (
-        <Tooltip title="Add new User">
-          <button
-            className="fixed z-20 bottom-5 right-5 shadow-md w-14 h-14 bg-blueDark rounded-full text-lg text-white"
-            onClick={handleAddUser}
-          >
-            <PlusOutlined />
-          </button>
-        </Tooltip>
-      )}
     </div>
   );
 }

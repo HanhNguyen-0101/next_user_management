@@ -6,7 +6,8 @@ import { Dispatch } from "redux";
 
 export default function DrawerNav() {
   const { visible, title, FormComponent, submitAction } = useSelector(
-    (state: any) => state.drawerReducer);
+    (state: any) => state.drawerReducer
+  );
 
   const dispatch = useDispatch<Dispatch<any>>();
   const onClose = () => {
@@ -15,24 +16,27 @@ export default function DrawerNav() {
 
   return (
     <Drawer
-      title={<span className="text-white">{title}</span>}
+      title={<span className="text-blueDark">{title}</span>}
+      footer={
+        <Space className="float-right">
+          <Button className="text-blueDark border-blueDark" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            type="primary"
+            className="bg-blueDark text-white"
+            onClick={submitAction}
+          >
+            Confirm
+          </Button>
+        </Space>
+      }
       placement="right"
       open={visible}
       closable={false}
       size="large"
       className="drawer"
       destroyOnClose={true}
-      footer={
-        <Space>
-          <Button className="capitalize" onClick={onClose}>cancel</Button>
-          <Button type="primary" className="capitalize" onClick={submitAction}>
-          confirm
-          </Button>
-        </Space>
-      }
-      footerStyle={{ textAlign: "left", backgroundColor: "#17759F", borderColor: "transparent" }}
-      headerStyle={{ backgroundColor: "#17759F", borderColor: "transparent" }}
-      bodyStyle={{ backgroundColor: "#ffffff" }}
     >
       {FormComponent}
     </Drawer>
