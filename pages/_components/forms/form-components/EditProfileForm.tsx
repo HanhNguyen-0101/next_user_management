@@ -103,13 +103,15 @@ export default function EditProfileForm() {
         </Space>
       </Popconfirm>
       <div className="text-center mb-8">
-        <h3 className="font-bold text-lg text-blueDark">
+        <h1 className="sm:text-3xl text-2xl title-font font-medium text-center text-blueDark">
           <Space>
             {profile?.firstName}
             {profile?.lastName}
           </Space>
-        </h3>
-        <div className="text-gray-500 text-sm">{profile?.email}</div>
+        </h1>
+        <p className="text-sm leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto">
+          {profile?.email}
+        </p>
       </div>
       <Space className="grid grid-cols-2 items-start">
         <InputFormField

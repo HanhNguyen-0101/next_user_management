@@ -6,6 +6,6 @@ export class FormatDate {
         this.date = dateString;
     }
     toFullDate() {
-        return moment(this.date).format('DD MMM YY, h:mm a');
+        return moment(this.date).format('DD/MM/YY, H:mm');
     }
 }

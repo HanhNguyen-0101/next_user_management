@@ -41,6 +41,7 @@ export default function DashboardLayout({ children }: any) {
     dispatch(
       ModalAction.openModal({
         visible: true,
+        actionText: "Filter",
         FormComponent: <>hello filter</>,
       })
     );
@@ -111,7 +112,7 @@ export default function DashboardLayout({ children }: any) {
   ];
 
   return profile && isClient ? (
-    <Layout>
+    <Layout className="h-full min-h-screen">
       <Header className="flex items-center z-20 shadow-md bg-white">
         <div className="w-full m-auto md:px-8 px-5">
           <div className="inline-flex justify-center items-center align-middle">

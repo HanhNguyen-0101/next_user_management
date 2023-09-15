@@ -8,7 +8,7 @@ import {
 } from "@/components/notification/notification";
 import { DrawerAction, ModalAction } from "@/redux/actions";
 import { UserAction } from "@/redux/actions/user.action";
-import { UserState } from "@/redux/models/user";
+import { IUserModel, UserState } from "@/redux/models/user";
 import {
   CheckOutlined,
   MinusOutlined,
@@ -25,10 +25,10 @@ import {
 } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
-import moment from "moment";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import UserDetail from "pages/_templates/userDetail.template";
 import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
 import { ITEM_PER_PAGE } from "pages/_utils/constant";
 import { FormatDate } from "pages/_utils/formatData";
@@ -81,14 +81,6 @@ export default function DashboardPage(
   const onChangePagination = (page: number) => {
     dispatch(UserAction.getAll({ page }));
   };
-  const handleShowDetail = () => {
-    dispatch(
-      ModalAction.openModal({
-        visible: true,
-        FormComponent: <>hello detail</>,
-      })
-    );
-  };
   const handleAddUser = () => {
     dispatch(
       DrawerAction.openDrawer({
@@ -97,6 +89,23 @@ export default function DashboardPage(
         FormComponent: <CreateUserForm />,
       })
     );
+  };
+  const handleShowDetailUserBtn = () => {
+    if (selectedRowKeys && selectedRowKeys.length === 1) {
+      dispatch(UserAction.getItemById({ id: selectedRowKeys[0].toString() }));
+      dispatch(
+        ModalAction.openModal({
+          visible: true,
+          hiddenSubmitBtn: true,
+          FormComponent: <UserDetail />,
+        })
+      );
+    } else {
+      openNotification(
+        NOTIF_TYPE.WARNING,
+        "Please select only a row in the table!"
+      );
+    }
   };
   const handleEditUserBtn = async () => {
     if (selectedRowKeys && selectedRowKeys.length === 1) {
@@ -122,7 +131,10 @@ export default function DashboardPage(
   };
   const handleDeleteUser = async () => {
     await dispatch(
-      UserAction.removeItem({ id: selectedRowKeys[0].toString(), page: currentPage })
+      UserAction.removeItem({
+        id: selectedRowKeys[0].toString(),
+        page: currentPage,
+      })
     );
   };
 
@@ -130,6 +142,12 @@ export default function DashboardPage(
     {
       title: (
         <Space>
+          <Button
+            className="text-blueDark border-blueDark font-medium"
+            onClick={handleShowDetailUserBtn}
+          >
+            Show Detail
+          </Button>
           {hasAddPermission && (
             <Button
               className="text-blueDark border-blueDark font-medium"
@@ -172,70 +190,42 @@ export default function DashboardPage(
               className="text-blueDark border-blueDark font-medium"
               onClick={handleAddUser}
             >
-              Change Role
+              Assign Role
             </Button>
           )}
         </Space>
       ),
       align: "left",
+      key: "action",
       children: [
         {
           title: "Email",
           dataIndex: "email",
-          fixed: "left",
-          sorter: {
-            compare: (a, b) => {
-              return a.email.localeCompare(b.email);
-            },
-            multiple: 1,
-          },
+          key: "email",
         },
         {
           title: "Firstname",
           dataIndex: "firstName",
-          sorter: {
-            compare: (a, b) => {
-              return a.firstName.localeCompare(b.firstName);
-            },
-            multiple: 2,
-          },
+          key: "firstName",
         },
         {
           title: "Lastname",
           dataIndex: "lastName",
-          sorter: {
-            compare: (a, b) => {
-              return a.lastName.localeCompare(b.lastName);
-            },
-            multiple: 3,
-          },
+          key: "lastName",
         },
         {
           title: "Disable",
           dataIndex: "isDisable",
-          width: 100,
           align: "center",
           render: (value) => {
             const statusText = value ? "Disable" : "Active";
             const status = value ? "error" : "success";
             return <Badge status={status} text={statusText} />;
           },
-          filters: [
-            {
-              text: "Disable",
-              value: true,
-            },
-            {
-              text: "Enable",
-              value: false,
-            },
-          ],
-          onFilter: (value, record) => record.isDisable === value,
         },
         {
           title: "Registered With Google",
           dataIndex: "isRegisteredWithGoogle",
-          width: 200,
           align: "center",
           render: (value) =>
             value ? (
@@ -245,24 +235,10 @@ export default function DashboardPage(
             ) : (
               <MinusOutlined className="text-gray-400" />
             ),
-          filters: [
-            {
-              text: "Registered via Google",
-              value: true,
-            },
-            {
-              text: "Registered Without Google",
-              value: false,
-            },
-          ],
-          onFilter: (value, record) => record.isRegisteredWithGoogle === value,
         },
         {
           title: "Created At",
           dataIndex: "createdAt",
-          sorter: (a, b) => {
-            return moment(a.createdAt).diff(moment(b.createdAt));
-          },
           render: (value) => {
             return <span>{new FormatDate(value).toFullDate()}</span>;
           },
@@ -270,7 +246,6 @@ export default function DashboardPage(
         {
           title: "Updated By",
           dataIndex: "updatedByUser",
-          width: 150,
           align: "center",
           render: (value) => {
             if (value) {
@@ -291,9 +266,6 @@ export default function DashboardPage(
           dataIndex: "updatedAt",
           render: (value) => {
             return <span>{new FormatDate(value).toFullDate()}</span>;
-          },
-          sorter: (a, b) => {
-            return moment(a.updatedAt).diff(moment(b.updatedAt));
           },
         },
       ],
@@ -321,7 +293,7 @@ export default function DashboardPage(
           return { ...i, key: i.id };
         })}
         onChange={onChange}
-        scroll={{ x: true }}
+        scroll={{ x: 1200 }}
         sticky={true}
         pagination={false}
         rowSelection={{ ...rowSelection }}
@@ -336,11 +308,6 @@ export default function DashboardPage(
             className="text-right"
           />
         )}
-        onRow={(record, rowIndex) => {
-          return {
-            onDoubleClick: handleShowDetail,
-          };
-        }}
       />
     </div>
   );

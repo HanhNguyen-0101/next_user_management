@@ -11,6 +11,7 @@ const {
 const initState = {
   visible: false,
   title: "",
+  hiddenSubmitBtn: false,
   FormComponent: null,
   submitAction: () => {},
   resetAction: () => {},

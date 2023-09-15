@@ -5,10 +5,14 @@ import { Button, Modal } from "antd";
 import { ModalAction } from "@/redux/actions";
 
 export default function ModalCustom() {
-  const { visible, title, FormComponent, submitAction } = useSelector(
-    (state: any) => state.modalReducer
-  );
-
+  const {
+    visible,
+    title,
+    FormComponent,
+    submitAction,
+    hiddenSubmitBtn,
+    actionText = "Save",
+  } = useSelector((state: any) => state.modalReducer);
   const dispatch = useDispatch<Dispatch<any>>();
   const onClose = () => {
     dispatch(ModalAction.hideModal());
@@ -21,16 +25,18 @@ export default function ModalCustom() {
       onOk={submitAction}
       onCancel={onClose}
       cancelButtonProps={{ className: "hidden" }}
-      footer={[
-        <Button
-          key="submit"
-          type="primary"
-          className="bg-blueDark mr-4"
-          onClick={submitAction}
-        >
-          Save
-        </Button>
-      ]}
+      footer={
+        !hiddenSubmitBtn && [
+          <Button
+            key="submit"
+            type="primary"
+            className="bg-blueDark mr-4"
+            onClick={submitAction}
+          >
+            {actionText}
+          </Button>,
+        ]
+      }
     >
       {FormComponent}
     </Modal>

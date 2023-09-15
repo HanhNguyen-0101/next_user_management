@@ -8,4 +8,5 @@ export interface ModalPayload {
   visible?: boolean | false,
   title?: string | '',
   FormComponent: null,
+  hiddenSubmitBtn?: boolean | false,
 }
