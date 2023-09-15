@@ -1,8 +1,10 @@
+import { ITEM_PER_PAGE } from "pages/_utils/constant";
 import axiosConfig from "./axiosConfig";
 
 export const UserService = {
   getAll(query: any) {
-    return axiosConfig.get(`/users?${query}`);
+    const page = query && query.page ? query.page : 1;
+    return axiosConfig.get(`/users?page=${page}&item_per_page=${ITEM_PER_PAGE}`);
   },
   getItemById(id: string) {
     return axiosConfig.get(`/users/${id}`);

@@ -29,7 +29,7 @@ export interface UserState {
   } | null;
   error?: string | null;
   user?: IUserModel | null;
-  deleteMsg?: string | null;
+  currentPage?: number | 1;
 }
 
 export interface GetUserByIdPayload {
@@ -41,7 +41,8 @@ export interface GetUserResponse {
 }
 
 export interface DeleteUserByIdPayload {
-  id: string
+  id: string,
+  page?: number | 1,
 }
 export interface DeleteUserResponse {
   data: string;

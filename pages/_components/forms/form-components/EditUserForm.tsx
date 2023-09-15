@@ -1,18 +1,18 @@
-import { useFormik } from "formik";
-import React, { useEffect } from "react";
-import * as Yup from "yup";
-import { useTranslation } from "next-i18next";
-import { Space, Form } from "antd";
-import { useDispatch, useSelector } from "react-redux";
 import { DrawerAction } from "@/redux/actions";
-import { InputFormField } from "../form-fields/InputFormField";
 import { UserAction } from "@/redux/actions/user.action";
+import { Form, Space } from "antd";
+import { useFormik } from "formik";
+import { useTranslation } from "next-i18next";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
 import { CheckboxFormField } from "../form-fields/CheckboxFormField";
+import { InputFormField } from "../form-fields/InputFormField";
 
 export default function EditUserForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
-  const { user } = useSelector((state: any) => state.userReducer);
+  const { user, currentPage } = useSelector((state: any) => state.userReducer);
   const handleCheckboxChange = (e) => {
     formik.setFieldValue(e.target.name, e.target.checked);
   };
@@ -37,7 +37,7 @@ export default function EditUserForm() {
           then: (schema) =>
             schema
               .max(30, t("error.charactersInvalid", { number: 30 }))
-              .required(t("error.required"))
+              .required(t("error.required")),
         }),
       email: Yup.string()
         .email(t("error.emailInvalid"))
@@ -64,7 +64,7 @@ export default function EditUserForm() {
         values.password = user.password;
       }
       delete values["isChangePassword"];
-      dispatch(UserAction.editItem(user.id, values));
+      dispatch(UserAction.editItem(user.id, values, currentPage));
     },
   });
   useEffect(() => {

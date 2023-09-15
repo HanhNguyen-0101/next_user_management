@@ -29,14 +29,17 @@ const {
 } = UserConstant;
 
 export const UserAction = {
-  getAll: (query: any) => {
+  getAll: (query?: any) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
         const { status, data } = await UserService.getAll(query);
         if (status === STATUS_CODE.SUCCESS) {
           dispatch({
             type: GET_USER_LIST_SUCCESS,
-            payload: data,
+            payload: {
+              data,
+              currentPage: query?.page || 1,
+            },
           });
         }
       } catch (error: any) {
@@ -82,7 +85,7 @@ export const UserAction = {
           "A new user is added successfully!"
         );
         dispatch(DrawerAction.hideDrawer());
-        dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
+        dispatch(UserAction.getAll());
       } catch (error: any) {
         dispatch({
           type: ADD_USER_ITEM_FAILUER,
@@ -92,7 +95,7 @@ export const UserAction = {
       }
     };
   },
-  editItem: (id: string, payload: any) => {
+  editItem: (id: string, payload: any, currentPage?: number) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
         const { status, data } = await UserService.updateItem(id, payload);
@@ -101,12 +104,9 @@ export const UserAction = {
             type: EDIT_USER_ITEM_SUCCESS,
             payload: data,
           });
-          openNotification(
-            NOTIF_TYPE.SUCCESS,
-            "User is updated successfully!"
-          );
+          openNotification(NOTIF_TYPE.SUCCESS, "User is updated successfully!");
           dispatch(DrawerAction.hideDrawer());
-          dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
+          dispatch(UserAction.getAll({ page: currentPage }));
         }
       } catch (error: any) {
         dispatch({
@@ -127,9 +127,9 @@ export const UserAction = {
             type: REMOVE_USER_ITEM_SUCCESS,
             payload: data,
           });
-          openNotification(NOTIF_TYPE.SUCCESS, 'User is deleted succesfully');
+          openNotification(NOTIF_TYPE.SUCCESS, "User is deleted succesfully");
         }
-        dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
+        dispatch(UserAction.getAll({ page: values.page }));
       } catch (error: any) {
         dispatch({
           type: REMOVE_USER_ITEM_FAILURE,

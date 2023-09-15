@@ -54,7 +54,7 @@ export default function DashboardPage(
 ) {
   const { t } = useTranslation();
   const dispatch = useDispatch<Dispatch<any>>();
-  const { userData }: UserState = useSelector(
+  const { userData, currentPage }: UserState = useSelector(
     (state: any) => state.userReducer
   );
   const { profile } = useSelector((state: any) => state.authReducer);
@@ -75,11 +75,11 @@ export default function DashboardPage(
     );
 
   useEffect(() => {
-    dispatch(UserAction.getAll(`page=1&item_per_page=${ITEM_PER_PAGE}`));
+    dispatch(UserAction.getAll());
   }, []);
 
   const onChangePagination = (page: number) => {
-    dispatch(UserAction.getAll(`page=${page}&item_per_page=${ITEM_PER_PAGE}`));
+    dispatch(UserAction.getAll({ page }));
   };
   const handleShowDetail = () => {
     dispatch(
@@ -122,7 +122,7 @@ export default function DashboardPage(
   };
   const handleDeleteUser = async () => {
     await dispatch(
-      UserAction.removeItem({ id: selectedRowKeys[0].toString() })
+      UserAction.removeItem({ id: selectedRowKeys[0].toString(), page: currentPage })
     );
   };
 
