@@ -1,4 +1,4 @@
-import { Input, Form } from "antd";
+import { Form, Input } from "antd";
 
 export const InputFormField = ({ formik, label, name, isRequired, ...props }: any) => {
   return (

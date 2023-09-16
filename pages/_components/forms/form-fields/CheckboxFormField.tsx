@@ -1,4 +1,4 @@
-import { Input, Form, Switch, Checkbox } from "antd";
+import { Checkbox, Form } from "antd";
 
 export const CheckboxFormField = ({ formik, label, name, children, ...props }: any) => {
   return (

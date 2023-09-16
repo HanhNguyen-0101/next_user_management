@@ -10,3 +10,10 @@ export interface ModalPayload {
   FormComponent: null,
   hiddenSubmitBtn?: boolean | false,
 }
+
+export interface QueryPayload {
+  page?: number | string,
+  item_per_page?: string,
+  sort?: {},
+  search?: string,
+}

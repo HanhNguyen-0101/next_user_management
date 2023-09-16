@@ -1,5 +1,6 @@
 export const tables = {
   USER: "user",
+  USER_ROLE: "user-role"
 };
 export const permissionGroup = {
   VIEW: "view",
@@ -12,6 +13,7 @@ export const permissionTypes = {
   USER_EDIT: `${tables.USER}: ${permissionGroup.EDIT}`,
   USER_DELETE: `${tables.USER}: ${permissionGroup.DELETE}`,
   USER_CREATE: `${tables.USER}: ${permissionGroup.CREATE}`,
+  USER_ROLE_CREATE: `${tables.USER_ROLE}: ${permissionGroup.CREATE}`,
 };
 export const hasPermission = (type: any, permissionList: any) => {
   return permissionList.includes(type);

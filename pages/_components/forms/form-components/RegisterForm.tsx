@@ -1,12 +1,11 @@
-import { useFormik } from "formik";
-import React from "react";
-import * as Yup from "yup";
-import { useTranslation } from "next-i18next";
 import { DarkButton } from "@/components/button/darkButton";
 import { RegisterPayload } from "@/redux/models/auth";
-import { Form, Space } from "antd";
-import { InputFormField } from "../form-fields/InputFormField";
 import { LoadingOutlined } from "@ant-design/icons";
+import { Form, Space } from "antd";
+import { useFormik } from "formik";
+import { useTranslation } from "next-i18next";
+import * as Yup from "yup";
+import { InputFormField } from "../form-fields";
 
 export default function RegisterForm({
   onRegisterSubmit,

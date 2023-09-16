@@ -1,3 +1,5 @@
+import { IRoleModel } from "./role";
+
 export interface IUserModel {
   email: string;
   firstName: string;
@@ -13,7 +15,7 @@ export interface IUserModel {
   updatedAt?: string;
   updatedBy?: string;
   updatedByUser?: IUserModel | null;
-  userRoles?: {} | null;
+  userRoles?: Array<IRoleModel> | null;
 }
 export interface IUserArrayModel {
   data: Array<IUserModel>;

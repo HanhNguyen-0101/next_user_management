@@ -26,7 +26,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         theme={{
           token: {
             colorPrimary: "#274a74",
-            borderRadius: 2,            
+            borderRadius: 2,
+            controlHeight: 38,   
           },
         }}
       >

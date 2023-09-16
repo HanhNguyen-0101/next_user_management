@@ -6,8 +6,7 @@ import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { CheckboxFormField } from "../form-fields/CheckboxFormField";
-import { InputFormField } from "../form-fields/InputFormField";
+import { CheckboxFormField, InputFormField } from "../form-fields";
 
 export default function EditUserForm() {
   const { t } = useTranslation(["common", "auth"]);

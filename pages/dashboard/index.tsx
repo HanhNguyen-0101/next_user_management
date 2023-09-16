@@ -185,14 +185,6 @@ export default function DashboardPage(
               </Button>
             </Popconfirm>
           )}
-          {hasDeletePermission && (
-            <Button
-              className="text-blueDark border-blueDark font-medium"
-              onClick={handleAddUser}
-            >
-              Assign Role
-            </Button>
-          )}
         </Space>
       ),
       align: "left",

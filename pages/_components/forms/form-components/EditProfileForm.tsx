@@ -1,13 +1,12 @@
-import { useFormik } from "formik";
-import React, { useEffect } from "react";
-import * as Yup from "yup";
-import { useTranslation } from "next-i18next";
-import { Space, Form, Popconfirm, Button } from "antd";
-import { useDispatch, useSelector } from "react-redux";
 import { AuthAction, ModalAction } from "@/redux/actions";
-import { InputFormField } from "../form-fields/InputFormField";
-import { CheckboxFormField } from "../form-fields/CheckboxFormField";
 import { DeleteOutlined } from "@ant-design/icons";
+import { Form, Popconfirm, Space } from "antd";
+import { useFormik } from "formik";
+import { useTranslation } from "next-i18next";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
+import { CheckboxFormField, InputFormField } from "../form-fields";
 
 export default function EditProfileForm() {
   const { t } = useTranslation(["common", "auth"]);

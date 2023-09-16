@@ -2,8 +2,9 @@ import { combineReducers } from "redux";
 import authReducer from "./auth.reducer";
 import drawerReducer from "./drawer.reducer";
 import menuReducer from "./menu.reducer";
-import userReducer from "./user.reducer";
 import modalReducer from "./modal.reducer";
+import userReducer from "./user.reducer";
+import roleReducer from "./role.reducer";
 
 const rootReducer = combineReducers({
   authReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   menuReducer,
   userReducer,
   modalReducer,
+  roleReducer,
 });
 
 export default rootReducer;

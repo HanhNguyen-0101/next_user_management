@@ -136,7 +136,6 @@ export default function DashboardLayout({ children }: any) {
           <div className="float-right items-center">
             <div className="inline-block mx-2">
               <Input
-                size="large"
                 placeholder="Search..."
                 onPressEnter={handleSearch}
                 suffix={
