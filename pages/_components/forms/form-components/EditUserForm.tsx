@@ -1,5 +1,4 @@
-import { DrawerAction } from "@/redux/actions";
-import { UserAction } from "@/redux/actions/user.action";
+import { DrawerAction, UserAction } from "@/redux/actions";
 import { Divider, Form, Space } from "antd";
 import { useFormik } from "formik";
 import { useTranslation } from "next-i18next";

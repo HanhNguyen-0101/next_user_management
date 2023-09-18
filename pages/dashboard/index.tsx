@@ -1,4 +1,5 @@
 "use client";
+import AssignRoleForm from "@/components/forms/form-components/AssignRoleForm";
 import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
 import EditUserForm from "@/components/forms/form-components/EditUserForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
@@ -6,8 +7,13 @@ import {
   NOTIF_TYPE,
   openNotification,
 } from "@/components/notification/notification";
-import { DrawerAction, ModalAction } from "@/redux/actions";
-import { UserAction } from "@/redux/actions/user.action";
+import {
+  DrawerAction,
+  ModalAction,
+  RoleAction,
+  UserAction,
+} from "@/redux/actions";
+import { IRoleModel } from "@/redux/models/role";
 import { IUserModel, UserState } from "@/redux/models/user";
 import {
   CheckOutlined,
@@ -22,6 +28,7 @@ import {
   Popover,
   Space,
   Table,
+  Tag,
 } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
@@ -133,6 +140,25 @@ export default function DashboardPage(
   const handleDeleteUserBtn = () => {
     openNotification(NOTIF_TYPE.WARNING, "Please select a row in the table!");
   };
+  const handleAssignRoleBtn = async () => {
+    if (selectedRowKeys && selectedRowKeys.length === 1) {
+      await dispatch(
+        UserAction.getItemById({ id: selectedRowKeys[0].toString() })
+      );
+      await dispatch(RoleAction.getAll());
+      await dispatch(
+        ModalAction.openModal({
+          visible: true,
+          FormComponent: <AssignRoleForm />,
+        })
+      );
+    } else {
+      openNotification(
+        NOTIF_TYPE.WARNING,
+        "Please select only a row in the table!"
+      );
+    }
+  };
   const handleDeleteUser = async () => {
     await dispatch(
       UserAction.removeItem({
@@ -171,6 +197,7 @@ export default function DashboardPage(
           {hasDeletePermission && (
             <Popconfirm
               title="Are you sure to delete item/items?"
+              description="All data related to this account will also be deleted."
               okText="Delete"
               cancelText="Cancel"
               disabled={!(selectedRowKeys && selectedRowKeys.length === 1)}
@@ -192,7 +219,7 @@ export default function DashboardPage(
           {hasAssignRolePermission && (
             <Button
               className="text-blueDark border-blueDark font-medium"
-              onClick={handleEditUserBtn}
+              onClick={handleAssignRoleBtn}
             >
               Assign Role
             </Button>
@@ -218,7 +245,24 @@ export default function DashboardPage(
           key: "lastName",
         },
         {
-          title: "Disable",
+          title: "Roles",
+          dataIndex: "userRoles",
+          align: "center",
+          key: "userRoles",
+          render: (value) => {
+            return value?.map((role: { role: IRoleModel }) => (
+              <Tag
+                key={role?.role.name}
+                className="uppercase text-xs font-medium"
+                color="geekblue"
+              >
+                {role?.role?.name}
+              </Tag>
+            ));
+          },
+        },
+        {
+          title: "Disabled",
           dataIndex: "isDisable",
           align: "center",
           render: (value) => {

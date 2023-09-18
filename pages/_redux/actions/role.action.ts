@@ -2,17 +2,6 @@ import { STATUS_CODE } from "@/constants/configSetting";
 import { Dispatch } from "redux";
 import { RoleService } from "../services";
 import { RoleConstant } from "../constants";
-import {
-  DeleteRoleByIdPayload,
-  DeleteRoleResponse,
-  GetRoleByIdPayload,
-  GetRoleResponse,
-} from "../models/role";
-import {
-  NOTIF_TYPE,
-  openNotification,
-} from "@/components/notification/notification";
-import { DrawerAction } from ".";
 import { QueryPayload } from "../models/common";
 
 const {

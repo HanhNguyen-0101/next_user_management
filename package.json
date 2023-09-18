@@ -27,6 +27,7 @@
     "next-i18next": "^14.0.3",
     "postcss": "8.4.29",
     "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
     "react-i18next": "^13.2.2",
     "react-redux": "^8.1.2",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@types/cookies": "^0.7.7",
-    "@types/http-proxy": "^1.17.11"
+    "@types/http-proxy": "^1.17.11",
+    "@types/react-beautiful-dnd": "^13.1.4"
   }
 }

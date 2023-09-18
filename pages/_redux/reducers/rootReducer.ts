@@ -5,6 +5,7 @@ import menuReducer from "./menu.reducer";
 import modalReducer from "./modal.reducer";
 import userReducer from "./user.reducer";
 import roleReducer from "./role.reducer";
+import userRoleReducer from "./userRole.reducer";
 
 const rootReducer = combineReducers({
   authReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   userReducer,
   modalReducer,
   roleReducer,
+  userRoleReducer,
 });
 
 export default rootReducer;

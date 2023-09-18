@@ -25,6 +25,7 @@ export default function ModalCustom() {
       onOk={submitAction}
       onCancel={onClose}
       cancelButtonProps={{ className: "hidden" }}
+      destroyOnClose={true}
       footer={
         !hiddenSubmitBtn && [
           <Button
