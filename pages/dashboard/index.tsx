@@ -72,6 +72,10 @@ export default function DashboardPage(
     hasAddPermission = hasPermission(
       permissionTypes.USER_CREATE,
       profile?.permissionList
+    ),
+    hasAssignRolePermission = hasPermission(
+      permissionTypes.USER_ROLE_CREATE,
+      profile?.permissionList
     );
 
   useEffect(() => {
@@ -184,6 +188,14 @@ export default function DashboardPage(
                 Delete
               </Button>
             </Popconfirm>
+          )}
+          {hasAssignRolePermission && (
+            <Button
+              className="text-blueDark border-blueDark font-medium"
+              onClick={handleEditUserBtn}
+            >
+              Assign Role
+            </Button>
           )}
         </Space>
       ),

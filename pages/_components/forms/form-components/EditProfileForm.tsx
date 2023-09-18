@@ -26,6 +26,7 @@ export default function EditProfileForm() {
       globalId: profile?.globalId || "",
       lastName: profile?.lastName || "",
       officeCode: profile?.officeCode || "",
+      country: profile?.country || "",
       password: "",
       passwordConfirm: "",
       isChangePassword: false,
@@ -66,6 +67,10 @@ export default function EditProfileForm() {
       officeCode: Yup.string().max(
         10,
         t("error.charactersInvalid", { number: 10 })
+      ),
+      country: Yup.string().max(
+        100,
+        t("error.charactersInvalid", { number: 100 })
       ),
     }),
     onSubmit: async (values) => {
@@ -129,6 +134,9 @@ export default function EditProfileForm() {
       <Space className="grid grid-cols-2 items-start">
         <InputFormField formik={formik} label="Office Code" name="officeCode" />
         <InputFormField formik={formik} label="Global ID" name="globalId" />
+      </Space>
+      <Space className="grid grid-cols-2 items-start">
+        <InputFormField formik={formik} label="Country" name="country" />
       </Space>
       <CheckboxFormField
         formik={formik}
