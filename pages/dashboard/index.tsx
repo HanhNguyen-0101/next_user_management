@@ -2,6 +2,7 @@
 import AssignRoleForm from "@/components/forms/form-components/AssignRoleForm";
 import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
 import EditUserForm from "@/components/forms/form-components/EditUserForm";
+import SearchForm from "@/components/forms/form-components/SearchForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
 import {
   NOTIF_TYPE,
@@ -14,11 +15,12 @@ import {
   UserAction,
 } from "@/redux/actions";
 import { IRoleModel } from "@/redux/models/role";
-import { IUserModel, UserState } from "@/redux/models/user";
+import { UserState } from "@/redux/models/user";
 import {
   CheckOutlined,
   MinusOutlined,
   QuestionCircleOutlined,
+  FilterFilled,
 } from "@ant-design/icons";
 import {
   Badge,
@@ -30,12 +32,12 @@ import {
   Table,
   Tag,
 } from "antd";
-import type { ColumnsType, TableProps } from "antd/es/table";
+import type { ColumnsType } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import UserDetail from "pages/_templates/userDetail.template";
+import UserDetail from "pages/_templates/UserDetail.template";
 import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
 import { ITEM_PER_PAGE } from "pages/_utils/constant";
 import { FormatDate } from "pages/_utils/formatData";
@@ -86,8 +88,21 @@ export default function DashboardPage(
     );
 
   useEffect(() => {
-    dispatch(UserAction.getAll());
+    dispatch(UserAction.getAll({ page: 1 }));
   }, []);
+
+  const handleSearch = (values) => {
+    dispatch(UserAction.getAll({...values, page: 1}))
+  };
+  const handleFilter = () => {
+    dispatch(
+      ModalAction.openModal({
+        visible: true,
+        actionText: "Filter",
+        FormComponent: <>hello filter</>,
+      })
+    );
+  };
 
   const onChangePagination = (page: number) => {
     dispatch(UserAction.getAll({ page }));
@@ -163,71 +178,82 @@ export default function DashboardPage(
     await dispatch(
       UserAction.removeItem({
         id: selectedRowKeys[0].toString(),
-        page: currentPage,
       })
     );
+    await openNotification(NOTIF_TYPE.SUCCESS, "User is deleted succesfully");
+    await dispatch(UserAction.getAll({ page: currentPage }));
   };
 
   const columns: ColumnsType = [
     {
       title: (
-        <Space>
-          <Button
-            className="text-blueDark border-blueDark font-medium"
-            onClick={handleShowDetailUserBtn}
-          >
-            Show Detail
-          </Button>
-          {hasAddPermission && (
+        <div>
+          <Space>
             <Button
               className="text-blueDark border-blueDark font-medium"
-              onClick={handleAddUser}
+              onClick={handleShowDetailUserBtn}
             >
-              Add
+              Show Detail
             </Button>
-          )}
-          {hasEditPermission && (
-            <Button
-              className="text-blueDark border-blueDark font-medium"
-              onClick={handleEditUserBtn}
-            >
-              Edit
-            </Button>
-          )}
-          {hasDeletePermission && (
-            <Popconfirm
-              title="Are you sure to delete item/items?"
-              description="All data related to this account will also be deleted."
-              okText="Delete"
-              cancelText="Cancel"
-              disabled={!(selectedRowKeys && selectedRowKeys.length === 1)}
-              onConfirm={handleDeleteUser}
-              icon={<QuestionCircleOutlined className="text-red-600" />}
-            >
+            {hasAddPermission && (
               <Button
                 className="text-blueDark border-blueDark font-medium"
-                onClick={
-                  !(selectedRowKeys && selectedRowKeys.length === 1)
-                    ? handleDeleteUserBtn
-                    : () => {}
-                }
+                onClick={handleAddUser}
               >
-                Delete
+                Add
               </Button>
-            </Popconfirm>
-          )}
-          {hasAssignRolePermission && (
-            <Button
-              className="text-blueDark border-blueDark font-medium"
-              onClick={handleAssignRoleBtn}
-            >
-              Assign Role
-            </Button>
-          )}
-        </Space>
+            )}
+            {hasEditPermission && (
+              <Button
+                className="text-blueDark border-blueDark font-medium"
+                onClick={handleEditUserBtn}
+              >
+                Edit
+              </Button>
+            )}
+            {hasDeletePermission && (
+              <Popconfirm
+                title="Are you sure to delete item/items?"
+                description="All data related to this account will also be deleted."
+                okText="Delete"
+                cancelText="Cancel"
+                disabled={!(selectedRowKeys && selectedRowKeys.length === 1)}
+                onConfirm={handleDeleteUser}
+                icon={<QuestionCircleOutlined className="text-red-600" />}
+              >
+                <Button
+                  className="text-blueDark border-blueDark font-medium"
+                  onClick={
+                    !(selectedRowKeys && selectedRowKeys.length === 1)
+                      ? handleDeleteUserBtn
+                      : () => {}
+                  }
+                >
+                  Delete
+                </Button>
+              </Popconfirm>
+            )}
+            {hasAssignRolePermission && (
+              <Button
+                className="text-blueDark border-blueDark font-medium"
+                onClick={handleAssignRoleBtn}
+              >
+                Assign Role
+              </Button>
+            )}
+          </Space>
+          <Pagination
+            onChange={onChangePagination}
+            total={userData?.total}
+            pageSize={ITEM_PER_PAGE}
+            current={userData?.currentPage}
+            className="text-right float-right"
+          />
+        </div>
       ),
       align: "left",
       key: "action",
+      fixed: "left",
       children: [
         {
           title: "Email",
@@ -235,12 +261,12 @@ export default function DashboardPage(
           key: "email",
         },
         {
-          title: "Firstname",
+          title: "First Name",
           dataIndex: "firstName",
           key: "firstName",
         },
         {
-          title: "Lastname",
+          title: "Last Name",
           dataIndex: "lastName",
           key: "lastName",
         },
@@ -320,42 +346,37 @@ export default function DashboardPage(
     },
   ];
 
-  const onChange: TableProps<DataType>["onChange"] = (
-    filters,
-    sorter,
-    extra
-  ) => {
-    console.log("params", filters, sorter, extra);
-  };
   const rowSelection: TableRowSelection<DataType> = {
     onChange: (selectedRowKeys) => {
       setSelectedRowKeys(selectedRowKeys);
     },
   };
-
   return (
     <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
+      <div className="flex flex-grow mb-3">
+        <button
+          onClick={handleFilter}
+          className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
+        >
+          <FilterFilled />
+        </button>
+        <div className="mx-2 flex-1 h-8">
+          <SearchForm
+            onSearchSubmit={handleSearch}
+            placeholder="Email, First name, Last name, globalId, officeCode, country"
+          />
+        </div>
+      </div>
       <Table
         columns={columns}
         dataSource={userData?.data.map((i) => {
           return { ...i, key: i.id };
         })}
-        onChange={onChange}
-        scroll={{ x: 1200 }}
-        sticky={true}
+        scroll={{ x: 1200, y: window.innerHeight - 320 }}
         pagination={false}
         rowSelection={{ ...rowSelection }}
         bordered
         rowClassName="cursor-pointer"
-        footer={() => (
-          <Pagination
-            onChange={onChangePagination}
-            total={userData?.total}
-            pageSize={ITEM_PER_PAGE}
-            current={userData?.currentPage}
-            className="text-right"
-          />
-        )}
       />
     </div>
   );

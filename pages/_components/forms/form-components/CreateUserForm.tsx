@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { CheckboxFormField, InputFormField } from "../form-fields";
+import { NOTIF_TYPE, openNotification } from "@/components/notification/notification";
 
 export default function CreateUserForm() {
   const { t } = useTranslation(["common", "auth"]);
@@ -61,9 +62,15 @@ export default function CreateUserForm() {
       isDisable: Yup.boolean(),
       isPending: Yup.boolean(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async(values) => {
       delete values["passwordConfirm"];
-      dispatch(UserAction.addItem(values));
+      await dispatch(UserAction.addItem(values));
+      await openNotification(
+        NOTIF_TYPE.SUCCESS,
+        "A new user is added successfully!"
+      );
+      await dispatch(DrawerAction.hideDrawer());
+      await dispatch(UserAction.getAll({ page: 1 }));
     },
   });
 

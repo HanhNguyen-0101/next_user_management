@@ -48,6 +48,9 @@ export default function UserDetail() {
               Profile Information
             </h2>
             <nav className="flex flex-col sm:items-start sm:text-left text-center items-center -mb-1 space-y-2.5">
+              <LineItem name="First Name" value={user?.firstName} />
+              <LineItem name="Last Name" value={user?.lastName} />
+              <LineItem name="Email" value={user?.email} />
               <LineItem name="Country" value={user?.country} />
               <LineItem name="Office Code" value={user?.officeCode} />
               <LineItem name="Global Id" value={user?.globalId} />
@@ -57,7 +60,7 @@ export default function UserDetail() {
               />
               <LineItem
                 name="Updated By"
-                value={user?.updatedBy ? user?.updatedByUser?.email : ""}
+                value={user?.updatedBy ? `${user?.updatedByUser?.firstName} ${user?.updatedByUser?.lastName} - ${user?.updatedByUser?.email}` : ""}
               />
               <LineItem
                 name="Updated At"

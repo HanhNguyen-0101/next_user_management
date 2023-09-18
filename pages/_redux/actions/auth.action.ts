@@ -1,7 +1,7 @@
 import { LoginPayload, RegisterPayload } from "@/redux/models/auth";
 import { AuthConstant } from "../constants";
 import { AuthService, UserService } from "../services";
-import { STATUS_CODE } from "@/constants/configSetting";
+import { STATUS_CODE } from "pages/_utils/configSetting";
 import { Dispatch } from "redux";
 import Router from "next/router";
 import {

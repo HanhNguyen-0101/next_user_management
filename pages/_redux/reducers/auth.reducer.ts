@@ -1,4 +1,4 @@
-import { USER_LOGIN } from "@/constants/configSetting";
+import { USER_LOGIN } from "pages/_utils/configSetting";
 import { AuthConstant } from "../constants";
 
 const {

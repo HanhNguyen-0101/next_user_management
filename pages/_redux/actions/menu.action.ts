@@ -1,5 +1,5 @@
 import { MenuConstant } from "../constants";
-import { STATUS_CODE } from "@/constants/configSetting";
+import { STATUS_CODE } from "pages/_utils/configSetting";
 import { Dispatch } from "redux";
 import { MenuService } from "../services";
 

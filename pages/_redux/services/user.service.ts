@@ -1,10 +1,20 @@
 import { ITEM_PER_PAGE } from "pages/_utils/constant";
 import axiosConfig from "./axiosConfig";
+import { QueryPayload } from "../models/common";
 
 export const UserService = {
-  getAll(query: any) {
-    const page = query && query.page ? query.page : 1;
-    return axiosConfig.get(`/users?page=${page}&item_per_page=${ITEM_PER_PAGE}`);
+  getAll(query?: QueryPayload) {
+    let queryStr = '';
+    if (query) {
+      queryStr = '?';
+      if(query.page) {
+        queryStr += `page=${query.page}&item_per_page=${ITEM_PER_PAGE}&`;
+      }
+      if(query.search) {
+        queryStr += `search=${query.search}`;
+      }
+    }
+    return axiosConfig.get(`/users${queryStr}`);
   },
   getItemById(id: string) {
     return axiosConfig.get(`/users/${id}`);

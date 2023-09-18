@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { CheckboxFormField, InputFormField } from "../form-fields";
+import { NOTIF_TYPE, openNotification } from "@/components/notification/notification";
 
 export default function EditUserForm() {
   const { t } = useTranslation(["common", "auth"]);
@@ -73,13 +74,16 @@ export default function EditUserForm() {
       isDisable: Yup.boolean(),
       isPending: Yup.boolean(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       if (!values.isChangePassword) {
         values.password = user?.password;
       }
       delete values["isChangePassword"];
       delete values["passwordConfirm"];
-      dispatch(UserAction.editItem(user?.id, values, currentPage));
+      await dispatch(UserAction.editItem(user?.id, values));
+      await openNotification(NOTIF_TYPE.SUCCESS, "User is updated successfully!");
+      await dispatch(DrawerAction.hideDrawer());
+      await dispatch(UserAction.getAll({ page: currentPage }));
     },
   });
   useEffect(() => {

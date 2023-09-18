@@ -1,8 +1,9 @@
 import { ITEM_PER_PAGE } from "pages/_utils/constant";
 import axiosConfig from "./axiosConfig";
+import { QueryPayload } from "../models/common";
 
 export const RoleService = {
-  getAll(query: any) {
+  getAll(query?: QueryPayload) {
     let queryStr = '';
     if (query) {
       queryStr = '?';

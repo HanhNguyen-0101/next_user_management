@@ -1,4 +1,4 @@
-import { STATUS_CODE } from "@/constants/configSetting";
+import { STATUS_CODE } from "pages/_utils/configSetting";
 import { Dispatch } from "redux";
 import { UserService } from "../services";
 import { UserConstant } from "../constants";
@@ -13,7 +13,7 @@ import {
   openNotification,
 } from "@/components/notification/notification";
 import { DrawerAction } from ".";
-import { ITEM_PER_PAGE } from "pages/_utils/constant";
+import { QueryPayload } from "../models/common";
 
 const {
   GET_USER_LIST_SUCCESS,
@@ -29,7 +29,7 @@ const {
 } = UserConstant;
 
 export const UserAction = {
-  getAll: (query?: any) => {
+  getAll: (query?: QueryPayload) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
         const { status, data } = await UserService.getAll(query);
@@ -80,22 +80,15 @@ export const UserAction = {
             payload: data,
           });
         }
-        openNotification(
-          NOTIF_TYPE.SUCCESS,
-          "A new user is added successfully!"
-        );
-        dispatch(DrawerAction.hideDrawer());
-        dispatch(UserAction.getAll());
       } catch (error: any) {
         dispatch({
           type: ADD_USER_ITEM_FAILUER,
           payload: error.response,
         });
-        openNotification(NOTIF_TYPE.ERROR, error.response.data.message);
       }
     };
   },
-  editItem: (id: string, payload: any, currentPage?: number) => {
+  editItem: (id: string, payload: any) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
         const { status, data } = await UserService.updateItem(id, payload);
@@ -104,16 +97,12 @@ export const UserAction = {
             type: EDIT_USER_ITEM_SUCCESS,
             payload: data,
           });
-          openNotification(NOTIF_TYPE.SUCCESS, "User is updated successfully!");
-          dispatch(DrawerAction.hideDrawer());
-          dispatch(UserAction.getAll({ page: currentPage }));
         }
       } catch (error: any) {
         dispatch({
           type: EDIT_USER_ITEM_FAILURE,
           payload: error.response,
         });
-        openNotification(NOTIF_TYPE.ERROR, error.response.data.message);
       }
     };
   },
@@ -127,9 +116,7 @@ export const UserAction = {
             type: REMOVE_USER_ITEM_SUCCESS,
             payload: data,
           });
-          openNotification(NOTIF_TYPE.SUCCESS, "User is deleted succesfully");
         }
-        dispatch(UserAction.getAll({ page: values.page }));
       } catch (error: any) {
         dispatch({
           type: REMOVE_USER_ITEM_FAILURE,

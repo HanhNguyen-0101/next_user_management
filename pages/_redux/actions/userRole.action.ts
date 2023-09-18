@@ -1,4 +1,4 @@
-import { STATUS_CODE } from "@/constants/configSetting";
+import { STATUS_CODE } from "pages/_utils/configSetting";
 import { Dispatch } from "redux";
 import { UserRoleService, UserService } from "../services";
 import { UserRoleConstant } from "../constants";
@@ -41,7 +41,6 @@ export const UserRoleAction = {
           type: ADD_USER_ROLE_ITEM_FAILUER,
           payload: error.response,
         });
-        openNotification(NOTIF_TYPE.ERROR, error.response.data.message);
       }
     };
   },

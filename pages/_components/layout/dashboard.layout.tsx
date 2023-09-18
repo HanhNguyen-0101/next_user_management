@@ -7,7 +7,7 @@ import {
   FilterFilled,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Avatar, Button, Dropdown, Input, Layout, Space } from "antd";
+import { Avatar, Dropdown, Input, Layout, Space } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ import { Dispatch } from "redux";
 import LoadingComponent from "../loading";
 import EditProfileForm from "../forms/form-components/EditProfileForm";
 import Image from "next/image";
+import SearchForm from "../forms/form-components/SearchForm";
 
 const { Header, Content } = Layout;
 
@@ -34,18 +35,6 @@ export default function DashboardLayout({ children }: any) {
     dispatch(MenuAction.getAll());
   }, []);
 
-  const handleSearch = () => {
-    alert("111111111111");
-  };
-  const handleFilter = () => {
-    dispatch(
-      ModalAction.openModal({
-        visible: true,
-        actionText: "Filter",
-        FormComponent: <>hello filter</>,
-      })
-    );
-  };
   const handleLogout = async () => {
     await dispatch(AuthAction.logout());
   };
@@ -134,24 +123,6 @@ export default function DashboardLayout({ children }: any) {
             </Dropdown>
           </div>
           <div className="float-right items-center">
-            <div className="inline-block mx-2">
-              <Input
-                placeholder="Search..."
-                onPressEnter={handleSearch}
-                suffix={
-                  <button className="text-blueDark" onClick={handleSearch}>
-                    <SearchOutlined className="font-bold text-xl" />
-                  </button>
-                }
-                className="rounded-lg border-blueDark"
-              />
-            </div>
-            <button
-              onClick={handleFilter}
-              className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
-            >
-              <FilterFilled />
-            </button>
             <Dropdown menu={{ items }} placement="bottomRight" className="ml-2">
               <Avatar
                 size={40}

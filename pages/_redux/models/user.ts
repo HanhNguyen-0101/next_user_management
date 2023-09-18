@@ -44,7 +44,6 @@ export interface GetUserResponse {
 
 export interface DeleteUserByIdPayload {
   id: string,
-  page?: number | 1,
 }
 export interface DeleteUserResponse {
   data: string;
