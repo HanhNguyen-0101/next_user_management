@@ -6,11 +6,16 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { CheckboxFormField, InputFormField } from "../form-fields";
-import { NOTIF_TYPE, openNotification } from "@/components/notification/notification";
+import {
+  NOTIF_TYPE,
+  openNotification,
+} from "@/components/notification/notification";
+import { useSelector } from "react-redux";
 
 export default function CreateUserForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
+  const { query } = useSelector((state) => state.userReducer);
 
   const handleChangeCheckbox = (e) => {
     formik.setFieldValue(e.target.name, e.target.checked);
@@ -31,38 +36,38 @@ export default function CreateUserForm() {
       passwordConfirm: "",
     },
     validationSchema: Yup.object({
-      password: Yup.string()
+      password: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      passwordConfirm: Yup.string()
+      passwordConfirm: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required"))
         .oneOf([Yup.ref("password")], t("error.passwordNotMatch")),
       email: Yup.string()
-        .email(t("error.emailInvalid"))
+        .email(t("error.emailInvalid")).trim()
         .required(t("error.required")),
-      firstName: Yup.string()
+      firstName: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      lastName: Yup.string()
+      lastName: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      globalId: Yup.string().max(
+      globalId: Yup.string().trim().max(
         10,
         t("error.charactersInvalid", { number: 10 })
       ),
-      country: Yup.string().max(
+      country: Yup.string().trim().max(
         100,
         t("error.charactersInvalid", { number: 100 })
       ),
-      officeCode: Yup.string().max(
+      officeCode: Yup.string().trim().max(
         10,
         t("error.charactersInvalid", { number: 10 })
       ),
       isDisable: Yup.boolean(),
       isPending: Yup.boolean(),
     }),
-    onSubmit: async(values) => {
+    onSubmit: async (values) => {
       delete values["passwordConfirm"];
       await dispatch(UserAction.addItem(values));
       await openNotification(
@@ -70,7 +75,7 @@ export default function CreateUserForm() {
         "A new user is added successfully!"
       );
       await dispatch(DrawerAction.hideDrawer());
-      await dispatch(UserAction.getAll({ page: 1 }));
+      await dispatch(UserAction.getAll({ ...query, page: 1 }));
     },
   });
 

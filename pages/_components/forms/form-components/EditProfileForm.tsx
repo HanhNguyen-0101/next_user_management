@@ -32,7 +32,7 @@ export default function EditProfileForm() {
       isChangePassword: false,
     },
     validationSchema: Yup.object({
-      password: Yup.string()
+      password: Yup.string().trim()
         .ensure()
         .when("isChangePassword", {
           is: true,
@@ -41,7 +41,7 @@ export default function EditProfileForm() {
               .max(30, t("error.charactersInvalid", { number: 30 }))
               .required(t("error.required")),
         }),
-      passwordConfirm: Yup.string()
+      passwordConfirm: Yup.string().trim()
         .ensure()
         .when("isChangePassword", {
           is: true,
@@ -51,24 +51,24 @@ export default function EditProfileForm() {
               .required(t("error.required"))
               .oneOf([Yup.ref("password")], t("error.passwordNotMatch")),
         }),
-      email: Yup.string()
+      email: Yup.string().trim()
         .email(t("error.emailInvalid"))
         .required(t("error.required")),
-      firstName: Yup.string()
+      firstName: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      lastName: Yup.string()
+      lastName: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      globalId: Yup.string().max(
+      globalId: Yup.string().trim().max(
         10,
         t("error.charactersInvalid", { number: 10 })
       ),
-      officeCode: Yup.string().max(
+      officeCode: Yup.string().trim().max(
         10,
         t("error.charactersInvalid", { number: 10 })
       ),
-      country: Yup.string().max(
+      country: Yup.string().trim().max(
         100,
         t("error.charactersInvalid", { number: 100 })
       ),

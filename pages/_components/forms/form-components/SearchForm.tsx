@@ -19,7 +19,7 @@ export default function SearchForm({
       search: "",
     },
     validationSchema: Yup.object({
-      search: Yup.string().max(
+      search: Yup.string().trim().max(
         200,
         t("error.charactersInvalid", { number: 200 })
       ),

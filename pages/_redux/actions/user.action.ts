@@ -38,7 +38,7 @@ export const UserAction = {
             type: GET_USER_LIST_SUCCESS,
             payload: {
               data,
-              currentPage: query?.page || 1,
+              query,
             },
           });
         }

@@ -15,6 +15,10 @@ export const InputFormField = ({ formik, label, name, isRequired, ...props }: an
       {props.type == 'password' && <Input.Password
         name={name}
         onChange={formik.handleChange}
+        onBlur={(e) => {
+          formik.handleBlur(e);
+          formik.setFieldValue(name, e.target.value.trim());
+        }}
         value={formik.values[name]}
         className="rounded-sm"
         style={{padding: 7}}
@@ -23,6 +27,10 @@ export const InputFormField = ({ formik, label, name, isRequired, ...props }: an
       {!props.type && <Input
         name={name}
         onChange={formik.handleChange}
+        onBlur={(e) => {
+          formik.handleBlur(e);
+          formik.setFieldValue(name, e.target.value.trim());
+        }}
         value={formik.values[name]}
         className="rounded-sm"
         style={{padding: 7}}

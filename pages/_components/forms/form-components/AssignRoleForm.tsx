@@ -14,7 +14,7 @@ export default function AssignRoleForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
   const { roleData } = useSelector((state: any) => state.roleReducer);
-  const { user, currentPage } = useSelector((state) => state.userReducer);
+  const { user, query } = useSelector((state) => state.userReducer);
 
   const selectedRoles = user?.userRoles?.map(
     (i: { role: IRoleModel }) => i.role
@@ -79,7 +79,7 @@ export default function AssignRoleForm() {
           "Assign role is successful!"
         );
         await dispatch(ModalAction.hideModal());
-        await dispatch(UserAction.getAll({ page: currentPage }));
+        await dispatch(UserAction.getAll(query));
       })
     );
   };

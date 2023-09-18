@@ -11,7 +11,7 @@ import { NOTIF_TYPE, openNotification } from "@/components/notification/notifica
 export default function EditUserForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
-  const { user, currentPage } = useSelector((state: any) => state.userReducer);
+  const { user, query } = useSelector((state: any) => state.userReducer);
   const handleCheckboxChange = (e) => {
     formik.setFieldValue(e.target.name, e.target.checked);
   };
@@ -31,7 +31,7 @@ export default function EditUserForm() {
       isChangePassword: false,
     },
     validationSchema: Yup.object({
-      password: Yup.string()
+      password: Yup.string().trim()
         .ensure()
         .when("isChangePassword", {
           is: true,
@@ -40,7 +40,7 @@ export default function EditUserForm() {
               .max(30, t("error.charactersInvalid", { number: 30 }))
               .required(t("error.required")),
         }),
-      passwordConfirm: Yup.string()
+      passwordConfirm: Yup.string().trim()
         .ensure()
         .when("isChangePassword", {
           is: true,
@@ -50,24 +50,24 @@ export default function EditUserForm() {
               .required(t("error.required"))
               .oneOf([Yup.ref("password")], t("error.passwordNotMatch")),
         }),
-      email: Yup.string()
+      email: Yup.string().trim()
         .email(t("error.emailInvalid"))
         .required(t("error.required")),
-      firstName: Yup.string()
+      firstName: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      lastName: Yup.string()
+      lastName: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      globalId: Yup.string().max(
+      globalId: Yup.string().trim().max(
         10,
         t("error.charactersInvalid", { number: 10 })
       ),
-      officeCode: Yup.string().max(
+      officeCode: Yup.string().trim().max(
         10,
         t("error.charactersInvalid", { number: 10 })
       ),
-      country: Yup.string().max(
+      country: Yup.string().trim().max(
         100,
         t("error.charactersInvalid", { number: 100 })
       ),
@@ -83,7 +83,7 @@ export default function EditUserForm() {
       await dispatch(UserAction.editItem(user?.id, values));
       await openNotification(NOTIF_TYPE.SUCCESS, "User is updated successfully!");
       await dispatch(DrawerAction.hideDrawer());
-      await dispatch(UserAction.getAll({ page: currentPage }));
+      await dispatch(UserAction.getAll(query));
     },
   });
   useEffect(() => {

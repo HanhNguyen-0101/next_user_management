@@ -31,7 +31,10 @@ export interface UserState {
   } | null;
   error?: string | null;
   user?: IUserModel | null;
-  currentPage?: number | 1;
+  query?: {
+    page?: number,
+    search?: string,
+  };
 }
 
 export interface GetUserByIdPayload {

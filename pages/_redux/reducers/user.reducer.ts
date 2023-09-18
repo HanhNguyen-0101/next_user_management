@@ -24,7 +24,7 @@ const initState: UserState = {
   },
   user: null,
   error: null,
-  currentPage: 1,
+  query: {},
 };
 
 const userReducer = (
@@ -33,7 +33,7 @@ const userReducer = (
 ) => {
   switch (type) {
     case GET_USER_LIST_SUCCESS: {
-      return { ...state, userData: payload.data, currentPage: payload.currentPage };
+      return { ...state, userData: payload.data, query: payload.query };
     }
     case GET_USER_LIST_FAILUER: {
       return { ...state, error: payload.data };

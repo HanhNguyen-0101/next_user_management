@@ -26,10 +26,10 @@ export default function LoginForm({
       remember: false,
     },
     validationSchema: Yup.object({
-      password: Yup.string()
+      password: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      email: Yup.string()
+      email: Yup.string().trim()
         .email(t("error.emailInvalid"))
         .required(t("error.required")),
       remember: Yup.boolean(),

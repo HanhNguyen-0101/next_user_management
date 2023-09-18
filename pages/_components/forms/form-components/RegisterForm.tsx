@@ -23,20 +23,20 @@ export default function RegisterForm({
       passwordConfirm: "",
     },
     validationSchema: Yup.object({
-      password: Yup.string()
+      password: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      passwordConfirm: Yup.string()
+      passwordConfirm: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required"))
         .oneOf([Yup.ref("password")], t("error.passwordNotMatch")),
-      firstName: Yup.string()
+      firstName: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      lastName: Yup.string()
+      lastName: Yup.string().trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      email: Yup.string()
+      email: Yup.string().trim()
         .email(t("error.emailInvalid"))
         .required(t("error.required")),
     }),

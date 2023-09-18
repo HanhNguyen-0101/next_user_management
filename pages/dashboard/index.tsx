@@ -63,7 +63,7 @@ export default function DashboardPage(
 ) {
   const { t } = useTranslation();
   const dispatch = useDispatch<Dispatch<any>>();
-  const { userData, currentPage }: UserState = useSelector(
+  const { userData, query }: UserState = useSelector(
     (state: any) => state.userReducer
   );
   const { profile } = useSelector((state: any) => state.authReducer);
@@ -88,11 +88,11 @@ export default function DashboardPage(
     );
 
   useEffect(() => {
-    dispatch(UserAction.getAll({ page: 1 }));
+    dispatch(UserAction.getAll({ ...query, page: 1 }));
   }, []);
 
   const handleSearch = (values) => {
-    dispatch(UserAction.getAll({...values, page: 1}))
+    dispatch(UserAction.getAll({ ...query, ...values}))
   };
   const handleFilter = () => {
     dispatch(
@@ -105,7 +105,7 @@ export default function DashboardPage(
   };
 
   const onChangePagination = (page: number) => {
-    dispatch(UserAction.getAll({ page }));
+    dispatch(UserAction.getAll({ ...query, page }));
   };
   const handleAddUser = () => {
     dispatch(
@@ -181,7 +181,7 @@ export default function DashboardPage(
       })
     );
     await openNotification(NOTIF_TYPE.SUCCESS, "User is deleted succesfully");
-    await dispatch(UserAction.getAll({ page: currentPage }));
+    await dispatch(UserAction.getAll(query));
   };
 
   const columns: ColumnsType = [
