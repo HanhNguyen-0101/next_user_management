@@ -1,38 +1,27 @@
 "use client";
-import AssignPermissionForm from "@/components/forms/form-components/AssignPermissionForm";
-import CreateRoleForm from "@/components/forms/form-components/CreateRoleForm";
-import EditRoleForm from "@/components/forms/form-components/EditRoleForm";
+import CreatePermissionForm from "@/components/forms/form-components/CreatePermissionForm";
+import EditPermissionForm from "@/components/forms/form-components/EditPermissionForm";
 import SearchForm from "@/components/forms/form-components/SearchForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
 import {
-    NOTIF_TYPE,
-    openNotification,
+  NOTIF_TYPE,
+  openNotification,
 } from "@/components/notification/notification";
 import {
-    DrawerAction,
-    ModalAction,
-    PermissionAction,
-    RoleAction
+  DrawerAction,
+  ModalAction,
+  PermissionAction,
+  PermissionGroupAction,
 } from "@/redux/actions";
-import { RoleState } from "@/redux/models/role";
-import {
-    FilterFilled,
-    QuestionCircleOutlined
-} from "@ant-design/icons";
-import {
-    Button,
-    Pagination,
-    Popconfirm,
-    Popover,
-    Space,
-    Table
-} from "antd";
+import { PermissionState } from "@/redux/models/permission";
+import { FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
+import { Button, Pagination, Popconfirm, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import RoleDetail from "pages/_templates/RoleDetail.template";
+import PermissionDetail from "pages/_templates/PermissionDetail.template";
 import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
 import { ITEM_PER_PAGE } from "pages/_utils/constant";
 import { FormatDate } from "pages/_utils/formatData";
@@ -46,46 +35,41 @@ interface DataType {
   name: string;
   createdAt: string;
   updatedAt: string;
-  createdByUser: string;
-  updatedByUser: string;
   description: string;
+  code: string;
+  permissionGroupId: string;
 }
-export default function RoleMgmPage(
+export default function PermissionMgmPage(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const { t } = useTranslation();
   const dispatch = useDispatch<Dispatch<any>>();
-  const { roleData, query }: RoleState = useSelector(
-    (state: any) => state.roleReducer
+  const { permissionData, query }: PermissionState = useSelector(
+    (state: any) => state.permissionReducer
   );
   const { profile } = useSelector((state: any) => state.authReducer);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const hasEditPermission = hasPermission(
-      permissionTypes.ROLE_EDIT,
+      permissionTypes.PERMISSION_EDIT,
       profile?.permissionList
     ),
     hasDeletePermission = hasPermission(
-      permissionTypes.ROLE_DELETE,
+      permissionTypes.PERMISSION_DELETE,
       profile?.permissionList
     ),
     hasAddPermission = hasPermission(
-      permissionTypes.ROLE_CREATE,
+      permissionTypes.PERMISSION_CREATE,
       profile?.permissionList
-    ),
-    hasAssignPermission =
-      hasPermission(
-        permissionTypes.ROLE_PERMISSION_ASSIGN,
-        profile?.permissionList
-      );
+    );
 
   useEffect(() => {
-    dispatch(RoleAction.getAll({ ...query, page: 1 }));
+    dispatch(PermissionAction.getAll({ ...query, page: 1 }));
   }, []);
 
   const handleSearch = (values: { search: string }) => {
-    dispatch(RoleAction.getAll({ ...query, ...values }));
+    dispatch(PermissionAction.getAll({ ...query, ...values }));
   };
 
   const handleFilter = async () => {
@@ -99,26 +83,29 @@ export default function RoleMgmPage(
     // );
   };
   const onChangePagination = (page: number) => {
-    dispatch(RoleAction.getAll({ ...query, page }));
+    dispatch(PermissionAction.getAll({ ...query, page }));
   };
   const handleAddLineItem = () => {
+    dispatch(PermissionGroupAction.getAll());
     dispatch(
       DrawerAction.openDrawer({
         visible: true,
-        title: "ADD NEW ROLE",
-        FormComponent: <CreateRoleForm />,
+        title: "ADD NEW PERMISSION",
+        FormComponent: <CreatePermissionForm />,
       })
     );
   };
   const handleShowDetailLineItemBtn = () => {
     if (selectedRowKeys && selectedRowKeys.length === 1) {
-      dispatch(RoleAction.getItemById({ id: selectedRowKeys[0].toString() }));
+      dispatch(
+        PermissionAction.getItemById({ id: selectedRowKeys[0].toString() })
+      );
       dispatch(
         ModalAction.openModal({
           visible: true,
           actionText: "Save",
           hiddenSubmitBtn: true,
-          FormComponent: <RoleDetail />,
+          FormComponent: <PermissionDetail />,
         })
       );
     } else {
@@ -131,13 +118,14 @@ export default function RoleMgmPage(
   const handleEditLineItemBtn = async () => {
     if (selectedRowKeys && selectedRowKeys.length === 1) {
       await dispatch(
-        RoleAction.getItemById({ id: selectedRowKeys[0].toString() })
+        PermissionAction.getItemById({ id: selectedRowKeys[0].toString() })
       );
+      await dispatch(PermissionGroupAction.getAll());
       await dispatch(
         DrawerAction.openDrawer({
           visible: true,
           title: "EDIT ROLE",
-          FormComponent: <EditRoleForm />,
+          FormComponent: <EditPermissionForm />,
         })
       );
     } else {
@@ -150,29 +138,9 @@ export default function RoleMgmPage(
   const handleDeleteLineItemBtn = () => {
     openNotification(NOTIF_TYPE.WARNING, "Please select a row in the table!");
   };
-  const handleAssignPermissionBtn = async () => {
-    if (selectedRowKeys && selectedRowKeys.length === 1) {
-        await dispatch(
-          RoleAction.getItemById({ id: selectedRowKeys[0].toString() })
-        );
-        await dispatch(PermissionAction.getAll());
-        await dispatch(
-          ModalAction.openModal({
-            actionText: "Save",
-            visible: true,
-            FormComponent: <AssignPermissionForm />,
-          })
-        );
-    } else {
-      openNotification(
-        NOTIF_TYPE.WARNING,
-        "Please select only a row in the table!"
-      );
-    }
-  };
   const handleDeleteLineItem = async () => {
     await dispatch(
-      RoleAction.removeItem({
+      PermissionAction.removeItem({
         id: selectedRowKeys[0].toString(),
         query,
       })
@@ -229,20 +197,12 @@ export default function RoleMgmPage(
                 </Button>
               </Popconfirm>
             )}
-            {hasAssignPermission && (
-              <Button
-                className="text-blueDark border-blueDark font-medium"
-                onClick={handleAssignPermissionBtn}
-              >
-                Assign Permission
-              </Button>
-            )}
           </Space>
           <Pagination
             onChange={onChangePagination}
-            total={roleData?.total}
+            total={permissionData?.total}
             pageSize={ITEM_PER_PAGE}
-            current={roleData?.currentPage}
+            current={permissionData?.currentPage}
             className="text-right float-right"
           />
         </div>
@@ -263,6 +223,22 @@ export default function RoleMgmPage(
           key: "description",
         },
         {
+          title: "Code",
+          dataIndex: "code",
+          key: "code",
+        },
+        {
+          title: "Permission Group",
+          dataIndex: "permissionGroup",
+          render: (value) => {
+            return (
+              <Tag color="geekblue" className="text-sm">
+                {value?.name}
+              </Tag>
+            );
+          },
+        },
+        {
           title: "Created At",
           dataIndex: "createdAt",
           render: (value) => {
@@ -270,38 +246,10 @@ export default function RoleMgmPage(
           },
         },
         {
-          title: "Created By",
-          dataIndex: "createdByUser",
-          render: (value) => {
-            return (
-              <Popover content={value?.email}>
-                <Space className="cursor-pointer">
-                  <span>{value?.firstName}</span>
-                  <span>{value?.lastName}</span>
-                </Space>
-              </Popover>
-            );
-          },
-        },
-        {
           title: "Updated At",
           dataIndex: "updatedAt",
           render: (value) => {
             return <span>{new FormatDate(value).toFullDate()}</span>;
-          },
-        },
-        {
-          title: "Updated By",
-          dataIndex: "updatedByUser",
-          render: (value) => {
-            return (
-              <Popover content={value?.email}>
-                <Space className="cursor-pointer">
-                  <span>{value?.firstName}</span>
-                  <span>{value?.lastName}</span>
-                </Space>
-              </Popover>
-            );
           },
         },
       ],
@@ -325,13 +273,13 @@ export default function RoleMgmPage(
         <div className="mx-2 flex-1 h-8">
           <SearchForm
             onSearchSubmit={handleSearch}
-            placeholder="Name, description"
+            placeholder="Name, description, code"
           />
         </div>
       </div>
       <Table
         columns={columns}
-        dataSource={roleData?.data.map((i) => {
+        dataSource={permissionData?.data.map((i) => {
           return { ...i, key: i.id };
         })}
         scroll={{ x: 1200, y: window.innerHeight - 320 }}
@@ -344,7 +292,7 @@ export default function RoleMgmPage(
   );
 }
 
-RoleMgmPage.getLayout = function getLayout(page: ReactElement) {
+PermissionMgmPage.getLayout = function getLayout(page: ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
 

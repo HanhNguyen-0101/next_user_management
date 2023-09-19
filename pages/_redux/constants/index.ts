@@ -7,3 +7,4 @@ export { RoleConstant } from "./role.constant";
 export { UserRoleConstant } from "./userRole.constant";
 export { PermissionConstant } from "./permission.constant";
 export { RolePermissionConstant } from "./rolePermission.constant";
+export { PermissionGroupConstant } from "./permissionGroup.constant";

@@ -5,3 +5,4 @@ export { RoleService } from "./role.service";
 export { UserRoleService } from "./userRole.service";
 export { PermissionService } from "./permission.service";
 export { RolePermissionService } from "./rolePermission.service";
+export { PermissionGroupService } from "./permissionGroup.service";

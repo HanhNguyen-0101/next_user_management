@@ -56,6 +56,12 @@ const permissionReducer = (
     case REMOVE_PERMISSION_ITEM_FAILURE: {
       return { ...state, error: payload.data };
     }
+    case EDIT_PERMISSION_ITEM_SUCCESS: {
+      return { ...state, permission: payload };
+    }
+    case EDIT_PERMISSION_ITEM_FAILURE: {
+      return { ...state, error: payload.data };
+    }
     default:
       return { ...state };
   }

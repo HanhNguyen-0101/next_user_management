@@ -220,6 +220,7 @@ export default function UserMgmPage(
                 title="Are you sure to delete item/items?"
                 description="All data related to this account will also be deleted."
                 okText="Delete"
+                okButtonProps={{className: 'bg-blueDark'}}
                 cancelText="Cancel"
                 disabled={!(selectedRowKeys && selectedRowKeys.length === 1)}
                 onConfirm={handleDeleteUser}

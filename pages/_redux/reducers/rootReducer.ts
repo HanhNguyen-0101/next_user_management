@@ -8,6 +8,7 @@ import roleReducer from "./role.reducer";
 import userRoleReducer from "./userRole.reducer";
 import permissionReducer from "./permission.reducer";
 import rolePermissionReducer from "./rolePermission.reducer";
+import permissionGroupReducer from "./permissionGroup.reducer";
 
 const rootReducer = combineReducers({
   authReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   userRoleReducer,
   permissionReducer,
   rolePermissionReducer,
+  permissionGroupReducer,
 });
 
 export default rootReducer;

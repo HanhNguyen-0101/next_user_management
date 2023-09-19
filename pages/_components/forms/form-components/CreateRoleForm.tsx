@@ -1,16 +1,11 @@
-import { DrawerAction, RoleAction, UserAction } from "@/redux/actions";
-import { Divider, Form, Space } from "antd";
+import { DrawerAction, RoleAction } from "@/redux/actions";
+import { Form } from "antd";
 import { useFormik } from "formik";
 import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { CheckboxFormField, InputFormField } from "../form-fields";
-import {
-  NOTIF_TYPE,
-  openNotification,
-} from "@/components/notification/notification";
-import { useSelector } from "react-redux";
+import { InputFormField } from "../form-fields";
 import { TextAreaFormField } from "../form-fields/TextareaFormField";
 
 export default function CreateRoleForm() {

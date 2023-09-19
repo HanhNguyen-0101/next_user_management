@@ -56,6 +56,12 @@ const roleReducer = (
     case REMOVE_ROLE_ITEM_FAILURE: {
       return { ...state, error: payload.data };
     }
+    case EDIT_ROLE_ITEM_SUCCESS: {
+      return { ...state, role: payload };
+    }
+    case EDIT_ROLE_ITEM_FAILURE: {
+      return { ...state, error: payload.data };
+    }
     default:
       return { ...state };
   }
