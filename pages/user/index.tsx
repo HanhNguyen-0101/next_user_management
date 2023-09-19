@@ -59,7 +59,7 @@ interface DataType {
   password: string;
   isRegisteredWithGoogle: boolean;
 }
-export default function DashboardPage(
+export default function UserMgmPage(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const { t } = useTranslation();
@@ -83,8 +83,8 @@ export default function DashboardPage(
       permissionTypes.USER_CREATE,
       profile?.permissionList
     ),
-    hasAssignRolePermission = hasPermission(
-      permissionTypes.USER_ROLE_CREATE,
+    hasAssignRole = hasPermission(
+      permissionTypes.USER_ROLE_ASSIGN,
       profile?.permissionList
     );
 
@@ -237,7 +237,7 @@ export default function DashboardPage(
                 </Button>
               </Popconfirm>
             )}
-            {hasAssignRolePermission && (
+            {hasAssignRole && (
               <Button
                 className="text-blueDark border-blueDark font-medium"
                 onClick={handleAssignRoleBtn}
@@ -386,7 +386,7 @@ export default function DashboardPage(
   );
 }
 
-DashboardPage.getLayout = function getLayout(page: ReactElement) {
+UserMgmPage.getLayout = function getLayout(page: ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };
 

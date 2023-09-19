@@ -126,13 +126,13 @@ export default function DrapDropComponent({
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex">
         <DroppableComponent
-          columnTitle="Roles"
+          columnTitle={data?.items?.columnTitle}
           droppableId={data?.items?.droppableId}
           data={data?.items?.data}
         />
         <SwapOutlined className="p-2" />
         <DroppableComponent
-          columnTitle="Account's Roles"
+          columnTitle={data?.selected?.columnTitle}
           droppableId={data?.selected?.droppableId}
           data={data?.selected?.data}
         />

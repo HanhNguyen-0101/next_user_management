@@ -33,10 +33,12 @@ export default function AssignRoleForm() {
     items: {
       droppableId: `${user?.id}_1`,
       data: state.items,
+      columnTitle: "Roles",
     },
     selected: {
       droppableId: `${user?.id}_2`,
       data: state.selected,
+      columnTitle: "Account's Roles",
     },
   };
   const handleChange = async (data: any) => {

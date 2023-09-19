@@ -24,6 +24,7 @@ const initState: RoleState = {
   },
   role: null,
   error: null,
+  query: {}
 };
 
 const roleReducer = (
@@ -32,9 +33,27 @@ const roleReducer = (
 ) => {
   switch (type) {
     case GET_ROLE_LIST_SUCCESS: {
-      return { ...state, roleData: payload.data };
+      return { ...state, roleData: payload.data, query: payload.query };
     }
     case GET_ROLE_LIST_FAILUER: {
+      return { ...state, error: payload.data };
+    }
+    case ADD_ROLE_ITEM_SUCCESS: {
+      return { ...state, role: payload };
+    }
+    case ADD_ROLE_ITEM_FAILUER: {
+      return { ...state, error: payload.data };
+    }
+    case GET_ROLE_ITEM_SUCCESS: {
+      return { ...state, role: payload };
+    }
+    case GET_ROLE_ITEM_FAILUER: {
+      return { ...state, error: payload.data };
+    }
+    case REMOVE_ROLE_ITEM_SUCCESS: {
+      return { ...state };
+    }
+    case REMOVE_ROLE_ITEM_FAILURE: {
       return { ...state, error: payload.data };
     }
     default:

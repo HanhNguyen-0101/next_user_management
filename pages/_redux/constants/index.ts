@@ -5,3 +5,5 @@ export { ModalConstant } from "./modal.constant";
 export { UserConstant } from "./user.constant";
 export { RoleConstant } from "./role.constant";
 export { UserRoleConstant } from "./userRole.constant";
+export { PermissionConstant } from "./permission.constant";
+export { RolePermissionConstant } from "./rolePermission.constant";

@@ -37,7 +37,7 @@ export const AuthAction = {
             payload: user.data,
           });
         }
-        Router.push("/dashboard");
+        Router.push("/user");
       } catch (error: any) {
         const message = error?.response?.data.message;
         dispatch({
@@ -75,7 +75,7 @@ export const AuthAction = {
             payload: data,
           });
         }
-        Router.push("/login");
+        Router.push("/");
       } catch (error: any) {
         const message = error?.response?.data.message;
         dispatch({
@@ -94,7 +94,7 @@ export const AuthAction = {
             type: LOGOUT_SUCCESS,
           });
         }
-        Router.push("/login");
+        Router.push("/");
       } catch (error) {
         dispatch({
           type: LOGOUT_FAILURE,
@@ -142,7 +142,7 @@ export const AuthAction = {
             "Profile is deleted successfully!"
           );
           dispatch(ModalAction.hideModal());
-          Router.push('/login');
+          Router.push('/');
         }
       } catch (error: any) {
         const message = error?.response?.data.message;

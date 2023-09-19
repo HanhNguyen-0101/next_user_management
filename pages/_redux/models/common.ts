@@ -1,13 +1,14 @@
 export interface DrawerPayload {
   visible?: boolean | false,
   title?: string | '',
-  FormComponent: null,
+  FormComponent: any,
 }
 
 export interface ModalPayload {
   visible?: boolean | false,
   title?: string | '',
-  FormComponent: null,
+  FormComponent: any,
+  actionText: string,
   hiddenSubmitBtn?: boolean | false,
 }
 

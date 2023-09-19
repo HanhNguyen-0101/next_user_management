@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: any) {
 
   useEffect(() => {
     if (!profile) {
-      router.push("/login");
+      router.push("/");
     }
     setIsClient(true);
     dispatch(MenuAction.getAll());
@@ -65,7 +65,7 @@ export default function DashboardLayout({ children }: any) {
         if (i?.parentMenu?.key === item.key) {
           const menuSub = {
             key: i.key,
-            label: <Link href={`/dashboard/${i.key}`}>{i.name}</Link>,
+            label: <Link href={`/${i.key}`}>{i.name}</Link>,
           };
           if (!item.children) {
             item.children = [];
@@ -106,7 +106,7 @@ export default function DashboardLayout({ children }: any) {
       <Header className="flex items-center z-20 shadow-md bg-white">
         <div className="w-full m-auto md:px-8 px-5">
           <div className="inline-flex justify-center items-center align-middle">
-            <Link href={"/dashboard"} className="mr-4">
+            <Link href={"/user"} className="mr-4">
               <Image
                 src={"/images/logo.png"}
                 alt={"logo"}

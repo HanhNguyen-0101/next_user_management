@@ -1,3 +1,4 @@
+import { QueryPayload } from "./common";
 import { IRoleModel } from "./role";
 
 export interface IUserModel {
@@ -31,10 +32,7 @@ export interface UserState {
   } | null;
   error?: string | null;
   user?: IUserModel | null;
-  query?: {
-    page?: number,
-    search?: string,
-  };
+  query?: QueryPayload;
 }
 
 export interface GetUserByIdPayload {

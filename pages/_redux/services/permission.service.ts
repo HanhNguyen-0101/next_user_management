@@ -2,7 +2,7 @@ import { ITEM_PER_PAGE } from "pages/_utils/constant";
 import axiosConfig from "./axiosConfig";
 import { QueryPayload } from "../models/common";
 
-export const RoleService = {
+export const PermissionService = {
   getAll(query?: QueryPayload) {
     let queryStr = '';
     if (query) {
@@ -14,21 +14,21 @@ export const RoleService = {
         queryStr += `search=${query.search}`;
       }
     }
-    return axiosConfig.get(`/roles${queryStr}`);
+    return axiosConfig.get(`/permissions${queryStr}`);
   },
   getItemById(id: string) {
-    return axiosConfig.get(`/roles/${id}`);
+    return axiosConfig.get(`/permissions/${id}`);
   },
   getItemByName(name: string) {
-    return axiosConfig.get(`/roles/name/${name}`);
+    return axiosConfig.get(`/permissions/name/${name}`);
   },
   addItem(payload: any) {
-    return axiosConfig.post("/roles", payload);
+    return axiosConfig.post("/permissions", payload);
   },
   updateItem(id: string, payload: any) {
-    return axiosConfig.put(`/roles/${id}`, payload);
+    return axiosConfig.put(`/permissions/${id}`, payload);
   },
   deleteItem(id: string) {
-    return axiosConfig.delete(`/roles/${id}`);
+    return axiosConfig.delete(`/permissions/${id}`);
   },
 };
