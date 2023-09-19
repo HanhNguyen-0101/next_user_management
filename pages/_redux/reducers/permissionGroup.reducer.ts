@@ -56,6 +56,12 @@ const permissionGroupReducer = (
     case REMOVE_PERMISSION_GROUP_ITEM_FAILURE: {
       return { ...state, error: payload.data };
     }
+    case EDIT_PERMISSION_GROUP_ITEM_SUCCESS: {
+      return { ...state, permissionGroup: payload };
+    }
+    case EDIT_PERMISSION_GROUP_ITEM_FAILURE: {
+      return { ...state, error: payload.data };
+    }
     default:
       return { ...state };
   }

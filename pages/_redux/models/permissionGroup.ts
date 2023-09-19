@@ -38,3 +38,14 @@ export interface DeletePermissionGroupResponse {
   data: string;
   status: number;
 }
+
+export interface AddPermissionGroupPayload {
+  name: string;
+}
+
+export interface EditPermissionGroupPayload {
+  id: string;
+  data: {
+    name: string;
+  };
+}
