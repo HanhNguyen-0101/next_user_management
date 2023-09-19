@@ -2,6 +2,7 @@
 import AssignRoleForm from "@/components/forms/form-components/AssignRoleForm";
 import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
 import EditUserForm from "@/components/forms/form-components/EditUserForm";
+import FilterUserForm from "@/components/forms/form-components/FilterUserForm";
 import SearchForm from "@/components/forms/form-components/SearchForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
 import {
@@ -92,14 +93,15 @@ export default function DashboardPage(
   }, []);
 
   const handleSearch = (values) => {
-    dispatch(UserAction.getAll({ ...query, ...values}))
+    dispatch(UserAction.getAll({ ...query, ...values }));
   };
-  const handleFilter = () => {
-    dispatch(
+  const handleFilter = async() => {
+    await dispatch(RoleAction.getAll());
+    await dispatch(
       ModalAction.openModal({
         visible: true,
         actionText: "Filter",
-        FormComponent: <>hello filter</>,
+        FormComponent: <FilterUserForm />,
       })
     );
   };
@@ -122,6 +124,7 @@ export default function DashboardPage(
       dispatch(
         ModalAction.openModal({
           visible: true,
+          actionText: "Save",
           hiddenSubmitBtn: true,
           FormComponent: <UserDetail />,
         })
@@ -163,6 +166,7 @@ export default function DashboardPage(
       await dispatch(RoleAction.getAll());
       await dispatch(
         ModalAction.openModal({
+          actionText: "Save",
           visible: true,
           FormComponent: <AssignRoleForm />,
         })

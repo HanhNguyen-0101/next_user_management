@@ -42,6 +42,7 @@ export default function DashboardLayout({ children }: any) {
   const handleProfileModal = () => {
     dispatch(
       ModalAction.openModal({
+        actionText: "Save",
         visible: true,
         FormComponent: <EditProfileForm />,
       })

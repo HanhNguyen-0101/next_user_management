@@ -5,7 +5,6 @@ export const SelectFormField = ({
   formik,
   label,
   name,
-  children,
   options,
   required = false,
   ...props
