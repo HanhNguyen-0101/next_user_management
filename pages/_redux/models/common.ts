@@ -14,7 +14,7 @@ export interface ModalPayload {
 
 export interface QueryPayload {
   page?: number | string,
-  item_per_page?: string,
+  item_per_page?: number | string,
   sort?: {},
   search?: string,
 }

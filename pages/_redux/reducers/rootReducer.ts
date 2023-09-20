@@ -9,6 +9,7 @@ import userRoleReducer from "./userRole.reducer";
 import permissionReducer from "./permission.reducer";
 import rolePermissionReducer from "./rolePermission.reducer";
 import permissionGroupReducer from "./permissionGroup.reducer";
+import mdmVslCntrReducer from "./mdmVslCntr.reducer";
 
 const rootReducer = combineReducers({
   authReducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   permissionReducer,
   rolePermissionReducer,
   permissionGroupReducer,
+  mdmVslCntrReducer,
 });
 
 export default rootReducer;

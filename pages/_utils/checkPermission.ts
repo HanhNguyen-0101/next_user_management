@@ -6,6 +6,7 @@ export const tables = {
   PERMISSION: "permission",
   PERMISSION_GROUP: "permission-group",
   MENU: "menu",
+  MDM_VSL_CNTR: "mdm-vsl-cntr",
 };
 export const permissionGroup = {
   VIEW: "view",
@@ -36,6 +37,10 @@ export const permissionTypes = {
   MENU_EDIT: `${tables.MENU}: ${permissionGroup.EDIT}`,
   MENU_DELETE: `${tables.MENU}: ${permissionGroup.DELETE}`,
   MENU_CREATE: `${tables.MENU}: ${permissionGroup.CREATE}`,
+
+  MDM_VSL_CNTR_EDIT: `${tables.MDM_VSL_CNTR}: ${permissionGroup.EDIT}`,
+  MDM_VSL_CNTR_DELETE: `${tables.MDM_VSL_CNTR}: ${permissionGroup.DELETE}`,
+  MDM_VSL_CNTR_CREATE: `${tables.MDM_VSL_CNTR}: ${permissionGroup.CREATE}`,
 };
 export const hasPermission = (type: any, permissionList: any) => {
   return permissionList.includes(type);

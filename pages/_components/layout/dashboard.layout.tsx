@@ -1,26 +1,20 @@
 import { AuthAction, MenuAction, ModalAction } from "@/redux/actions";
-import { MenuType } from "@/redux/models/menu";
-import {
-  DownOutlined,
-  SettingFilled,
-  SearchOutlined,
-  FilterFilled,
-} from "@ant-design/icons";
+import { IMenuModel } from "@/redux/models/menu";
+import { DownOutlined, SettingFilled } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Avatar, Dropdown, Input, Layout, Space } from "antd";
+import { Avatar, Dropdown, Layout, Space } from "antd";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import LoadingComponent from "../loading";
 import EditProfileForm from "../forms/form-components/EditProfileForm";
-import Image from "next/image";
-import SearchForm from "../forms/form-components/SearchForm";
+import LoadingComponent from "../loading";
 
 const { Header, Content } = Layout;
 
-export default function DashboardLayout({ children }: any) {
+export default function DashboardLayout({ children, fullWidth }: any) {
   const dispatch = useDispatch<Dispatch<any>>();
   const router = useRouter();
   const { menuData } = useSelector((state: any) => state.menuReducer);
@@ -51,7 +45,7 @@ export default function DashboardLayout({ children }: any) {
 
   const itemsMenu: any = [];
   if (menuData && menuData.data) {
-    menuData.data.filter((menu: MenuType) => {
+    menuData.data.filter((menu: IMenuModel) => {
       if (!menu.parentId) {
         itemsMenu.push({
           key: menu.key,
@@ -103,7 +97,7 @@ export default function DashboardLayout({ children }: any) {
 
   return profile && isClient ? (
     <Layout className="h-full min-h-screen">
-      <Header className="flex items-center z-20 shadow-md bg-white">
+      <Header className="flex items-center z-20 shadow-md bg-white fixed top-0 w-full">
         <div className="w-full m-auto md:px-8 px-5">
           <div className="inline-flex justify-center items-center align-middle">
             <Link href={"/user"} className="mr-4">
@@ -134,9 +128,9 @@ export default function DashboardLayout({ children }: any) {
           </div>
         </div>
       </Header>
-      <Content>
-        <Layout className="relative z-10 min-h-[280px] w-full max-w-[1260px] m-auto p-5">
-          <Content className="shadow-lg">{children}</Content>
+      <Content className="mt-20">
+        <Layout className={`${!fullWidth && 'max-w-[1260px]'} relative z-10 min-h-[280px] w-full  m-auto p-5`}>
+          <Content className={`${!fullWidth && 'shadow-lg'}`}>{children}</Content>
         </Layout>
       </Content>
     </Layout>

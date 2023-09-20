@@ -8,3 +8,4 @@ export { UserRoleAction } from "./userRole.action";
 export { PermissionAction } from "./permission.action";
 export { RolePermissionAction } from "./rolePermission.action";
 export { PermissionGroupAction } from "./permissionGroup.action";
+export { MdmVslCntrAction } from "./mdmVslCntr.action";

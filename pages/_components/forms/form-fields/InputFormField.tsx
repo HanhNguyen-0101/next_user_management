@@ -1,11 +1,12 @@
 import { Form, Input } from "antd";
 
-export const InputFormField = ({ formik, label, name, isRequired, ...props }: any) => {
+export const InputFormField = ({ formik, label, name, isRequired, width, ...props }: any) => {
   return (
     <Form.Item
       style={{
         marginBottom: 12
       }}
+      className={`${width ? `w-[${width}px]` : 'w-full'} inline-block`}
       label={
         <span>
           {label} {isRequired && <span className="text-red-500">*</span>}

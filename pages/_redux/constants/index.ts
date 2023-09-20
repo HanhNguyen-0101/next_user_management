@@ -8,3 +8,4 @@ export { UserRoleConstant } from "./userRole.constant";
 export { PermissionConstant } from "./permission.constant";
 export { RolePermissionConstant } from "./rolePermission.constant";
 export { PermissionGroupConstant } from "./permissionGroup.constant";
+export { MdmVslCntrConstant } from "./mdmVslCntr.constant";
