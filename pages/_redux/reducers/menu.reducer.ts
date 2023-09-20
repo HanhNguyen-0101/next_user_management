@@ -22,6 +22,13 @@ const initState: MenuState = {
     prevPage: 0,
     total: 0,
   },
+  menuDataList: {
+    currentPage: 0,
+    data: [],
+    nextPage: 0,
+    prevPage: 0,
+    total: 0,
+  },
   menu: null,
   error: null,
   query: {},
@@ -33,34 +40,34 @@ const menuReducer = (
 ) => {
   switch (type) {
     case GET_MENU_LIST_SUCCESS: {
-      return { ...state, menuData: payload.data, query: payload.query };
+      return { ...state, menuData: payload?.data?.menuData, menuDataList: payload?.data?.menuDataList, query: payload.query };
     }
     case GET_MENU_LIST_FAILUER: {
-      return { ...state, error: payload.data };
+      return { ...state, error: payload?.data };
     }
     case ADD_MENU_ITEM_SUCCESS: {
       return { ...state, menu: payload };
     }
     case ADD_MENU_ITEM_FAILUER: {
-      return { ...state, error: payload.data };
+      return { ...state, error: payload?.data };
     }
     case GET_MENU_ITEM_SUCCESS: {
       return { ...state, menu: payload };
     }
     case GET_MENU_ITEM_FAILUER: {
-      return { ...state, error: payload.data };
+      return { ...state, error: payload?.data };
     }
     case EDIT_MENU_ITEM_SUCCESS: {
       return { ...state, menu: payload };
     }
     case EDIT_MENU_ITEM_FAILURE: {
-      return { ...state, error: payload.data };
+      return { ...state, error: payload?.data };
     }
     case REMOVE_MENU_ITEM_SUCCESS: {
       return { ...state };
     }
     case REMOVE_MENU_ITEM_FAILURE: {
-      return { ...state, error: payload.data };
+      return { ...state, error: payload?.data };
     }
     default:
       return { ...state };

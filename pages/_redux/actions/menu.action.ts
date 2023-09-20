@@ -3,16 +3,30 @@ import { STATUS_CODE } from "pages/_utils/configSetting";
 import { Dispatch } from "redux";
 import { MenuService } from "../services";
 import { QueryPayload } from "../models/common";
-import { NOTIF_TYPE, openNotification } from "@/components/notification/notification";
+import {
+  NOTIF_TYPE,
+  openNotification,
+} from "@/components/notification/notification";
 import { DrawerAction } from ".";
-import { AddMenuPayload, DeleteMenuResponse, EditMenuPayload, GetMenuByIdPayload, GetMenuResponse } from "../models/menu";
+import {
+  AddMenuPayload,
+  DeleteMenuResponse,
+  EditMenuPayload,
+  GetMenuByIdPayload,
+  GetMenuResponse,
+} from "../models/menu";
 
 const {
-  GET_MENU_LIST_SUCCESS, GET_MENU_LIST_FAILUER,
-  ADD_MENU_ITEM_SUCCESS, ADD_MENU_ITEM_FAILUER,
-  EDIT_MENU_ITEM_SUCCESS, EDIT_MENU_ITEM_FAILURE,
-  REMOVE_MENU_ITEM_SUCCESS, REMOVE_MENU_ITEM_FAILURE,
-  GET_MENU_ITEM_SUCCESS, GET_MENU_ITEM_FAILUER,
+  GET_MENU_LIST_SUCCESS,
+  GET_MENU_LIST_FAILUER,
+  ADD_MENU_ITEM_SUCCESS,
+  ADD_MENU_ITEM_FAILUER,
+  EDIT_MENU_ITEM_SUCCESS,
+  EDIT_MENU_ITEM_FAILURE,
+  REMOVE_MENU_ITEM_SUCCESS,
+  REMOVE_MENU_ITEM_FAILURE,
+  GET_MENU_ITEM_SUCCESS,
+  GET_MENU_ITEM_FAILUER,
 } = MenuConstant;
 
 export const MenuAction = {
@@ -21,9 +35,13 @@ export const MenuAction = {
       try {
         const { status, data } = await MenuService.getAll(query);
         if (status === STATUS_CODE.SUCCESS) {
+          const result = await MenuService.getAll();
           dispatch({
             type: GET_MENU_LIST_SUCCESS,
-            payload: {data, query},
+            payload: {
+              data: { menuData: data, menuDataList: result?.data },
+              query,
+            },
           });
         }
       } catch (error: any) {
@@ -107,10 +125,7 @@ export const MenuAction = {
       }
     };
   },
-  removeItem: (payload: {
-    id: string;
-    query: QueryPayload;
-  }) => {
+  removeItem: (payload: { id: string; query: QueryPayload }) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
         const { status, data }: DeleteMenuResponse =

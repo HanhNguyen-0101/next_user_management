@@ -14,10 +14,28 @@ import LoadingComponent from "../loading";
 
 const { Header, Content } = Layout;
 
+const handleMultipleLevel = (itemsMenu: any[], menuData: { data: any[] }) => {
+  itemsMenu?.map((item: any) => {
+    menuData?.data?.map((i: any) => {
+      if (i?.parentMenu?.key === item.key) {
+        const menuSub = {
+          key: i.key,
+          label: <Link href={`/${i.key}`}>{i.name}</Link>,
+        };
+        if (!item.children) {
+          item.children = [];
+        }
+        item.children.push(menuSub);
+      }
+    });
+    handleMultipleLevel(item.children, menuData);
+  });
+};
+
 export default function DashboardLayout({ children, fullWidth }: any) {
   const dispatch = useDispatch<Dispatch<any>>();
   const router = useRouter();
-  const { menuData } = useSelector((state: any) => state.menuReducer);
+  const { menuDataList } = useSelector((state: any) => state.menuReducer);
   const { profile } = useSelector((state: any) => state.authReducer);
   const [isClient, setIsClient] = useState(false);
 
@@ -44,8 +62,8 @@ export default function DashboardLayout({ children, fullWidth }: any) {
   };
 
   const itemsMenu: any = [];
-  if (menuData && menuData.data) {
-    menuData.data.filter((menu: IMenuModel) => {
+  if (menuDataList && menuDataList.data) {
+    menuDataList.data.filter((menu: IMenuModel) => {
       if (!menu.parentId) {
         itemsMenu.push({
           key: menu.key,
@@ -54,20 +72,7 @@ export default function DashboardLayout({ children, fullWidth }: any) {
         });
       }
     });
-    itemsMenu.map((item: any) => {
-      menuData.data.map((i: any) => {
-        if (i?.parentMenu?.key === item.key) {
-          const menuSub = {
-            key: i.key,
-            label: <Link href={`/${i.key}`}>{i.name}</Link>,
-          };
-          if (!item.children) {
-            item.children = [];
-          }
-          item.children.push(menuSub);
-        }
-      });
-    });
+    handleMultipleLevel(itemsMenu, menuDataList);
   }
   let roleName = "";
   profile?.roleList?.map((name: string) => {
@@ -129,8 +134,14 @@ export default function DashboardLayout({ children, fullWidth }: any) {
         </div>
       </Header>
       <Content className="mt-20">
-        <Layout className={`${!fullWidth && 'max-w-[1260px]'} relative z-10 min-h-[280px] w-full  m-auto p-5`}>
-          <Content className={`${!fullWidth && 'shadow-lg'}`}>{children}</Content>
+        <Layout
+          className={`${
+            !fullWidth && "max-w-[1260px]"
+          } relative z-10 min-h-[280px] w-full  m-auto p-5`}
+        >
+          <Content className={`${!fullWidth && "shadow-lg"}`}>
+            {children}
+          </Content>
         </Layout>
       </Content>
     </Layout>

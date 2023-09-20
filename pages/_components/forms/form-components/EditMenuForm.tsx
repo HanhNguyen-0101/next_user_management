@@ -18,7 +18,10 @@ export default function EditMenuForm() {
       value: menu.id,
     };
   });
-
+  menuArr.push({
+    label: 'None',
+    value: '',
+  });
   const handleSelectChange = (name: string) => {
     return (value: string) => {
       formik.setFieldValue(name, value);
@@ -41,9 +44,12 @@ export default function EditMenuForm() {
         .trim()
         .max(50, t("error.charactersInvalid", { number: 50 }))
         .required(t("error.required")),
-      parentId: Yup.string().required(t("error.required")),
+      parentId: Yup.string(),
     }),
     onSubmit: async (values) => {
+      if (!values.parentId) {
+        values.parentId = null;
+      }
       await dispatch(
         MenuAction.editItem({
           editPayload: {
@@ -87,7 +93,6 @@ export default function EditMenuForm() {
           name="parentId"
           onChange={handleSelectChange("parentId")}
           options={menuArr}
-          required={true}
         />
       </Space>
     </Form>

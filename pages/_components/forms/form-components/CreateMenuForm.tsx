@@ -18,7 +18,10 @@ export default function CreateMenuForm() {
       value: menu.id,
     };
   });
-
+  menuArr.push({
+    label: 'None',
+    value: '',
+  });
   const handleSelectChange = (name: string) => {
     return (value: string) => {
       formik.setFieldValue(name, value);
@@ -30,7 +33,7 @@ export default function CreateMenuForm() {
     initialValues: {
       name: "",
       key: "",
-      parentId: "",
+      parentId: null,
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -41,9 +44,12 @@ export default function CreateMenuForm() {
         .trim()
         .max(50, t("error.charactersInvalid", { number: 50 }))
         .required(t("error.required")),
-      parentId: Yup.string().required(t("error.required")),
+      parentId: Yup.string(),
     }),
     onSubmit: async (values) => {
+      if (!values.parentId) {
+        values.parentId = null;
+      }
       await dispatch(MenuAction.addItem({ addPayload: values, query }));
     },
   });
@@ -79,7 +85,6 @@ export default function CreateMenuForm() {
           name="parentId"
           onChange={handleSelectChange("parentId")}
           options={menuArr}
-          required={true}
         />
       </Space>
     </Form>

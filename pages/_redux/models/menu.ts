@@ -21,6 +21,13 @@ export interface MenuState {
     prevPage: number;
     total: number;
   } | null;
+  menuDataList?: {
+    currentPage: number;
+    data: Array<IMenuModel>;
+    nextPage: number;
+    prevPage: number;
+    total: number;
+  } | null;
   error?: string | null;
   menu?: IMenuModel | null;
   query?: QueryPayload;
