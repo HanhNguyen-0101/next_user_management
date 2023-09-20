@@ -5,6 +5,7 @@ export const tables = {
   ROLE_PERMISSION: "role-permission",
   PERMISSION: "permission",
   PERMISSION_GROUP: "permission-group",
+  MENU: "menu",
 };
 export const permissionGroup = {
   VIEW: "view",
@@ -31,6 +32,10 @@ export const permissionTypes = {
   PERMISSION_GROUP_EDIT: `${tables.PERMISSION_GROUP}: ${permissionGroup.EDIT}`,
   PERMISSION_GROUP_DELETE: `${tables.PERMISSION_GROUP}: ${permissionGroup.DELETE}`,
   PERMISSION_GROUP_CREATE: `${tables.PERMISSION_GROUP}: ${permissionGroup.CREATE}`,
+
+  MENU_EDIT: `${tables.MENU}: ${permissionGroup.EDIT}`,
+  MENU_DELETE: `${tables.MENU}: ${permissionGroup.DELETE}`,
+  MENU_CREATE: `${tables.MENU}: ${permissionGroup.CREATE}`,
 };
 export const hasPermission = (type: any, permissionList: any) => {
   return permissionList.includes(type);

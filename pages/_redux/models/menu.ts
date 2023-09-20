@@ -1,23 +1,54 @@
-import { number } from "react-i18next/icu.macro";
+import { QueryPayload } from "./common";
 
-export interface Menu {
-  id: string,
+export interface IMenuModel {
+  id?: string,
   name: string,
-  createdAt: string,
-  updatedAt: string,
+  createdAt?: string,
+  updatedAt?: string,
   key: string,
-  parentId: string,
-  parentMenu: Object,
+  parentId?: string,
+  parentMenu?: IMenuModel,
+}
+export interface IMenuArrayModel {
+  data: Array<IMenuModel>;
 }
 
-export type MenuType = Menu;
-
-export interface MenuList {
-  currentPage: number,
-  data: Array<Menu>,
-  nextPage: number,
-  prevPage: number,
-  total: number,
+export interface MenuState {
+  menuData?: {
+    currentPage: number;
+    data: Array<IMenuModel>;
+    nextPage: number;
+    prevPage: number;
+    total: number;
+  } | null;
+  error?: string | null;
+  menu?: IMenuModel | null;
+  query?: QueryPayload;
 }
 
-export type MenuListType = MenuList;
+export interface AddMenuPayload {
+  name: string;
+  key: string;
+  parentId: string;
+}
+
+export interface GetMenuByIdPayload {
+  id: string;
+}
+export interface GetMenuResponse {
+  data: IMenuModel;
+  status: number;
+}
+export interface EditMenuPayload {
+  id: string;
+  data: {
+    name: string;
+    key: string;
+    parentId: string;
+  };
+}
+export interface DeleteMenuResponse {
+  data: string;
+  status: number;
+}
+
