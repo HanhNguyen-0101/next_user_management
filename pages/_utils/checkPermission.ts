@@ -7,6 +7,7 @@ export const tables = {
   PERMISSION_GROUP: "permission-group",
   MENU: "menu",
   MDM_VSL_CNTR: "mdm-vsl-cntr",
+  VIEW_MENU: "view-menu",
 };
 export const permissionGroup = {
   VIEW: "view",

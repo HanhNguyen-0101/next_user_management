@@ -42,7 +42,7 @@ export default function EditPermissionForm() {
     validationSchema: Yup.object({
       name: Yup.string()
         .trim()
-        .max(30, t("error.charactersInvalid", { number: 30 }))
+        .max(100, t("error.charactersInvalid", { number: 100 }))
         .required(t("error.required")),
       description: Yup.string()
         .trim()

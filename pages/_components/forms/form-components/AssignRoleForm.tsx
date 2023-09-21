@@ -39,6 +39,7 @@ export default function AssignRoleForm() {
       droppableId: `${user?.id}_2`,
       data: state.selected,
       columnTitle: "Account's Roles",
+      dragDisabledItem: 'user',
     },
   };
   const handleChange = async (data: any) => {
@@ -101,6 +102,7 @@ export default function AssignRoleForm() {
       </div>
       <Divider orientation="left" className="tracking-widest">
         Assign Role
+        <span className="text-xs opacity-70"> (User role is default)</span>
       </Divider>
       <DrapDropComponent data={data} handleChange={handleChange} />
     </div>

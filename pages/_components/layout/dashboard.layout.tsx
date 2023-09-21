@@ -11,12 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import EditProfileForm from "../forms/form-components/EditProfileForm";
 import LoadingComponent from "../loading";
+import { tables } from "pages/_utils/checkPermission";
 
 const { Header, Content } = Layout;
 
-const handleMultipleLevel = (itemsMenu: any[], menuData: { data: any[] }) => {
+const handleMultipleLevel = (itemsMenu: any[], menuData: any[]) => {
   itemsMenu?.map((item: any) => {
-    menuData?.data?.map((i: any) => {
+    menuData?.map((i: any) => {
       if (i?.parentMenu?.key === item.key) {
         const menuSub = {
           key: i.key,
@@ -61,9 +62,17 @@ export default function DashboardLayout({ children, fullWidth }: any) {
     );
   };
 
+  // Check view menu permission
+  const menuViewedArr: IMenuModel[] = [];
+  menuDataList?.data?.map((menu: IMenuModel) => {
+  if (profile?.permissionList.includes(`${tables.VIEW_MENU}: ${menu.key}`)) {
+      menuViewedArr.push(menu);
+    }
+  });
+
   const itemsMenu: any = [];
-  if (menuDataList && menuDataList.data) {
-    menuDataList.data.filter((menu: IMenuModel) => {
+  if (menuViewedArr) {
+    menuViewedArr.filter((menu: IMenuModel) => {
       if (!menu.parentId) {
         itemsMenu.push({
           key: menu.key,
@@ -72,7 +81,7 @@ export default function DashboardLayout({ children, fullWidth }: any) {
         });
       }
     });
-    handleMultipleLevel(itemsMenu, menuDataList);
+    handleMultipleLevel(itemsMenu, menuViewedArr);
   }
   let roleName = "";
   profile?.roleList?.map((name: string) => {

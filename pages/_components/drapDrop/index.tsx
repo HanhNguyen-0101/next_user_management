@@ -31,10 +31,12 @@ const DroppableComponent = ({
   droppableId,
   columnTitle,
   data,
+  dragDisabledItem,
 }: {
   droppableId: string;
   columnTitle: string;
   data: [];
+  dragDisabledItem: string;
 }) => (
   <Droppable droppableId={droppableId}>
     {(provided, snapshot) => (
@@ -44,11 +46,18 @@ const DroppableComponent = ({
           snapshot.isDraggingOver ? "bg-blue-200" : "bg-gray-200"
         }`}
       >
-        <h3 className="font-medium text-blueDark text-center tracking-widest">{columnTitle}</h3>
+        <h3 className="font-medium text-blueDark text-center tracking-widest">
+          {columnTitle}
+        </h3>
         {data?.length > 0 &&
           data?.map((item, index) => {
             return (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
+              <Draggable
+                key={item.id}
+                draggableId={item.id}
+                index={index}
+                isDragDisabled={item.name === dragDisabledItem}
+              >
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -56,7 +65,7 @@ const DroppableComponent = ({
                     {...provided.dragHandleProps}
                     className={`cursor-grab p-2 my-1 uppercase text-white font-medium text-xs ${
                       snapshot.isDragging ? "bg-blueDark" : "bg-slate-500"
-                    }`}
+                    } ${!provided.dragHandleProps && "opacity-60"}`}
                     style={{ ...provided.draggableProps.style }}
                   >
                     {item.name}
@@ -75,7 +84,7 @@ export default function DrapDropComponent({
   data,
   handleChange,
 }: {
-  data: { items: {}; selected: {} };
+  data: { items: {}; selected: {}; dragDisabledItem?: string };
   handleChange: any;
 }) {
   const getList = (id) => {
@@ -129,12 +138,14 @@ export default function DrapDropComponent({
           columnTitle={data?.items?.columnTitle}
           droppableId={data?.items?.droppableId}
           data={data?.items?.data}
+          dragDisabledItem={data?.selected?.dragDisabledItem}
         />
         <SwapOutlined className="p-2" />
         <DroppableComponent
           columnTitle={data?.selected?.columnTitle}
           droppableId={data?.selected?.droppableId}
           data={data?.selected?.data}
+          dragDisabledItem={data?.selected?.dragDisabledItem}
         />
       </div>
     </DragDropContext>
