@@ -252,7 +252,7 @@ export default function MdmVslCntrMgmPage(
         })}
         scroll={{ x: 1200, y: window.innerHeight - 350 }}
         pagination={false}
-        rowSelection={{ ...rowSelection }}
+        rowSelection={{ ...rowSelection, type:'radio' }}
         bordered
         rowClassName="cursor-pointer"
       />
