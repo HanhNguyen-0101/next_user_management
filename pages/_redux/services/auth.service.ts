@@ -25,4 +25,7 @@ export const AuthService = {
   deleteProfile(id: string) {
     return axiosConfig.delete(`/users/personal/${id}`);
   },
+  resetPassword(email: string) {
+    return axiosConfig.get(`/auth/forget-password/${email}`);
+  }
 };

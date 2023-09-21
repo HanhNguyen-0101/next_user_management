@@ -1,4 +1,4 @@
-import { LoginPayload, RegisterPayload } from "@/redux/models/auth";
+import { ForgetPasswordPayload, LoginPayload, RegisterPayload } from "@/redux/models/auth";
 import { AuthConstant } from "../constants";
 import { AuthService, UserService } from "../services";
 import { STATUS_CODE } from "pages/_utils/configSetting";
@@ -23,6 +23,8 @@ const {
   EDIT_PROFILE_SUCCESS,
   DELETE_PROFILE_SUCCESS,
   DELETE_PROFILE_FAILURE,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILUER,
 } = AuthConstant;
 
 export const AuthAction = {
@@ -142,7 +144,7 @@ export const AuthAction = {
             "Profile is deleted successfully!"
           );
           dispatch(ModalAction.hideModal());
-          Router.push('/');
+          Router.push("/");
         }
       } catch (error: any) {
         const message = error?.response?.data.message;
@@ -151,6 +153,25 @@ export const AuthAction = {
           payload: { message },
         });
         openNotification(NOTIF_TYPE.ERROR, error.response.data.message);
+      }
+    };
+  },
+  resetPassword: (payload: ForgetPasswordPayload) => {
+    return async (dispatch: Dispatch): Promise<void> => {
+      try {
+        const { status } = await AuthService.resetPassword(payload.email);
+        if (status === STATUS_CODE.SUCCESS) {
+          dispatch({
+            type: RESET_PASSWORD_SUCCESS,
+          });
+        }
+        openNotification(NOTIF_TYPE.SUCCESS, "Submit reset password is successfully", "Please check your email");
+      } catch (error: any) {
+        const message = error?.response?.data.message;
+        dispatch({
+          type: RESET_PASSWORD_FAILUER,
+          payload: { message },
+        });
       }
     };
   },

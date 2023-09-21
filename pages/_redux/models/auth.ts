@@ -10,3 +10,7 @@ export interface RegisterPayload {
   passwordConfirm: string;
   password: string;
 }
+
+export interface ForgetPasswordPayload {
+  email: string;
+}

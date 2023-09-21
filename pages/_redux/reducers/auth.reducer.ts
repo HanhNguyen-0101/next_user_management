@@ -14,6 +14,8 @@ const {
   EDIT_PROFILE_SUCCESS,
   DELETE_PROFILE_SUCCESS,
   DELETE_PROFILE_FAILURE,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILUER,
 } = AuthConstant;
 
 let user = null;
@@ -123,6 +125,15 @@ const authReducer = (
       }
     }
     case DELETE_PROFILE_FAILURE: {
+      return {
+        ...state,
+        error: payload.message,
+      };
+    }
+    case RESET_PASSWORD_SUCCESS: {
+      return { ...state, error: initState.error };
+    }
+    case RESET_PASSWORD_FAILUER: {
       return {
         ...state,
         error: payload.message,
