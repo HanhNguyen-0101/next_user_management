@@ -12,7 +12,7 @@ export const SelectFormField = ({
   return (
     <Form.Item
       label={
-        <span>
+        label && <span>
           {label} {required && <span className="text-red-500">*</span>}
         </span>
       }

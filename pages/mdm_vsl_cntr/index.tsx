@@ -53,17 +53,6 @@ export default function MdmVslCntrMgmPage(
   const handleSearch = (values: { search: string }) => {
     dispatch(MdmVslCntrAction.getAll({ ...query, ...values }));
   };
-
-  const handleFilter = async () => {
-    // await dispatch(RoleAction.getAll());
-    // await dispatch(
-    //   ModalAction.openModal({
-    //     visible: true,
-    //     actionText: "Filter",
-    //     FormComponent: <FilterUserForm />,
-    //   })
-    // );
-  };
   const onChangePagination: PaginationProps['onChange'] = (current, pageSize) => {
     dispatch(MdmVslCntrAction.getAll({ ...query, page: current, item_per_page: pageSize }));
   };
@@ -232,12 +221,6 @@ export default function MdmVslCntrMgmPage(
   return (
     <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
       <div className="flex flex-grow mb-3">
-        <button
-          onClick={handleFilter}
-          className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
-        >
-          <FilterFilled />
-        </button>
         <div className="mx-2 flex-1 h-8">
           <SearchForm
             onSearchSubmit={handleSearch}

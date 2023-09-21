@@ -4,15 +4,15 @@ import EditPermissionGroupForm from "@/components/forms/form-components/EditPerm
 import SearchForm from "@/components/forms/form-components/SearchForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
 import {
-    NOTIF_TYPE,
-    openNotification,
+  NOTIF_TYPE,
+  openNotification,
 } from "@/components/notification/notification";
 import {
-    DrawerAction,
-    PermissionGroupAction
+  DrawerAction,
+  PermissionGroupAction
 } from "@/redux/actions";
 import { PermissionGroupState } from "@/redux/models/permissionGroup";
-import { FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Button, Pagination, Popconfirm, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
@@ -64,17 +64,6 @@ export default function PermissionGroupMgmPage(
 
   const handleSearch = (values: { search: string }) => {
     dispatch(PermissionGroupAction.getAll({ ...query, ...values }));
-  };
-
-  const handleFilter = async () => {
-    // await dispatch(RoleAction.getAll());
-    // await dispatch(
-    //   ModalAction.openModal({
-    //     visible: true,
-    //     actionText: "Filter",
-    //     FormComponent: <FilterUserForm />,
-    //   })
-    // );
   };
   const onChangePagination = (page: number) => {
     dispatch(PermissionGroupAction.getAll({ ...query, page }));
@@ -209,12 +198,6 @@ export default function PermissionGroupMgmPage(
   return (
     <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
       <div className="flex flex-grow mb-3">
-        <button
-          onClick={handleFilter}
-          className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
-        >
-          <FilterFilled />
-        </button>
         <div className="mx-2 flex-1 h-8">
           <SearchForm
             onSearchSubmit={handleSearch}
