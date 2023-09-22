@@ -9,11 +9,7 @@ import {
 } from "@/components/notification/notification";
 import { DrawerAction, MenuAction } from "@/redux/actions";
 import { IMenuModel, MenuState } from "@/redux/models/menu";
-import {
-  FilterFilled,
-  MinusOutlined,
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
+import { MinusOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import { Button, Pagination, Popconfirm, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
@@ -60,16 +56,6 @@ export default function MenuMgmPage(
     dispatch(MenuAction.getAll({ ...query, ...values }));
   };
 
-  const handleFilter = async () => {
-    // await dispatch(RoleAction.getAll());
-    // await dispatch(
-    //   ModalAction.openModal({
-    //     visible: true,
-    //     actionText: "Filter",
-    //     FormComponent: <FilterUserForm />,
-    //   })
-    // );
-  };
   const onChangePagination = (page: number) => {
     dispatch(MenuAction.getAll({ ...query, page }));
   };
@@ -221,13 +207,7 @@ export default function MenuMgmPage(
   return (
     <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
       <div className="flex flex-grow mb-3">
-        <button
-          onClick={handleFilter}
-          className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
-        >
-          <FilterFilled />
-        </button>
-        <div className="mx-2 flex-1 h-8">
+        <div className="mx-2 flex-1">
           <SearchForm onSearchSubmit={handleSearch} placeholder="Name, key" />
         </div>
       </div>
@@ -236,10 +216,10 @@ export default function MenuMgmPage(
         dataSource={menuData?.data.map((i) => {
           return { ...i, keyMenu: i.id };
         })}
-        rowKey={'keyMenu'}
+        rowKey={"keyMenu"}
         scroll={{ x: 1200, y: window.innerHeight - 320 }}
         pagination={false}
-        rowSelection={{ ...rowSelection, type:'radio' }}
+        rowSelection={{ ...rowSelection, type: "radio" }}
         bordered
         rowClassName="cursor-pointer"
       />

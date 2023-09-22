@@ -100,7 +100,7 @@ export default function UserMgmPage(
     await dispatch(
       ModalAction.openModal({
         visible: true,
-        actionText: "Filter",
+        actionText: "FILTER",
         FormComponent: <FilterUserForm />,
       })
     );

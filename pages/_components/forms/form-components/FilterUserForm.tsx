@@ -1,28 +1,26 @@
-import { AuthAction, ModalAction } from "@/redux/actions";
-import { DeleteOutlined } from "@ant-design/icons";
-import { Form, Popconfirm, Space } from "antd";
+import { ModalAction, UserAction } from "@/redux/actions";
+import { IRoleModel } from "@/redux/models/role";
+import { Form, Space } from "antd";
 import { useFormik } from "formik";
 import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
-  CheckboxFormField,
-  InputFormField,
-  SelectFormField,
+  SelectFormField
 } from "../form-fields";
-import { IRoleModel } from "@/redux/models/role";
 
 export default function FilterUserForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
   const { roleData } = useSelector((state) => state.roleReducer);
+  const { query } = useSelector((state) => state.userReducer);
   const role = roleData?.data?.map((i: IRoleModel) => {
     return {
       value: i.id,
       label: i.name,
-    }
-  })
+    };
+  });
 
   const handleSelectChange = (name: string) => {
     return (value: boolean | string) => {
@@ -32,15 +30,15 @@ export default function FilterUserForm() {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      isDisable: -1,
-      isPending: -1,
-      isRegisteredWithGoogle: -1,
+      isDisable: 'all',
+      isPending: 'all',
+      isRegisteredWithGoogle: 'all',
       role: [],
     },
     validationSchema: Yup.object({
-      isDisable: Yup.number(),
-      isPending: Yup.number(),
-      isRegisteredWithGoogle: Yup.number(),
+      isDisable: Yup.mixed(),
+      isPending: Yup.mixed(),
+      isRegisteredWithGoogle: Yup.mixed(),
       role: Yup.mixed(),
     }),
     onSubmit: (values) => {
@@ -80,15 +78,15 @@ export default function FilterUserForm() {
           options={[
             {
               label: "All",
-              value: -1,
+              value: 'all',
             },
             {
               label: "Registered via Google",
-              value: 1,
+              value: true,
             },
             {
               label: "Registered via System",
-              value: 0,
+              value: false,
             },
           ]}
         />
@@ -102,15 +100,15 @@ export default function FilterUserForm() {
           options={[
             {
               label: "All",
-              value: -1,
+              value: 'all',
             },
             {
               label: "Disable",
-              value: 1,
+              value: true,
             },
             {
               label: "Action",
-              value: 0,
+              value: false,
             },
           ]}
         />
@@ -122,15 +120,15 @@ export default function FilterUserForm() {
           options={[
             {
               label: "All",
-              value: -1,
+              value: 'all',
             },
             {
               label: "Pending",
-              value: 1,
+              value: true,
             },
             {
               label: "Approve",
-              value: 0,
+              value: false,
             },
           ]}
         />
