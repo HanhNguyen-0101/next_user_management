@@ -5,28 +5,18 @@ import EditRoleForm from "@/components/forms/form-components/EditRoleForm";
 import SearchForm from "@/components/forms/form-components/SearchForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
 import {
-    NOTIF_TYPE,
-    openNotification,
+  NOTIF_TYPE,
+  openNotification,
 } from "@/components/notification/notification";
 import {
-    DrawerAction,
-    ModalAction,
-    PermissionAction,
-    RoleAction
+  DrawerAction,
+  ModalAction,
+  PermissionAction,
+  RoleAction,
 } from "@/redux/actions";
 import { RoleState } from "@/redux/models/role";
-import {
-    FilterFilled,
-    QuestionCircleOutlined
-} from "@ant-design/icons";
-import {
-    Button,
-    Pagination,
-    Popconfirm,
-    Popover,
-    Space,
-    Table
-} from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Button, Pagination, Popconfirm, Popover, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
@@ -74,11 +64,10 @@ export default function RoleMgmPage(
       permissionTypes.ROLE_CREATE,
       profile?.permissionList
     ),
-    hasAssignPermission =
-      hasPermission(
-        permissionTypes.ROLE_PERMISSION_ASSIGN,
-        profile?.permissionList
-      );
+    hasAssignPermission = hasPermission(
+      permissionTypes.ROLE_PERMISSION_ASSIGN,
+      profile?.permissionList
+    );
 
   useEffect(() => {
     dispatch(RoleAction.getAll({ ...query, page: 1 }));
@@ -86,17 +75,6 @@ export default function RoleMgmPage(
 
   const handleSearch = (values: { search: string }) => {
     dispatch(RoleAction.getAll({ ...query, ...values }));
-  };
-
-  const handleFilter = async () => {
-    // await dispatch(RoleAction.getAll());
-    // await dispatch(
-    //   ModalAction.openModal({
-    //     visible: true,
-    //     actionText: "Filter",
-    //     FormComponent: <FilterUserForm />,
-    //   })
-    // );
   };
   const onChangePagination = (page: number) => {
     dispatch(RoleAction.getAll({ ...query, page }));
@@ -152,17 +130,17 @@ export default function RoleMgmPage(
   };
   const handleAssignPermissionBtn = async () => {
     if (selectedRowKeys && selectedRowKeys.length === 1) {
-        await dispatch(
-          RoleAction.getItemById({ id: selectedRowKeys[0].toString() })
-        );
-        await dispatch(PermissionAction.getAll());
-        await dispatch(
-          ModalAction.openModal({
-            actionText: "Save",
-            visible: true,
-            FormComponent: <AssignPermissionForm />,
-          })
-        );
+      await dispatch(
+        RoleAction.getItemById({ id: selectedRowKeys[0].toString() })
+      );
+      await dispatch(PermissionAction.getAll());
+      await dispatch(
+        ModalAction.openModal({
+          actionText: "Save",
+          visible: true,
+          FormComponent: <AssignPermissionForm />,
+        })
+      );
     } else {
       openNotification(
         NOTIF_TYPE.WARNING,
@@ -211,7 +189,7 @@ export default function RoleMgmPage(
                 title="Are you sure to delete item/items?"
                 description="All data related to this item will also be deleted."
                 okText="Delete"
-                okButtonProps={{className: 'bg-blueDark'}}
+                okButtonProps={{ className: "bg-blueDark" }}
                 cancelText="Cancel"
                 disabled={!(selectedRowKeys && selectedRowKeys.length === 1)}
                 onConfirm={handleDeleteLineItem}
@@ -315,19 +293,11 @@ export default function RoleMgmPage(
   };
   return (
     <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
-      <div className="flex flex-grow mb-3">
-        <button
-          onClick={handleFilter}
-          className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
-        >
-          <FilterFilled />
-        </button>
-        <div className="mx-2 flex-1 h-8">
-          <SearchForm
-            onSearchSubmit={handleSearch}
-            placeholder="Name, description"
-          />
-        </div>
+      <div className="mx-2 mb-3">
+        <SearchForm
+          onSearchSubmit={handleSearch}
+          placeholder="Name, description"
+        />
       </div>
       <Table
         columns={columns}
@@ -336,7 +306,7 @@ export default function RoleMgmPage(
         })}
         scroll={{ x: 1200, y: window.innerHeight - 320 }}
         pagination={false}
-        rowSelection={{ ...rowSelection, type:'radio' }}
+        rowSelection={{ ...rowSelection, type: "radio" }}
         bordered
         rowClassName="cursor-pointer"
       />

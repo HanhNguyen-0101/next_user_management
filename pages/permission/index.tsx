@@ -14,7 +14,7 @@ import {
   PermissionGroupAction,
 } from "@/redux/actions";
 import { PermissionState } from "@/redux/models/permission";
-import { FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Button, Pagination, Popconfirm, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { TableRowSelection } from "antd/es/table/interface";
@@ -70,17 +70,6 @@ export default function PermissionMgmPage(
 
   const handleSearch = (values: { search: string }) => {
     dispatch(PermissionAction.getAll({ ...query, ...values }));
-  };
-
-  const handleFilter = async () => {
-    // await dispatch(RoleAction.getAll());
-    // await dispatch(
-    //   ModalAction.openModal({
-    //     visible: true,
-    //     actionText: "Filter",
-    //     FormComponent: <FilterUserForm />,
-    //   })
-    // );
   };
   const onChangePagination = (page: number) => {
     dispatch(PermissionAction.getAll({ ...query, page }));
@@ -179,7 +168,7 @@ export default function PermissionMgmPage(
                 title="Are you sure to delete item/items?"
                 description="All data related to this item will also be deleted."
                 okText="Delete"
-                okButtonProps={{className: 'bg-blueDark'}}
+                okButtonProps={{ className: "bg-blueDark" }}
                 cancelText="Cancel"
                 disabled={!(selectedRowKeys && selectedRowKeys.length === 1)}
                 onConfirm={handleDeleteLineItem}
@@ -263,19 +252,11 @@ export default function PermissionMgmPage(
   };
   return (
     <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
-      <div className="flex flex-grow mb-3">
-        <button
-          onClick={handleFilter}
-          className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
-        >
-          <FilterFilled />
-        </button>
-        <div className="mx-2 flex-1 h-8">
-          <SearchForm
-            onSearchSubmit={handleSearch}
-            placeholder="Name, description, code"
-          />
-        </div>
+      <div className="mb-3 mx-2">
+        <SearchForm
+          onSearchSubmit={handleSearch}
+          placeholder="Name, description, code"
+        />
       </div>
       <Table
         columns={columns}
@@ -284,7 +265,7 @@ export default function PermissionMgmPage(
         })}
         scroll={{ x: 1200, y: window.innerHeight - 320 }}
         pagination={false}
-        rowSelection={{ ...rowSelection, type:'radio' }}
+        rowSelection={{ ...rowSelection, type: "radio" }}
         bordered
         rowClassName="cursor-pointer"
       />

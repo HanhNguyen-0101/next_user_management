@@ -2,7 +2,6 @@
 import AssignRoleForm from "@/components/forms/form-components/AssignRoleForm";
 import CreateUserForm from "@/components/forms/form-components/CreateUserForm";
 import EditUserForm from "@/components/forms/form-components/EditUserForm";
-import FilterUserForm from "@/components/forms/form-components/FilterUserForm";
 import SearchForm from "@/components/forms/form-components/SearchForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
 import {
@@ -21,7 +20,6 @@ import {
   CheckOutlined,
   MinusOutlined,
   QuestionCircleOutlined,
-  FilterFilled,
 } from "@ant-design/icons";
 import {
   Badge,
@@ -95,17 +93,6 @@ export default function UserMgmPage(
   const handleSearch = (values) => {
     dispatch(UserAction.getAll({ ...query, ...values }));
   };
-  const handleFilter = async() => {
-    await dispatch(RoleAction.getAll());
-    await dispatch(
-      ModalAction.openModal({
-        visible: true,
-        actionText: "FILTER",
-        FormComponent: <FilterUserForm />,
-      })
-    );
-  };
-
   const onChangePagination = (page: number) => {
     dispatch(UserAction.getAll({ ...query, page }));
   };
@@ -220,7 +207,7 @@ export default function UserMgmPage(
                 title="Are you sure to delete item/items?"
                 description="All data related to this account will also be deleted."
                 okText="Delete"
-                okButtonProps={{className: 'bg-blueDark'}}
+                okButtonProps={{ className: "bg-blueDark" }}
                 cancelText="Cancel"
                 disabled={!(selectedRowKeys && selectedRowKeys.length === 1)}
                 onConfirm={handleDeleteUser}
@@ -358,19 +345,11 @@ export default function UserMgmPage(
   };
   return (
     <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
-      <div className="flex flex-grow mb-3">
-        <button
-          onClick={handleFilter}
-          className="w-[40px] h-[40px] rounded-full bg-blueDark text-white text-base mx-2"
-        >
-          <FilterFilled />
-        </button>
-        <div className="mx-2 flex-1 h-8">
-          <SearchForm
-            onSearchSubmit={handleSearch}
-            placeholder="Email, First name, Last name, globalId, officeCode, country"
-          />
-        </div>
+      <div className="mx-2 mb-3">
+        <SearchForm
+          onSearchSubmit={handleSearch}
+          placeholder="Email, First name, Last name, globalId, officeCode, country"
+        />
       </div>
       <Table
         columns={columns}
@@ -379,7 +358,7 @@ export default function UserMgmPage(
         })}
         scroll={{ x: 1200, y: window.innerHeight - 320 }}
         pagination={false}
-        rowSelection={{ ...rowSelection, type:'radio' }}
+        rowSelection={{ ...rowSelection, type: "radio" }}
         bordered
         rowClassName="cursor-pointer"
       />

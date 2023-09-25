@@ -1,20 +1,20 @@
 import DrapDropComponent from "@/components/drapDrop";
-import { useTranslation } from "next-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { ModalAction, UserAction, UserRoleAction } from "@/redux/actions";
-import { useState } from "react";
-import { Divider, Space } from "antd";
-import { IRoleModel } from "@/redux/models/role";
 import {
   NOTIF_TYPE,
   openNotification,
 } from "@/components/notification/notification";
+import { ModalAction, UserAction, UserRoleAction } from "@/redux/actions";
+import { IRoleModel } from "@/redux/models/role";
+import { Divider, Space } from "antd";
+import { useTranslation } from "next-i18next";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AssignRoleForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
   const { roleData } = useSelector((state: any) => state.roleReducer);
-  const { user, query } = useSelector((state) => state.userReducer);
+  const { user, query } = useSelector((state: any) => state.userReducer);
 
   const selectedRoles = user?.userRoles?.map(
     (i: { role: IRoleModel }) => i.role
@@ -39,7 +39,7 @@ export default function AssignRoleForm() {
       droppableId: `${user?.id}_2`,
       data: state.selected,
       columnTitle: "Account's Roles",
-      dragDisabledItem: 'user',
+      dragDisabledItem: "user",
     },
   };
   const handleChange = async (data: any) => {
