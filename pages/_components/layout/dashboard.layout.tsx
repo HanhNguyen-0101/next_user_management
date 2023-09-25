@@ -6,12 +6,13 @@ import { Avatar, Dropdown, Layout, Space } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { tables } from "pages/_utils/checkPermission";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import EditProfileForm from "../forms/form-components/EditProfileForm";
 import LoadingComponent from "../loading";
-import { tables } from "pages/_utils/checkPermission";
+import { useSession, signOut } from "next-auth/react";
 
 const { Header, Content } = Layout;
 
@@ -39,6 +40,7 @@ export default function DashboardLayout({ children, fullWidth }: any) {
   const { menuDataList } = useSelector((state: any) => state.menuReducer);
   const { profile } = useSelector((state: any) => state.authReducer);
   const [isClient, setIsClient] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (!profile) {
@@ -49,6 +51,9 @@ export default function DashboardLayout({ children, fullWidth }: any) {
   }, []);
 
   const handleLogout = async () => {
+    if (session) {
+      await signOut();
+    }
     await dispatch(AuthAction.logout());
   };
 

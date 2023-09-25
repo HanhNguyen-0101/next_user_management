@@ -49,16 +49,18 @@ export const AuthAction = {
       }
     };
   },
-  loginGoogle: () => {
+  loginGoogle: (payload: any) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
-        const { status, data } = await AuthService.loginGoogle();
+        const { status, data } = await AuthService.loginGoogle(payload);
         if (status === STATUS_CODE.SUCCESS) {
+          const user = await UserService.getItemById(data.profile.id);
           dispatch({
             type: LOGIN_GOOGLE_SUCCESS,
-            payload: data,
+            payload: user.data,
           });
         }
+        Router.push("/user");
       } catch (error) {
         dispatch({
           type: LOGIN_GOOGLE_FAILUER,

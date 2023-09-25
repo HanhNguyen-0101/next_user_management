@@ -2,6 +2,7 @@ import { AuthAction, ModalAction } from "@/redux/actions";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Form, Popconfirm, Space } from "antd";
 import { useFormik } from "formik";
+import { signOut, useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,10 +13,14 @@ export default function EditProfileForm() {
   const { t } = useTranslation(["common", "auth"]);
   const dispatch = useDispatch();
   const { profile } = useSelector((state: any) => state.authReducer);
+  const { data: session } = useSession();
   const handleCheckboxChange = (e) => {
     formik.setFieldValue(e.target.name, e.target.checked);
   };
   const handleDeleteProfile = (id: string) => {
+    if (session) {
+      signOut();
+    }
     dispatch(AuthAction.deleteProfile(id));
   };
   const formik = useFormik({
@@ -32,7 +37,8 @@ export default function EditProfileForm() {
       isChangePassword: false,
     },
     validationSchema: Yup.object({
-      password: Yup.string().trim()
+      password: Yup.string()
+        .trim()
         .ensure()
         .when("isChangePassword", {
           is: true,
@@ -41,7 +47,8 @@ export default function EditProfileForm() {
               .max(30, t("error.charactersInvalid", { number: 30 }))
               .required(t("error.required")),
         }),
-      passwordConfirm: Yup.string().trim()
+      passwordConfirm: Yup.string()
+        .trim()
         .ensure()
         .when("isChangePassword", {
           is: true,
@@ -51,27 +58,27 @@ export default function EditProfileForm() {
               .required(t("error.required"))
               .oneOf([Yup.ref("password")], t("error.passwordNotMatch")),
         }),
-      email: Yup.string().trim()
+      email: Yup.string()
+        .trim()
         .email(t("error.emailInvalid"))
         .required(t("error.required")),
-      firstName: Yup.string().trim()
+      firstName: Yup.string()
+        .trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      lastName: Yup.string().trim()
+      lastName: Yup.string()
+        .trim()
         .max(30, t("error.charactersInvalid", { number: 30 }))
         .required(t("error.required")),
-      globalId: Yup.string().trim().max(
-        10,
-        t("error.charactersInvalid", { number: 10 })
-      ),
-      officeCode: Yup.string().trim().max(
-        10,
-        t("error.charactersInvalid", { number: 10 })
-      ),
-      country: Yup.string().trim().max(
-        100,
-        t("error.charactersInvalid", { number: 100 })
-      ),
+      globalId: Yup.string()
+        .trim()
+        .max(10, t("error.charactersInvalid", { number: 10 })),
+      officeCode: Yup.string()
+        .trim()
+        .max(10, t("error.charactersInvalid", { number: 10 })),
+      country: Yup.string()
+        .trim()
+        .max(100, t("error.charactersInvalid", { number: 100 })),
     }),
     onSubmit: async (values) => {
       if (!values.isChangePassword) {

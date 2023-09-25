@@ -8,13 +8,8 @@ export const AuthService = {
   register(payload: RegisterPayload) {
     return axiosConfig.post("auth/register", payload);
   },
-  loginGoogle() {
-    return axiosConfig.get("auth/google/login", {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    });
+  loginGoogle(payload: any) {
+    return axiosConfig.post("auth/google-nextauth/login", payload);
   },
   logout() {
     return axiosConfig.post("/auth/logout");

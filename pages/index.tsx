@@ -7,10 +7,11 @@ import { LoginPayload } from "@/redux/models/auth";
 import { GoogleOutlined } from "@ant-design/icons";
 import { Space } from "antd";
 import { GetStaticProps } from "next";
+import { signIn, useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 
@@ -18,13 +19,22 @@ export default function LoginPage() {
   const dispatch = useDispatch<Dispatch<any>>();
   const { t } = useTranslation(["common", "auth"]);
   const { error } = useSelector((state: any) => state.authReducer);
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      dispatch(
+        AuthAction.loginGoogle({
+          ...session?.user,
+          firstName: session?.user?.name,
+          password: "default",
+        })
+      );
+    }
+  }, [session, status]);
 
   const handleSubmitLoginForm = (values: LoginPayload) => {
     dispatch(AuthAction.login(values));
-  };
-
-  const handleSubmitLoginGoogleForm = () => {
-    dispatch(AuthAction.loginGoogle());
   };
 
   return (
@@ -35,7 +45,7 @@ export default function LoginPage() {
       <p className="text-xs text-gray-500 mb-4">{t("auth:login.signInDesc")}</p>
       {error && <div className="error">{error}</div>}
       <LoginForm onLoginSubmit={handleSubmitLoginForm} />
-      <LightButton type="button" onClick={handleSubmitLoginGoogleForm}>
+      <LightButton type="button" onClick={() => signIn("google")}>
         <Space>
           <GoogleOutlined style={{ fontSize: 25 }} />
           {t("auth:login.signInGG")}

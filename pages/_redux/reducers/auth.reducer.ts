@@ -67,10 +67,34 @@ const authReducer = (
       };
     }
     case LOGIN_GOOGLE_SUCCESS: {
-      return { ...state, error: initState.error };
+      const permissionListOfProfile: any[] = [];
+      const roleListOfProfile: any[] = [];
+      payload?.userRoles?.map((userRoleItem: any) => {
+        roleListOfProfile.push(userRoleItem.role.name);
+        userRoleItem?.role?.rolePermissions?.map((rolePermission: any) => {
+          permissionListOfProfile.push(rolePermission.permission.name);
+        });
+      });
+
+      const dataUserStore = {
+        ...payload,
+        permissionList: permissionListOfProfile,
+        roleList: roleListOfProfile,
+      };
+      localStorage.setItem(USER_LOGIN, JSON.stringify(dataUserStore));
+      return {
+        ...state,
+        profile: dataUserStore,
+        error: initState.error,
+      };
     }
     case LOGIN_GOOGLE_FAILUER: {
-      return { ...state, error: payload.message };
+      localStorage.removeItem(USER_LOGIN);
+      return {
+        ...state,
+        profile: null,
+        error: payload.message,
+      };
     }
     case REGISTER_SUCCESS: {
       return { ...state, error: initState.error };
