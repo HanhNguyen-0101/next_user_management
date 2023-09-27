@@ -68,6 +68,7 @@ export const getStaticPaths: GetStaticPaths<{
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const translationsProps = await serverSideTranslations(locale ?? "en", [
     "common",
+    "mdmVslCntr"
   ]);
   return {
     props: {

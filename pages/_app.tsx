@@ -9,6 +9,9 @@ import { Provider } from "react-redux";
 import DrawerNav from "./_components/drawer/nav.drawer";
 import ModalCustom from "./_components/modal/modalCustom";
 import { store } from "./_redux/configStore";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+config.autoAddCss = false;
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -30,6 +33,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
               colorPrimary: "#274a74",
               borderRadius: 2,
               controlHeight: 38,
+            },
+            components: {
+              Tabs: {
+                inkBarColor: "white",
+                colorPrimary: "white",
+                colorText: "rgba(256, 256, 256, 0.5)",
+                verticalItemMargin: "0 0 0 0",
+                cardBg: "white",
+              },
+              Collapse: {
+                padding: 0,
+              },
             },
           }}
         >
