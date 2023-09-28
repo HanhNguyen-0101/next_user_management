@@ -1,23 +1,26 @@
 import { DarkButton } from "@/components/button/darkButton";
 import { LightButton } from "@/components/button/lightButton";
 import MdmVslCntrForm from "@/components/forms/form-components/MdmVslCntrForm";
-import { IMdmVslCntrModel } from "@/redux/models/mdmVslCntr";
+import { MdmVslCntrAction } from "@/redux/actions";
 import { Steps } from "antd";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-export default function MdmVslCntrSteps(props: { data: IMdmVslCntrModel }) {
-  const data = props?.data;
+export default function MdmVslCntrSteps() {
+  const { nextStepAction, currentStep, mdmVslCntrSteps } = useSelector(
+    (state: any) => state.mdmVslCntrReducer
+  );
+  const dispatch = useDispatch();
   const { t } = useTranslation(["mdmVslCntr"]);
-  const [current, setCurrent] = useState(0);
-
-  const next = () => {
-    setCurrent(current + 1);
+  const previousStep = () => {
+    dispatch(MdmVslCntrAction.setPreviousStepData());
   };
-  const prev = () => {
-    setCurrent(current - 1);
+  const handleSaveAction = () => {
+    nextStepAction;
+    console.log("------------", mdmVslCntrSteps);
+    // dispatch(MdmVslCntrAction.addItem(mdmVslCntrSteps));
   };
-
   const infomationVesselData = [
     {
       title: "Main Information",
@@ -500,50 +503,46 @@ export default function MdmVslCntrSteps(props: { data: IMdmVslCntrModel }) {
     {
       key: "step_0",
       title: "Information of Vessel",
-      content: (
-        <MdmVslCntrForm
-          data={data}
-          source={infomationVesselData}
-        />
-      ),
+      content: <MdmVslCntrForm source={infomationVesselData} />,
     },
     {
       key: "step_1",
       title: "Contact",
-      content: <MdmVslCntrForm data={data} source={contactVesselData} />,
+      content: <MdmVslCntrForm source={contactVesselData} />,
     },
     {
       key: "step_2",
       title: "CNTR Capacity",
-      content: <MdmVslCntrForm data={data} source={cntrCapacityData} />,
+      content: <MdmVslCntrForm source={cntrCapacityData} />,
     },
     {
       key: "step_3",
       title: "Dimension & Speed",
-      content: <MdmVslCntrForm data={data} source={dimensionSpeedData} />,
+      content: <MdmVslCntrForm source={dimensionSpeedData} />,
     },
     {
       key: "step_4",
       title: "Tonnage",
-      content: <MdmVslCntrForm data={data} source={tonnageData} />,
+      content: <MdmVslCntrForm source={tonnageData} />,
     },
     {
       key: "step_5",
       title: "CBM & MT",
-      content: <MdmVslCntrForm data={data} source={cbmMtData} />,
+      content: <MdmVslCntrForm source={cbmMtData} />,
     },
     {
       key: "step_6",
       title: "Engine",
-      content: <MdmVslCntrForm data={data} source={engineData} />,
+      content: <MdmVslCntrForm source={engineData} />,
     },
     {
       key: "step_7",
       title: "Certificate",
-      content: <MdmVslCntrForm data={data} source={certificateData} />,
+      content: <MdmVslCntrForm source={certificateData} />,
     },
   ];
   const items = steps.map((item) => ({ key: item.key, title: item.title }));
+
   return (
     <div className="max-w-7xl mx-auto bg-white rounded-md">
       <h2 className="text-blueDark p-2 text-lg title-font text-center font-medium mb-2 tracking-widest">
@@ -551,27 +550,24 @@ export default function MdmVslCntrSteps(props: { data: IMdmVslCntrModel }) {
       </h2>
       <section className="flex gap-8 p-4">
         <div className="flex-col border-r-2 px-4 border-blueDark">
-          <Steps direction="vertical" current={current} items={items} />
+          <Steps direction="vertical" current={currentStep} items={items} />
         </div>
         <div className={`flex-1 overflow-y-auto h-[500px]`}>
           <div className="relative">
-            <div className="pb-16">{steps[current].content}</div>
+            <div className="pb-16">{steps[currentStep].content}</div>
             <div className="absolute flex bottom-0 right-0">
-              {current > 0 && (
-                <LightButton className="mx-2" onClick={() => prev()}>
+              {currentStep > 0 && (
+                <LightButton className="mx-2" onClick={previousStep}>
                   Previous
                 </LightButton>
               )}
-              {current < steps.length - 1 && (
-                <DarkButton className="mx-2" onClick={() => next()}>
+              {currentStep < steps.length - 1 && (
+                <DarkButton className="mx-2" onClick={nextStepAction}>
                   Next
                 </DarkButton>
               )}
-              {current === steps.length - 1 && (
-                <DarkButton
-                  className="mx-2"
-                  onClick={() => alert("Processing complete!")}
-                >
+              {currentStep === steps.length - 1 && (
+                <DarkButton className="mx-2" onClick={handleSaveAction}>
                   Save
                 </DarkButton>
               )}

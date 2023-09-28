@@ -1,6 +1,10 @@
 import { Form } from "antd";
 import { useFormik } from "formik";
 import { InputFormField } from "../form-fields";
+import { useEffect } from "react";
+import { MdmVslCntrAction } from "@/redux/actions";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const GenerateField = ({ data, formik }: any) => {
   return data?.map((item: any, index: number) => {
@@ -32,20 +36,27 @@ const GenerateField = ({ data, formik }: any) => {
     );
   });
 };
-export default function MdmVslCntrForm({ data, source }: any) {
+export default function MdmVslCntrForm({ source }: any) {
+  const { mdmVslCntr } = useSelector((state: any) => state.mdmVslCntrReducer);
+  const dispatch = useDispatch();
+
   const initialValues = {};
   source?.map((item: any) => {
     item?.children?.map((i: any) => {
-      initialValues[i.name] = data[i.name];
+      initialValues[i.name] = mdmVslCntr[i.name];
     });
   });
   const formik = useFormik({
-    enableReinitialize: true,
     initialValues: initialValues,
-    onSubmit: async (values) => {
-      console.log('values', values);
+    onSubmit: (values) => {
+      console.log("values", values, source);
+      dispatch(MdmVslCntrAction.setNextStepData(values))
     },
   });
+
+  useEffect(() => {
+    dispatch(MdmVslCntrAction.setCallbackNextStep(formik.handleSubmit));
+  }, []);
 
   return (
     <Form

@@ -122,6 +122,9 @@ export interface MdmVslCntrState {
   error?: string | null;
   mdmVslCntr?: IMdmVslCntrModel | null;
   query?: QueryPayload;
+  nextStepAction?: any,
+  mdmVslCntrSteps?: {},
+  currentStep: number,
 }
 
 export interface GetMdmVslCntrByIdPayload {

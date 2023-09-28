@@ -11,7 +11,7 @@ import {
   DeleteMdmVslCntrResponse,
   GetMdmVslCntrByIdPayload,
   GetMdmVslCntrResponse,
-  IMdmVslCntrModel
+  IMdmVslCntrModel,
 } from "../models/mdmVslCntr";
 import { MdmVslCntrService } from "../services";
 
@@ -26,6 +26,10 @@ const {
   EDIT_MDM_VSL_CNTR_ITEM_FAILURE,
   REMOVE_MDM_VSL_CNTR_ITEM_SUCCESS,
   REMOVE_MDM_VSL_CNTR_ITEM_FAILURE,
+
+  SET_CALLBACK_NEXT_STEP_ACTION,
+  SET_NEXT_STEP_DATA,
+  SET_PREVIOUS_STEP_DATA,
 } = MdmVslCntrConstant;
 
 export const MdmVslCntrAction = {
@@ -135,4 +139,16 @@ export const MdmVslCntrAction = {
       }
     };
   },
+
+  setCallbackNextStep: (submitAction: any) => ({
+    type: SET_CALLBACK_NEXT_STEP_ACTION,
+    payload: submitAction,
+  }),
+  setNextStepData: (data: any) => ({
+    type: SET_NEXT_STEP_DATA,
+    payload: data,
+  }),
+  setPreviousStepData: () => ({
+    type: SET_PREVIOUS_STEP_DATA,
+  })
 };

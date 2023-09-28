@@ -12,6 +12,10 @@ const {
   EDIT_MDM_VSL_CNTR_ITEM_FAILURE,
   REMOVE_MDM_VSL_CNTR_ITEM_SUCCESS,
   REMOVE_MDM_VSL_CNTR_ITEM_FAILURE,
+
+  SET_CALLBACK_NEXT_STEP_ACTION,
+  SET_NEXT_STEP_DATA,
+  SET_PREVIOUS_STEP_DATA,
 } = MdmVslCntrConstant;
 
 const initState: MdmVslCntrState = {
@@ -24,7 +28,10 @@ const initState: MdmVslCntrState = {
   },
   mdmVslCntr: null,
   error: null,
-  query: {}
+  query: {},
+  nextStepAction: () => {},
+  mdmVslCntrSteps: {},
+  currentStep: 0,
 };
 
 const MdmVslCntrReducer = (
@@ -61,6 +68,20 @@ const MdmVslCntrReducer = (
     }
     case EDIT_MDM_VSL_CNTR_ITEM_FAILURE: {
       return { ...state, error: payload?.data };
+    }
+    case SET_CALLBACK_NEXT_STEP_ACTION: {
+      return { ...state, nextStepAction: payload };
+    }
+    case SET_NEXT_STEP_DATA: {
+      return {
+        ...state,
+        currentStep: state.currentStep + 1,
+        mdmVslCntrSteps: { ...state.mdmVslCntrSteps, ...payload },
+      };
+    }
+    case SET_PREVIOUS_STEP_DATA: {
+      const previousStep = state.currentStep > 0 ? state.currentStep - 1 : 0;
+      return { ...state, currentStep: previousStep };
     }
     default:
       return { ...state };

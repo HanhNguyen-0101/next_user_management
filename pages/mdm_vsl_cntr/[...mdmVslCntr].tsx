@@ -1,5 +1,4 @@
 "use client";
-import MdmVslCntrForm from "@/components/forms/form-components/MdmVslCntrForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
 import { MdmVslCntrAction } from "@/redux/actions";
 import { IMdmVslCntrModel } from "@/redux/models/mdmVslCntr";
@@ -36,12 +35,6 @@ export default function MdmVslCntrItemPage(
       permissionTypes.MDM_VSL_CNTR_CREATE,
       profile?.permissionList
     );
-  const handleAddItem = (data: IMdmVslCntrModel) => {
-    dispatch(MdmVslCntrAction.addItem(data));
-  };
-  const handleEditItem = (data: IMdmVslCntrModel) => {
-    dispatch(MdmVslCntrAction.editItem(data));
-  };
   useEffect(() => {
     if (mdmVslCntrParams && mdmVslCntrParams[1]) {
       dispatch(MdmVslCntrAction.getItemById({ id: mdmVslCntrParams[1] }));
@@ -49,9 +42,9 @@ export default function MdmVslCntrItemPage(
   }, []);
 
   return <div>
-    {hasAddPermission && action === "add" && <MdmVslCntrSteps data={mdmVslCntr} />}
-    {hasEditPermission && action === "edit" && mdmVslCntr && <MdmVslCntrSteps data={mdmVslCntr} />}
-    {action === "detail" && mdmVslCntr && <MdmVslCntrDetail data={mdmVslCntr} />}
+    {hasAddPermission && action === "add" && <MdmVslCntrSteps />}
+    {hasEditPermission && action === "edit" && mdmVslCntr && <MdmVslCntrSteps />}
+    {action === "detail" && mdmVslCntr && <MdmVslCntrDetail />}
   </div>
 }
 
