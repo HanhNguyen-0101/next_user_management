@@ -8,6 +8,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import MdmVslCntrDetail from "pages/_templates/MdmVslCntrDetail.template";
+import MdmVslCntrSteps from "pages/_templates/MdmVslCntrSteps.template";
 import { hasPermission, permissionTypes } from "pages/_utils/checkPermission";
 import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,8 +49,8 @@ export default function MdmVslCntrItemPage(
   }, []);
 
   return <div>
-    {hasAddPermission && action === "add" && <MdmVslCntrForm clearData={true} onSubmitForm={handleAddItem} />}
-    {hasEditPermission && action === "edit" && mdmVslCntr && <MdmVslCntrForm data={mdmVslCntr} onSubmitForm={handleEditItem} />}
+    {hasAddPermission && action === "add" && <MdmVslCntrSteps data={mdmVslCntr} />}
+    {hasEditPermission && action === "edit" && mdmVslCntr && <MdmVslCntrSteps data={mdmVslCntr} />}
     {action === "detail" && mdmVslCntr && <MdmVslCntrDetail data={mdmVslCntr} />}
   </div>
 }

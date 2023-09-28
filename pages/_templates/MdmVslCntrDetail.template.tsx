@@ -700,12 +700,12 @@ export default function MdmVslCntrDetail(props: { data: IMdmVslCntrModel }) {
                       title={t("mdmVslCntr:fields.vsl_delt_ofc_cd")}
                       value={data.vsl_delt_ofc_cd}
                       icon={faBuilding}
-                      className="lg:col-span-2 sm:col-span-2"
                     />
                     <LineItem
                       title={t("mdmVslCntr:fields.cre_usr_id")}
                       value={data.cre_usr_id}
                       icon={faUser}
+                      className="lg:col-span-2 sm:col-span-2"
                     />
                     <LineItem
                       title={t("mdmVslCntr:fields.cre_dt")}
@@ -720,12 +720,12 @@ export default function MdmVslCntrDetail(props: { data: IMdmVslCntrModel }) {
                       title={t("mdmVslCntr:fields.vsl_cre_ofc_cd")}
                       value={data.vsl_cre_ofc_cd}
                       icon={faBuilding}
-                      className="lg:col-span-2 sm:col-span-2"
                     />
                     <LineItem
                       title={t("mdmVslCntr:fields.upd_usr_id")}
                       value={data.upd_usr_id}
                       icon={faUser}
+                      className="lg:col-span-2 sm:col-span-2"
                     />
                     <LineItem
                       title={t("mdmVslCntr:fields.upd_dt")}
