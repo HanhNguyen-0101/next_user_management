@@ -74,7 +74,9 @@ export default function MdmVslCntrForm({ source }: any) {
   const validationSchema = {};
   source?.map((item: any) => {
     item?.children?.map((i: any) => {
-      initialValues[i.name] = mdmVslCntr[i.name];
+      if (mdmVslCntr && mdmVslCntr.id) {
+        initialValues[i.name] = mdmVslCntr[i.name];
+      }
       if (i.required) {
         validationSchema[i.name] = Yup.mixed().required(t("error.required"));
       }
@@ -87,12 +89,16 @@ export default function MdmVslCntrForm({ source }: any) {
     onSubmit: async (values) => {
       await dispatch(MdmVslCntrAction.setNextStepData(values));
       if (currentStep === 7) {
-        await dispatch(
-          MdmVslCntrAction.editItem({
-            id: mdmVslCntr.id,
-            data: mdmVslCntr,
-          })
-        );
+        if (mdmVslCntr && mdmVslCntr.id) {
+          await dispatch(
+            MdmVslCntrAction.editItem({
+              id: mdmVslCntr.id,
+              data: mdmVslCntr,
+            })
+          );
+        } else {
+          await dispatch(MdmVslCntrAction.addItem(mdmVslCntr));
+        }
       }
     },
   });

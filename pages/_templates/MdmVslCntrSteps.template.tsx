@@ -15,8 +15,10 @@ export default function MdmVslCntrSteps() {
   );
   const dispatch = useDispatch();
   const { t } = useTranslation(["mdmVslCntr"]);
-  const previousStep = () => {
-    dispatch(MdmVslCntrAction.setPreviousStepData());
+  const previousStep = (step: number) => {
+    if (step < currentStep) {
+      dispatch(MdmVslCntrAction.setPreviousStepData(step));
+    }
   };
   const infomationVesselData = [
     {
@@ -616,18 +618,18 @@ export default function MdmVslCntrSteps() {
   return (
     <div className="max-w-7xl mx-auto bg-white rounded-md">
       <h2 className="text-blueDark p-2 pt-6 text-lg title-font text-center font-medium mb-2 tracking-widest">
-        {`EDIT: Vessel Code - ${mdmVslCntr?.vsl_cd}`}
+        {mdmVslCntr?.id ? `EDIT: Vessel Code - ${mdmVslCntr?.vsl_cd}` : 'ADD NEW'}
       </h2>
       <section className="flex gap-4 p-4">
         <div className="flex-col border-r-2 px-4 border-blueDark">
-          <Steps direction="vertical" current={currentStep} items={items} />
+          <Steps direction="vertical" current={currentStep} items={items} onChange={previousStep} />
         </div>
         <div className={`flex-1 overflow-y-auto h-[500px]`}>
           <div className="relative">
             <div className="pb-16">{steps[currentStep]?.content}</div>
             <div className="absolute flex bottom-0 right-0 mr-5">
               {currentStep > 0 && (
-                <LightButton className="mx-2" onClick={previousStep}>
+                <LightButton className="mx-2" onClick={() => previousStep(-1)}>
                   Previous
                 </LightButton>
               )}

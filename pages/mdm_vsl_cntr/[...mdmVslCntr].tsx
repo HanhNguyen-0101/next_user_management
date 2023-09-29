@@ -36,6 +36,7 @@ export default function MdmVslCntrItemPage(
       profile?.permissionList
     );
   useEffect(() => {
+    dispatch(MdmVslCntrAction.resetData());
     if (mdmVslCntrParams && mdmVslCntrParams[1]) {
       dispatch(MdmVslCntrAction.getItemById({ id: mdmVslCntrParams[1] }));
     }

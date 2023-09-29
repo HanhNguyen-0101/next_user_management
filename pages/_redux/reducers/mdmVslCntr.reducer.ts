@@ -16,6 +16,7 @@ const {
   SET_CALLBACK_NEXT_STEP_ACTION,
   SET_NEXT_STEP_DATA,
   SET_PREVIOUS_STEP_DATA,
+  RESET_DATA,
 } = MdmVslCntrConstant;
 
 const initState: MdmVslCntrState = {
@@ -79,8 +80,10 @@ const MdmVslCntrReducer = (
       };
     }
     case SET_PREVIOUS_STEP_DATA: {
-      const previousStep = state.currentStep > 0 ? state.currentStep - 1 : 0;
-      return { ...state, currentStep: previousStep };
+      return { ...state, currentStep: (payload !== -1) ? payload : state.currentStep - 1 };
+    }
+    case RESET_DATA: {
+      return { ...state, currentStep: 0, mdmVslCntr: null };
     }
     default:
       return { ...state };

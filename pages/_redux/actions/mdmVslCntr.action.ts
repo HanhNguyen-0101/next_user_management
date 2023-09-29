@@ -32,6 +32,7 @@ const {
   SET_CALLBACK_NEXT_STEP_ACTION,
   SET_NEXT_STEP_DATA,
   SET_PREVIOUS_STEP_DATA,
+  RESET_DATA,
 } = MdmVslCntrConstant;
 
 export const MdmVslCntrAction = {
@@ -67,7 +68,7 @@ export const MdmVslCntrAction = {
           NOTIF_TYPE.SUCCESS,
           "A new item is added successfully!"
         );
-        await dispatch(DrawerAction.hideDrawer());
+        Router.push('/mdm_vsl_cntr');
       } catch (error: any) {
         dispatch({
           type: ADD_MDM_VSL_CNTR_ITEM_FAILUER,
@@ -141,7 +142,6 @@ export const MdmVslCntrAction = {
       }
     };
   },
-
   setCallbackNextStep: (submitAction: any) => ({
     type: SET_CALLBACK_NEXT_STEP_ACTION,
     payload: submitAction,
@@ -150,7 +150,11 @@ export const MdmVslCntrAction = {
     type: SET_NEXT_STEP_DATA,
     payload: data,
   }),
-  setPreviousStepData: () => ({
+  setPreviousStepData: (step: number) => ({
     type: SET_PREVIOUS_STEP_DATA,
+    payload: step,
+  }),
+  resetData: () => ({
+    type: RESET_DATA,
   })
 };
