@@ -1,4 +1,5 @@
 "use client";
+import SearchForm from "@/components/forms/form-components/SearchForm";
 import DashboardLayout from "@/components/layout/dashboard.layout";
 import {
   NOTIF_TYPE,
@@ -219,12 +220,20 @@ export default function MdmVslCntrMgmPage(
   };
   return (
     <div className="flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative">
+      <div className="flex flex-grow mb-3">
+        <div className="mx-2 flex-1 h-8">
+          <SearchForm
+            onSearchSubmit={handleSearch}
+            placeholder="Search..."
+          />
+        </div>
+      </div>
       <Table
         columns={columns}
         dataSource={mdmVslCntrData?.data.map((i) => {
           return { ...i, key: i.id };
         })}
-        scroll={{ x: 1200, y: window.innerHeight - 300 }}
+        scroll={{ x: 1200, y: window.innerHeight - 350 }}
         pagination={false}
         rowSelection={{ ...rowSelection, type:'radio' }}
         bordered
