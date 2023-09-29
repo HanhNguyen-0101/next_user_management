@@ -1,5 +1,8 @@
 import "@/styles/globals.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import { ConfigProvider } from "antd";
+import locale from "antd/locale/en_US";
 import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { appWithTranslation } from "next-i18next";
@@ -9,8 +12,6 @@ import { Provider } from "react-redux";
 import DrawerNav from "./_components/drawer/nav.drawer";
 import ModalCustom from "./_components/modal/modalCustom";
 import { store } from "./_redux/configStore";
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -28,6 +29,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>
         <ConfigProvider
+          locale={locale}
           theme={{
             token: {
               colorPrimary: "#274a74",
@@ -44,6 +46,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
               },
               Collapse: {
                 padding: 0,
+              },
+              DatePicker: {
+                colorLink: "#274a74",
+                colorLinkHover: "#274a74",
               },
             },
           }}

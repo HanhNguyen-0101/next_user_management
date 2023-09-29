@@ -7,8 +7,10 @@ import { Dispatch } from "redux";
 import { DrawerAction } from ".";
 import { MdmVslCntrConstant } from "../constants";
 import { QueryPayload } from "../models/common";
+import Router from "next/router";
 import {
   DeleteMdmVslCntrResponse,
+  EditMdmVslCntrByIdPayload,
   GetMdmVslCntrByIdPayload,
   GetMdmVslCntrResponse,
   IMdmVslCntrModel,
@@ -94,7 +96,7 @@ export const MdmVslCntrAction = {
       }
     };
   },
-  editItem: (payload: IMdmVslCntrModel) => {
+  editItem: (payload: EditMdmVslCntrByIdPayload) => {
     return async (dispatch: Dispatch): Promise<void> => {
       try {
         const { status, data } = await MdmVslCntrService.updateItem(
@@ -108,7 +110,7 @@ export const MdmVslCntrAction = {
           });
         }
         await openNotification(NOTIF_TYPE.SUCCESS, "Updated successfully!");
-        await dispatch(DrawerAction.hideDrawer());
+        Router.push(`/mdm_vsl_cntr/detail/${payload.id}`);
       } catch (error: any) {
         dispatch({
           type: EDIT_MDM_VSL_CNTR_ITEM_FAILURE,

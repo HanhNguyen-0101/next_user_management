@@ -1,19 +1,14 @@
 import { STATUS_CODE } from "pages/_utils/configSetting";
 import { Dispatch } from "redux";
-import { UserService } from "../services";
 import { UserConstant } from "../constants";
+import { QueryPayload } from "../models/common";
 import {
   DeleteUserByIdPayload,
   DeleteUserResponse,
   GetUserByIdPayload,
   GetUserResponse,
 } from "../models/user";
-import {
-  NOTIF_TYPE,
-  openNotification,
-} from "@/components/notification/notification";
-import { DrawerAction } from ".";
-import { QueryPayload } from "../models/common";
+import { UserService } from "../services";
 
 const {
   GET_USER_LIST_SUCCESS,

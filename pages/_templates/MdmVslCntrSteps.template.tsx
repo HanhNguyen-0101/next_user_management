@@ -6,9 +6,11 @@ import { Steps } from "antd";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-
+export const typeField = {
+  DATE: "date",
+};
 export default function MdmVslCntrSteps() {
-  const { nextStepAction, currentStep, mdmVslCntrSteps } = useSelector(
+  const { nextStepAction, currentStep, mdmVslCntr } = useSelector(
     (state: any) => state.mdmVslCntrReducer
   );
   const dispatch = useDispatch();
@@ -16,15 +18,24 @@ export default function MdmVslCntrSteps() {
   const previousStep = () => {
     dispatch(MdmVslCntrAction.setPreviousStepData());
   };
-  const handleSaveAction = () => {
-    nextStepAction;
-    console.log("------------", mdmVslCntrSteps);
-    // dispatch(MdmVslCntrAction.addItem(mdmVslCntrSteps));
-  };
   const infomationVesselData = [
     {
       title: "Main Information",
       children: [
+        {
+          title: t("mdmVslCntr:fields.vsl_cd"),
+          name: "vsl_cd",
+          required: true,
+        },
+        {
+          title: t("mdmVslCntr:fields.modi_ownr_nm"),
+          name: "modi_ownr_nm",
+        },
+        {
+          title: t("mdmVslCntr:fields.modi_alln_vsl_cd"),
+          name: "modi_alln_vsl_cd",
+        },
+
         {
           title: t("mdmVslCntr:fields.vsl_eng_nm"),
           name: "vsl_eng_nm",
@@ -68,12 +79,61 @@ export default function MdmVslCntrSteps() {
       ],
     },
     {
+      title: 'Information action',
+      children: [
+        {
+          title: t("mdmVslCntr:fields.delt_flg"),
+          name: "delt_flg",
+          className: "lg:col-span-2 sm:col-span-2",
+        },
+        {
+          title: t("mdmVslCntr:fields.vsl_delt_ofc_cd"),
+          name: "vsl_delt_ofc_cd",
+          className: "lg:col-span-2 sm:col-span-2",
+        },
+        {
+          title: t("mdmVslCntr:fields.cre_usr_id"),
+          name: "cre_usr_id",
+          className: "lg:col-span-2 sm:col-span-2",
+          required: true,
+        },
+        {
+          title: t("mdmVslCntr:fields.cre_dt"),
+          name: "cre_dt",
+          type: typeField.DATE,
+          required: true,
+        },
+        {
+          title: t("mdmVslCntr:fields.vsl_cre_ofc_cd"),
+          name: "vsl_cre_ofc_cd",
+        },
+        {
+          title: t("mdmVslCntr:fields.upd_usr_id"),
+          name: "upd_usr_id",
+          className: "lg:col-span-2 sm:col-span-2",
+          required: true,
+        },
+        {
+          title: t("mdmVslCntr:fields.upd_dt"),
+          name: "upd_dt",
+          type: typeField.DATE,
+          required: true,
+        },
+        {
+          title: t("mdmVslCntr:fields.edw_upd_dt"),
+          name: "edw_upd_dt",
+          type: typeField.DATE
+        },
+      ]
+    },
+    {
       title: "Others",
       children: [
         {
           title: t("mdmVslCntr:fields.eai_evnt_dt"),
           name: "eai_evnt_dt",
           className: "lg:col-span-2 sm:col-span-2",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.eai_if_id"),
@@ -164,22 +224,27 @@ export default function MdmVslCntrSteps() {
         {
           title: t("mdmVslCntr:fields.vsl_kel_ly_dt"),
           name: "vsl_kel_ly_dt",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.vsl_lnch_dt"),
           name: "vsl_lnch_dt",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.vsl_de_dt"),
           name: "vsl_de_dt",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.rgst_dt"),
           name: "rgst_dt",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.vsl_clz_dt"),
           name: "vsl_clz_dt",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.vsl_rmk"),
@@ -474,26 +539,31 @@ export default function MdmVslCntrSteps() {
           title: t("mdmVslCntr:fields.vsl_sft_cstru_certi_exp_dt"),
           name: "vsl_sft_cstru_certi_exp_dt",
           className: "lg:col-span-2 sm:col-span-2",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.vsl_sft_rdo_certi_exp_dt"),
           name: "vsl_sft_rdo_certi_exp_dt",
           className: "lg:col-span-2 sm:col-span-2",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.vsl_sft_eq_certi_exp_dt"),
           name: "vsl_sft_eq_certi_exp_dt",
           className: "lg:col-span-2 sm:col-span-2",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.vsl_lod_line_certi_exp_dt"),
           name: "vsl_lod_line_certi_exp_dt",
           className: "lg:col-span-2 sm:col-span-2",
+          type: typeField.DATE,
         },
         {
           title: t("mdmVslCntr:fields.vsl_derat_certi_exp_dt"),
           name: "vsl_derat_certi_exp_dt",
           className: "lg:col-span-2 sm:col-span-2",
+          type: typeField.DATE,
         },
       ],
     },
@@ -545,17 +615,17 @@ export default function MdmVslCntrSteps() {
 
   return (
     <div className="max-w-7xl mx-auto bg-white rounded-md">
-      <h2 className="text-blueDark p-2 text-lg title-font text-center font-medium mb-2 tracking-widest">
-        Edit a MDMVSLCNTR
+      <h2 className="text-blueDark p-2 pt-6 text-lg title-font text-center font-medium mb-2 tracking-widest">
+        {`EDIT: Vessel Code - ${mdmVslCntr?.vsl_cd}`}
       </h2>
-      <section className="flex gap-8 p-4">
+      <section className="flex gap-4 p-4">
         <div className="flex-col border-r-2 px-4 border-blueDark">
           <Steps direction="vertical" current={currentStep} items={items} />
         </div>
         <div className={`flex-1 overflow-y-auto h-[500px]`}>
           <div className="relative">
-            <div className="pb-16">{steps[currentStep].content}</div>
-            <div className="absolute flex bottom-0 right-0">
+            <div className="pb-16">{steps[currentStep]?.content}</div>
+            <div className="absolute flex bottom-0 right-0 mr-5">
               {currentStep > 0 && (
                 <LightButton className="mx-2" onClick={previousStep}>
                   Previous
@@ -567,7 +637,7 @@ export default function MdmVslCntrSteps() {
                 </DarkButton>
               )}
               {currentStep === steps.length - 1 && (
-                <DarkButton className="mx-2" onClick={handleSaveAction}>
+                <DarkButton className="mx-2" onClick={nextStepAction}>
                   Save
                 </DarkButton>
               )}

@@ -123,12 +123,15 @@ export interface MdmVslCntrState {
   mdmVslCntr?: IMdmVslCntrModel | null;
   query?: QueryPayload;
   nextStepAction?: any,
-  mdmVslCntrSteps?: {},
   currentStep: number,
 }
 
 export interface GetMdmVslCntrByIdPayload {
   id: number | string;
+}
+export interface EditMdmVslCntrByIdPayload {
+  id: string;
+  data: IMdmVslCntrModel;
 }
 export interface GetMdmVslCntrResponse {
   data: IMdmVslCntrModel;

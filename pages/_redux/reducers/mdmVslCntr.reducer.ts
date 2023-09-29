@@ -30,7 +30,6 @@ const initState: MdmVslCntrState = {
   error: null,
   query: {},
   nextStepAction: () => {},
-  mdmVslCntrSteps: {},
   currentStep: 0,
 };
 
@@ -64,7 +63,7 @@ const MdmVslCntrReducer = (
       return { ...state, error: payload?.data };
     }
     case EDIT_MDM_VSL_CNTR_ITEM_SUCCESS: {
-      return { ...state, mdmVslCntr: payload };
+      return { ...state, ...initState, mdmVslCntr: payload };
     }
     case EDIT_MDM_VSL_CNTR_ITEM_FAILURE: {
       return { ...state, error: payload?.data };
@@ -76,7 +75,7 @@ const MdmVslCntrReducer = (
       return {
         ...state,
         currentStep: state.currentStep + 1,
-        mdmVslCntrSteps: { ...state.mdmVslCntrSteps, ...payload },
+        mdmVslCntr: { ...state.mdmVslCntr, ...payload },
       };
     }
     case SET_PREVIOUS_STEP_DATA: {
